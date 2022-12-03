@@ -1,0 +1,6 @@
+node_modules/
+/tsc-out/
+/dist/*.js
+pnpm-lock.yaml
+.DS_Store
+pnpm-lock.yaml
