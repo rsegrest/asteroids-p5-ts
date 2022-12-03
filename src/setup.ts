@@ -1,12 +1,15 @@
 import type p5 from "p5";
+import AsteroidController from "./controller/AsteroidController";
 import PlayerShip from "./model/PlayerShip";
 
 export let pShip:PlayerShip;
+export let asteroidController:AsteroidController;
 
 /** This is a setup function. */
 export const setup = (p: p5): void => {
   p.createCanvas(400, 400);
   pShip = new PlayerShip(p);
+  asteroidController = new AsteroidController(p);
 };
 
 export const keyIsDown = (p:p5):void => {
@@ -19,5 +22,6 @@ export const keyIsDown = (p:p5):void => {
     console.log('thrust');
   } else if (p.key === ' ') {
     console.log('shoot');
+    // pShip.addMissile();
   }
 }

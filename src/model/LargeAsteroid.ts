@@ -8,12 +8,15 @@ class LargeAsteroid extends Asteroid {
     initialPos = p.createVector(100,100),
     velocity?:p5.Vector,
   ) {
-    super(p, initialPos, velocity);
+    super(p, initialPos, 100, velocity);
   }
-
   draw = ():void => {
     this.p.push();
-    this.p.stroke(255);
+    if (this.active) {
+      this.p.stroke(255);
+    } else {
+      this.p.stroke(255, 0, 0);
+    }
     this.p.noFill();
     this.p.strokeWeight(2);
     this.p.translate(

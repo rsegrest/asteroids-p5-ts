@@ -7,13 +7,17 @@ class SmallAsteroid extends Asteroid {
     initialPos = p.createVector(100,100),
     velocity?:p5.Vector,
   ) {
-    super(p, initialPos, velocity);
+    super(p, initialPos, 25, velocity);
   }
 
   draw = ():void => {
     const p = this.getP();
     p.push();
-    p.stroke(255);
+    if (this.active) {
+      this.p.stroke(255);
+    } else {
+      this.p.stroke(255, 0, 0);
+    }
     p.noFill();
     p.strokeWeight(2);
     p.translate(300, 300);

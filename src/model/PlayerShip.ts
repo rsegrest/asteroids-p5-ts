@@ -1,39 +1,5 @@
 import p5 from "p5";
-
-export class Bullet {
-  private p:p5;
-  private pos: p5.Vector;
-  private vel: p5.Vector;
-  private rot: number;
-  private scale = 1;
-  private creationTime:number;
-  constructor(
-    p:p5, pos:p5.Vector, vel:p5.Vector, rot:number, creationTime:number) {
-    this.p = p;
-    this.pos = pos;
-    this.vel = vel;
-    this.rot = rot;
-    this.creationTime = creationTime;
-  }
-  draw():void {
-    const p = this.p;
-    const scale = this.scale;
-    const pos = this.pos;
-    const rot = this.rot;
-    p.push();
-    p.scale(scale);
-    p.fill('rgb(255,0,0)');
-    p.noStroke();
-    // p.translate(pos.x as number, pos.y as number);
-    p.translate(this.pos.x as number, this.pos.y as number);
-    p.rotate(rot);
-    // p.rotate(rot);
-    // p.translate(origin[0] as number, origin[1] as number);
-    // p.translate(0,-1*(this.creationTime - p.frameCount));
-    p.circle(0,0,5);
-    p.pop();
-  }
-}
+import Bullet from './Bullet';
 export class PlayerShip {
   private p:p5;
   private pos:p5.Vector;
@@ -42,19 +8,24 @@ export class PlayerShip {
   private thrust = 0.5;
   private velocity;
   private scale = 1;
+  private coolDown = 0; // wait before firing again
 
   constructor(p:p5) {
     this.p = p;
     this.rot = 0; // this.p.HALF_PI/2
     this.velocity = this.p.createVector(0,0);
     this.pos = p.createVector(400,400);
-    this.bullets.push(new Bullet(
-      p,
-      this.p.createVector(this.pos.x as number, this.pos.y as number),
-      this.p.createVector(1,1),
-      0,
-      0
-    ));
+    // this.bullets.push(new Bullet(
+    //   p,
+    //   this.p.createVector(this.pos.x as number, this.pos.y as number),
+    //   this.p.createVector(1,1),
+    //   0,
+    //   0
+    // ));
+  }
+
+  getBullets():Bullet[] {
+    return this.bullets;
   }
   moveCW():void {
     this.rot += this.p.HALF_PI/20;
@@ -68,6 +39,22 @@ export class PlayerShip {
     );
     this.velocity.x += thrustVector.x;
     this.velocity.y += thrustVector.y;
+  }
+  addBullet():void {
+    // console.log('add missile')
+    // p:p5, pos:p5.Vector, vel:p5.Vector, rot:number, creationTime:number) {
+    if (this.coolDown === 0) {
+      this.bullets.push(new Bullet(
+        this.p,
+        this.p.createVector(this.pos.x as number, this.pos.y as number),
+        this.p.createVector(
+          Math.cos(this.rot)*5,
+          Math.sin(this.rot)*5),
+        this.rot,
+        this.p.frameCount,
+      ));
+      this.coolDown = 16;
+    }
   }
   advance():void {
     this.pos.x += this.velocity.x;
@@ -84,33 +71,39 @@ export class PlayerShip {
     }
     this.draw();
     this.velocity.mag() > 0.1 ? this.velocity.mult(0.99) : this.velocity.mult(0);
-    
+    for (let i = 0; i < this.bullets.length; i++) {
+      const thisBullet = (this.bullets[i] as Bullet);
+      thisBullet.setPos(thisBullet.getPos().add(thisBullet.getVel()));
+    }
+    if (this.coolDown > 0) {
+      this.coolDown -= 1;
+    }
   }
 
-  shoot = (
-    p:p5,
-    origin:number[] = [400,400],
-    rot=p.HALF_PI/2,
-    t = 10,
-    scale=1,
-  ):void => {
-    // origin, rot, t
-  // ) => {
-    // const origin:number[] = [400,400];
-    // const rot = p.HALF_PI/2;
-    // const t = 10;
-    p.push();
-    p.scale(scale);
-    p.fill(255);
-    p.noStroke();
-    // p.rotate(rot);
-    p.translate(origin[0] as number, origin[1] as number);
-    p.rotate(rot);
-    // p.translate(origin[0] as number, origin[1] as number);
-    p.translate(0,-10*t);
-    p.circle(0,0,5);
-    p.pop();
-  }
+  // shoot = (
+  //   p:p5,
+  //   origin:number[] = [400,400],
+  //   rot=p.HALF_PI/2,
+  //   t = 10,
+  //   scale=1,
+  // ):void => {
+  //   // origin, rot, t
+  // // ) => {
+  //   // const origin:number[] = [400,400];
+  //   // const rot = p.HALF_PI/2;
+  //   // const t = 10;
+  //   p.push();
+  //   p.scale(scale);
+  //   p.fill(255);
+  //   p.noStroke();
+  //   // p.rotate(rot);
+  //   p.translate(origin[0] as number, origin[1] as number);
+  //   p.rotate(rot);
+  //   // p.translate(origin[0] as number, origin[1] as number);
+  //   p.translate(0,-10*t);
+  //   p.circle(0,0,5);
+  //   p.pop();
+  // }
   drawAfterBurner():void {
     const p = this.p;
     const rot = this.rot;
@@ -150,7 +143,7 @@ export class PlayerShip {
       this.drawAfterBurner();
     }
     for (let i = 0; i < this.bullets.length; i++) {
-      console.log(this.bullets[i]);
+      // console.log(this.bullets[i]);
       (this.bullets[i] as Bullet).draw();
     }
   }

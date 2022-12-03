@@ -1,6 +1,6 @@
 import type p5 from "p5";
 
-import { pShip } from "./setup";
+import { pShip, asteroidController } from "./setup";
 
 // const drawPlayer = (
 //   p:p5,
@@ -23,25 +23,22 @@ import { pShip } from "./setup";
 //   }
 //   p.pop();
 // }
-
-/** This is a draw function. */
-export const draw = (p: p5): void => {
-  p.createCanvas(800,600);
-  p.background(10);
-  // drawLargeAsteroid(p);
-
-  // drawMediumAsteroid(p);
-  // drawSmallAsteroid(p);
+const checkKeys = (p:p5) => {
   if (p.keyIsDown(p.LEFT_ARROW)) {
     pShip.moveCCW();
   } else if (p.keyIsDown(p.RIGHT_ARROW)) {
     pShip.moveCW();
   } else if (p.keyIsDown(p.UP_ARROW)) {
-    console.log('thrust');
     pShip.addThrust();
   } else if (p.keyIsDown(32)) {
-    console.log('shoot');
+    pShip.addBullet();
   }
+}
+/** This is a draw function. */
+export const draw = (p: p5): void => {
+  p.createCanvas(800,600);
+  p.background(10);
+  checkKeys(p);
   pShip.advance();
-  // shoot(p);
+  asteroidController.advance(pShip.getBullets());
 };
