@@ -15,17 +15,13 @@ export class PlayerShip {
     this.rot = 0; // this.p.HALF_PI/2
     this.velocity = this.p.createVector(0,0);
     this.pos = p.createVector(400,400);
-    // this.bullets.push(new Bullet(
-    //   p,
-    //   this.p.createVector(this.pos.x as number, this.pos.y as number),
-    //   this.p.createVector(1,1),
-    //   0,
-    //   0
-    // ));
   }
 
   getBullets():Bullet[] {
     return this.bullets;
+  }
+  removeBullet(bullet:Bullet, index:number):void {
+    this.bullets.splice(index, 1);
   }
   moveCW():void {
     this.rot += this.p.HALF_PI/20;
@@ -80,30 +76,6 @@ export class PlayerShip {
     }
   }
 
-  // shoot = (
-  //   p:p5,
-  //   origin:number[] = [400,400],
-  //   rot=p.HALF_PI/2,
-  //   t = 10,
-  //   scale=1,
-  // ):void => {
-  //   // origin, rot, t
-  // // ) => {
-  //   // const origin:number[] = [400,400];
-  //   // const rot = p.HALF_PI/2;
-  //   // const t = 10;
-  //   p.push();
-  //   p.scale(scale);
-  //   p.fill(255);
-  //   p.noStroke();
-  //   // p.rotate(rot);
-  //   p.translate(origin[0] as number, origin[1] as number);
-  //   p.rotate(rot);
-  //   // p.translate(origin[0] as number, origin[1] as number);
-  //   p.translate(0,-10*t);
-  //   p.circle(0,0,5);
-  //   p.pop();
-  // }
   drawAfterBurner():void {
     const p = this.p;
     const rot = this.rot;

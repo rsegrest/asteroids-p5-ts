@@ -5,24 +5,31 @@ import Asteroid from '../model/Asteroid';
 class LargeAsteroid extends Asteroid {
   constructor(
     p:p5,
-    initialPos = p.createVector(100,100),
+    initialPos:p5.Vector,
     velocity?:p5.Vector,
   ) {
     super(p, initialPos, 100, velocity);
   }
   draw = ():void => {
-    this.p.push();
-    if (this.active) {
-      this.p.stroke(255);
-    } else {
-      this.p.stroke(255, 0, 0);
+    const p = this.getP();
+    const pos = this.getPos();
+    if (p) {
+      p.push();
+      if (this.active) {
+        p.stroke(255);
+      } else {
+        p.stroke(255, 0, 0);
+      }
+      p.noFill();
+      p.strokeWeight(2);
+      p.translate(
+        pos.x,pos.y);
+      p.circle(0,0,100);
+      p.pop();
     }
-    this.p.noFill();
-    this.p.strokeWeight(2);
-    this.p.translate(
-      this.pos.x,this.pos.y);
-    this.p.circle(0,0,100);
-    this.p.pop();
+  }
+  toString():string {
+    return `LargeAsteroid: pos: ${this.pos}, velocity: ${this.velocity}`;
   }
 }
 export default LargeAsteroid;

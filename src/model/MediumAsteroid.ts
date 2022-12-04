@@ -5,7 +5,7 @@ import Asteroid from '../model/Asteroid';
 class MediumAsteroid extends Asteroid {
   constructor(
     p:p5,
-    initialPos = p.createVector(100,100),
+    initialPos:p5.Vector,
     velocity?:p5.Vector,
   ) {
     super(p, initialPos, 50, velocity);
@@ -25,6 +25,9 @@ class MediumAsteroid extends Asteroid {
       this.getPos().x,this.getPos().y);
     p.circle(0,0,50);
     p.pop();
+  }
+  toString():string {
+    return `MediumAsteroid: pos: ${this.pos}, velocity: ${this.velocity}`;
   }
 }
 export default MediumAsteroid;

@@ -40,5 +40,9 @@ export const draw = (p: p5): void => {
   p.background(10);
   checkKeys(p);
   pShip.advance();
-  asteroidController.advance(pShip.getBullets());
+  asteroidController.advance();
+  const bullet = asteroidController.checkBulletCollisions(pShip.getBullets())
+  if (bullet !== null) {
+    pShip.removeBullet(bullet.bullet, bullet.index);
+  }
 };

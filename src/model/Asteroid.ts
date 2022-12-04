@@ -10,7 +10,7 @@ class Asteroid {
   size:number;
   constructor(
     p:p5,
-    initialPos = p.createVector(100,100),
+    initialPos:p5.Vector,
     size:number,
     velocity?:p5.Vector,
   ) {
@@ -57,8 +57,6 @@ class Asteroid {
   checkCollision(bullet:Bullet):boolean {
     const distance = this.getDistanceTo(bullet);
     const collisionRadius = this.getCollisionRadius();
-    // console.log(`distance: ${distance}, collisionRadius: ${collisionRadius}`);
-    // console.log(`${(distance < collisionRadius)}`);
     return distance < collisionRadius;
   }
   draw = ():void => {

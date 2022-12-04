@@ -4,7 +4,7 @@ import Asteroid from './Asteroid';
 class SmallAsteroid extends Asteroid {
   constructor(
     p:p5,
-    initialPos = p.createVector(100,100),
+    initialPos:p5.Vector,
     velocity?:p5.Vector,
   ) {
     super(p, initialPos, 25, velocity);
@@ -12,6 +12,7 @@ class SmallAsteroid extends Asteroid {
 
   draw = ():void => {
     const p = this.getP();
+    const pos = this.getPos();
     p.push();
     if (this.active) {
       this.p.stroke(255);
@@ -20,9 +21,12 @@ class SmallAsteroid extends Asteroid {
     }
     p.noFill();
     p.strokeWeight(2);
-    p.translate(300, 300);
+    p.translate(pos.x, pos.y);
     p.circle(0,0,25);
     p.pop();
+  }
+  toString():string {
+    return `SmallAsteroid: pos: ${this.pos}, velocity: ${this.velocity}`;
   }
 }
 export default SmallAsteroid;
