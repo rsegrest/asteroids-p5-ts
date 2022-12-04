@@ -1,6 +1,16 @@
 import type p5 from "p5";
 
-import { pShip, asteroidController, img } from "./setup";
+import {
+  pShip,
+  asteroidController,
+  font,
+  scoreDisplay,
+  livesDisplay,
+  playerController,
+  playerDisplay,
+  footerDisplay,
+} from "./setup";
+
 
 // const drawPlayer = (
 //   p:p5,
@@ -97,6 +107,20 @@ const drawSpaceShip = (p:p5) => {
   p.pop();
 }
 
+// larger size space ship
+const drawSmallSpaceShip = (p:p5) => {
+  p.push();
+  p.stroke(255,0,255);
+  p.strokeWeight(3);
+  p.translate(354,112);
+  p.scale(0.6);
+  p.noFill();
+  p.quad(-55,7,55,7,25,22,-25,22);
+  p.quad(-55,7,55,7,20,-10,-20,-10);
+  p.quad(20,-10,-20,-10,-10,-30,10,-30);
+  p.pop();
+}
+
 // large size
 const drawAsteroidThree = (p:p5) => {
   p.push();
@@ -170,19 +194,130 @@ const drawAsteroidFive = (p:p5) => {
   p.pop();
 }
 
-// TODO: Draw death-star looking asteroid
-/** This is a draw function. */
+
+// medium size "death star"
+const drawAsteroidSix = (p:p5) => {
+  p.push();
+  p.stroke(255,0,255);
+  p.strokeWeight(2);
+  p.translate(360,180);
+  p.noFill();
+  p.beginShape();
+  p.vertex(8,-16);
+  p.vertex(34,12);
+  p.vertex(18,20); // top right
+  p.vertex(36,28); // right top
+  p.vertex(18,60); // right middle
+  p.vertex(2,25); // right bottom
+  p.vertex(4,60); // bottom right edge
+  p.vertex(-16,60); // bottom left edge
+  p.vertex(-40,20);
+  p.vertex(-40,10);
+  p.vertex(-22,-16); // top left
+  p.endShape(p.CLOSE);
+  p.pop();
+}
+
+// small size "death star"
+const drawAsteroidSeven = (p:p5) => {
+  p.push();
+  p.stroke(255,0,255);
+  p.strokeWeight(2);
+  p.translate(355,485);
+  p.noFill();
+  p.beginShape();
+  p.vertex(26,-24); 
+  p.vertex(40,-36);
+  p.vertex(48,-32);
+  p.vertex(40,-16);
+  p.vertex(48,-8); 
+  p.vertex(36,5); 
+  p.vertex(14,5);
+  p.vertex(8,0);
+  p.vertex(8,-24);
+  p.vertex(16,-36);
+  p.endShape(p.CLOSE);
+  p.pop();
+}
+
+// const drawPlayer = (p:p5, position:p5.Vector, scale:number, color:string) => {
+//   p.push();
+//   p.stroke(color);
+//   p.strokeWeight(2);
+//   p.translate(position);
+//   p.scale(scale);
+//   p.noFill();
+//   p.beginShape();
+//   p.vertex(0,-20);
+//   p.vertex(-20,32);
+//   p.vertex(-14,22);
+//   p.vertex(14,22);
+//   p.vertex(20,32);
+//   p.endShape(p.CLOSE);
+//   p.pop();
+// }
+
+const drawAfterBurner = (p:p5) => {
+  p.push();
+  p.stroke(255,0,255);
+  p.strokeWeight(2);
+  p.translate(38,475);
+  p.noFill();
+  p.beginShape();
+  p.vertex(0,12);
+  p.vertex(-9,0);
+  p.vertex(9,0);
+  p.endShape(p.CLOSE);
+  p.pop();
+}
+
+const addFooter = (p:p5, font:p5.Font):void => {
+  p.fill('#2f2');
+  p.textFont(font);
+  p.textSize(16);
+  p.text('© 2022 Rick Segrest', 300, 500);
+}
+// const addScoreDisplay = (p:p5, font:p5.Font, score:number):void => {
+//   p.push();
+//   if (p.frameCount % 3 === 0) {
+//     p.strokeWeight(p.frameCount % 2)
+//     p.fill('#0f0'); // 2f2 / afa
+//     p.textFont(font);
+//     p.textSize(16);
+//     p.text(score.toString(), 100, 100);
+//   }
+//   p.pop();
+// }
+const addLivesDisplay = (p:p5, numLives:number):void => {
+  p.push();
+  for (let i = 0; i < numLives; i++) {
+    if (p.frameCount % 3 === 0) {
+      p.strokeWeight(p.frameCount % 2)
+      p.stroke('#0a0');
+      p.strokeWeight((p.frameCount % 3));
+      // drawPlayer(p,p.createVector(130+(i*8),115),0.2,'#0a0');  
+      p.fill('#fff'); // 2f2
+      p.noStroke();
+      // drawPlayer(p,p.createVector(130+(i*8),115),0.2,'#2f2');
+    }
+  }
+  p.pop();
+}
+
+
 export const draw = (p: p5): void => {
   p.createCanvas(800,600);
   p.background(10);
-  p.push();
-  p.scale(2);
-  p.image(img, 0, 0);
-  p.pop();
-  drawAsteroidFive(p);
+  // addFooter(p,font);
+
+  scoreDisplay.draw(123456);
+  livesDisplay.draw();
   checkKeys(p);
   pShip.advance();
   asteroidController.advance();
+  playerController.advance();
+  playerDisplay.draw(pShip);
+  footerDisplay.draw();
   const bullet = asteroidController.checkBulletCollisions(pShip.getBullets())
   if (bullet !== null) {
     pShip.removeBullet(bullet.bullet, bullet.index);
