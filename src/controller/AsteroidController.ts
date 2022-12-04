@@ -9,12 +9,12 @@ class AsteroidController {
   private asteroids:Asteroid[] = [];
   constructor (p:p5) {
     this.p = p;
-    this.spawnLargeAsteroid(
-      p.createVector(200, 200),
-      p.createVector(
-        Math.random()-1,
-        Math.random()-1
-      ));
+    // this.spawnLargeAsteroid(
+    //   p.createVector(200, 200),
+    //   p.createVector(
+    //     Math.random()-1,
+    //     Math.random()-1
+    //   ));
   }
   reposition = (position:p5.Vector):p5.Vector => {
     let newPos = position;
@@ -72,7 +72,6 @@ class AsteroidController {
     );
   }
   breakUpAsteroid = (asteroid:LargeAsteroid|MediumAsteroid|SmallAsteroid, index:number):void => {
-    console.log('breakUpAsteroid');
     const position = asteroid.getPos();
     this.asteroids.splice(index, 1);
     if (asteroid instanceof LargeAsteroid) {
@@ -90,8 +89,6 @@ class AsteroidController {
       this.spawnSmallAsteroid(position, velocityList[0]!);
       this.spawnSmallAsteroid(position, velocityList[1]!);
     }
-    console.log(`Asteroid list length is now : ${this.asteroids.length}`);
-    console.log(this.toString());
   }
   advance = ():void => {
     this.asteroids.forEach((asteroid, index) => {

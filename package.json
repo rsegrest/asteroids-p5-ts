@@ -22,7 +22,7 @@
   "private": true,
   "scripts": {
     "build": "npm run bundle && npm run format:dist && npm run minify",
-    "build:dev": "npm run bundle && npm run format:dist",
+    "build:dev": "nodemon npm run bundle && npm run format:dist",
     "bundle": "tsc && rollup --config",
     "preformat:dist": "eslint --fix --no-ignore dist/script.js",
     "format:dist": "prettier --write dist/script.js",

@@ -37,8 +37,6 @@ export class PlayerShip {
     this.velocity.y += thrustVector.y;
   }
   addBullet():void {
-    // console.log('add missile')
-    // p:p5, pos:p5.Vector, vel:p5.Vector, rot:number, creationTime:number) {
     if (this.coolDown === 0) {
       this.bullets.push(new Bullet(
         this.p,
@@ -115,7 +113,6 @@ export class PlayerShip {
       this.drawAfterBurner();
     }
     for (let i = 0; i < this.bullets.length; i++) {
-      // console.log(this.bullets[i]);
       (this.bullets[i] as Bullet).draw();
     }
   }
