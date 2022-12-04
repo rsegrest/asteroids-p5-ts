@@ -6,8 +6,10 @@ import LivesDisplay from "./view/LivesDisplay";
 import PlayerDisplay from "./view/PlayerDisplay";
 import ScoreDisplay from "./view/PlayerScoreDisplay";
 import FooterDisplay from "./view/FooterDisplay";
+import BulletDisplay from "./view/BulletDisplay";
 
 export let playerDisplay:PlayerDisplay;
+export let bulletDisplay:BulletDisplay;
 export let footerDisplay:FooterDisplay;
 export let pShip:PlayerShip;
 export let asteroidController:AsteroidController;
@@ -32,6 +34,7 @@ export const setup = (p: p5): void => {
     0.5
   );
   playerDisplay = new PlayerDisplay(p,0.5);
+  bulletDisplay = new BulletDisplay(p);
   playerController = new PlayerController(playerDisplay, pShip);
   asteroidController = new AsteroidController(p);
   scoreDisplay = new ScoreDisplay(p, font);

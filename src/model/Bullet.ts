@@ -19,8 +19,8 @@ export class Bullet {
   getPos():p5.Vector {
     return this.pos;
   }
-  setPos(newPos:p5.Vector):void {
-    this.pos = newPos;
+  getRot():number {
+    return this.rot;
   }
   getVel():p5.Vector {
     return this.vel;
@@ -28,27 +28,31 @@ export class Bullet {
   checkIfDead():boolean {
     return (this.creationTime + this.lifespan) < this.p.frameCount;
   }
-  draw():void {
-    const p = this.p;
-    const scale = this.scale;
-    const pos = this.pos;
-    const rot = this.rot;
-    p.push();
-    p.scale(scale);
-    if (this.checkIfDead()) {
-      p.fill('rgb(0,128,255)');
-    } else {
-      p.fill('rgb(255,0,0)');
-    }
-    p.noStroke();
-    // p.translate(pos.x as number, pos.y as number);
-    p.translate(pos.x as number, pos.y as number);
-    p.rotate(rot);
-    // p.rotate(rot);
-    // p.translate(origin[0] as number, origin[1] as number);
-    // p.translate(0,-1*(this.creationTime - p.frameCount));
-    p.circle(0,0,5);
-    p.pop();
+  setPos(newPos:p5.Vector):void {
+    this.pos = newPos;
   }
+  
+  // draw():void {
+  //   const p = this.p;
+  //   const scale = this.scale;
+  //   const pos = this.pos;
+  //   const rot = this.rot;
+  //   p.push();
+  //   p.scale(scale);
+  //   if (this.checkIfDead()) {
+  //     p.fill('rgb(0,128,255)');
+  //   } else {
+  //     p.fill('rgb(255,0,0)');
+  //   }
+  //   p.noStroke();
+  //   // p.translate(pos.x as number, pos.y as number);
+  //   p.translate(pos.x as number, pos.y as number);
+  //   p.rotate(rot);
+  //   // p.rotate(rot);
+  //   // p.translate(origin[0] as number, origin[1] as number);
+  //   // p.translate(0,-1*(this.creationTime - p.frameCount));
+  //   p.circle(0,0,5);
+  //   p.pop();
+  // }
 }
 export default Bullet;
