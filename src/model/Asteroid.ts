@@ -1,17 +1,20 @@
 
 import p5 from 'p5';
 import Bullet from './Bullet';
+import { AsteroidType } from '../type/AsteroidType';
 
 class Asteroid {
   p:p5;
   pos:p5.Vector;
   velocity:p5.Vector;
+  type:AsteroidType;
   active:boolean;
   size:number;
   constructor(
     p:p5,
     initialPos:p5.Vector,
     size:number,
+    type:AsteroidType,
     velocity?:p5.Vector,
   ) {
     this.p = p;
@@ -26,6 +29,7 @@ class Asteroid {
         Math.random()*1
       );
     }
+    this.type = type;
   }
   getP():p5 {
     return this.p;

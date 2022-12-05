@@ -12,27 +12,6 @@ import {
 } from "./setup";
 
 
-// const drawPlayer = (
-//   p:p5,
-//   rot=p.HALF_PI/2,
-// ) => {
-//   const thrusting = true;
-//   p.push();
-//   p.stroke(255);
-//   p.noFill();
-//   p.strokeWeight(2);
-//   p.translate(400, 400);
-//   p.rotate(rot);
-//   p.quad(0, -40,
-//     -15, 15,
-//     15,15,
-//     0,-40);
-//   p.fill(255);
-//   if (thrusting) {
-//     p.triangle(-10,18,10,18,0,25);
-//   }
-//   p.pop();
-// }
 const checkKeys = (p:p5) => {
   if (p.keyIsDown(p.LEFT_ARROW)) {
     pShip.moveCCW();
@@ -68,6 +47,93 @@ const drawAsteroidOne = (p:p5) => {
   p.pop();
 }
 
+
+// larger size space ship
+const drawSpaceShip = (p:p5) => {
+  p.push();
+  p.stroke(255,0,255);
+  p.strokeWeight(2);
+  p.translate(354,40);
+  p.noFill();
+  p.quad(-55,7,55,7,25,22,-25,22);
+  p.quad(-55,7,55,7,20,-10,-20,-10);
+  p.quad(20,-10,-20,-10,-10,-30,10,-30);
+  p.pop();
+}
+
+// small size space ship
+const drawSmallSpaceShip = (p:p5) => {
+  p.push();
+  p.stroke(255,0,255);
+  p.strokeWeight(3);
+  p.translate(354,112);
+  p.scale(0.6);
+  p.noFill();
+  p.quad(-55,7,55,7,25,22,-25,22);
+  p.quad(-55,7,55,7,20,-10,-20,-10);
+  p.quad(20,-10,-20,-10,-10,-30,10,-30);
+  p.pop();
+}
+
+
+
+// small size "death star"
+const drawAsteroidSeven = (p:p5) => {
+  p.push();
+  p.stroke(255,0,255);
+  p.strokeWeight(2);
+  p.translate(355,485);
+  p.noFill();
+  p.beginShape();
+  p.vertex(26,-24); 
+  p.vertex(40,-36);
+  p.vertex(48,-32);
+  p.vertex(40,-16);
+  p.vertex(48,-8); 
+  p.vertex(36,5); 
+  p.vertex(14,5);
+  p.vertex(8,0);
+  p.vertex(8,-24);
+  p.vertex(16,-36);
+  p.endShape(p.CLOSE);
+  p.pop();
+}
+const drawAfterBurner = (p:p5) => {
+  p.push();
+  p.stroke(255,0,255);
+  p.strokeWeight(2);
+  p.translate(38,475);
+  p.noFill();
+  p.beginShape();
+  p.vertex(0,12);
+  p.vertex(-9,0);
+  p.vertex(9,0);
+  p.endShape(p.CLOSE);
+  p.pop();
+}
+
+
+
+export const draw = (p: p5): void => {
+  p.createCanvas(800,600);
+  p.background(10);
+  // addFooter(p,font);
+
+  scoreDisplay.draw(123456);
+  livesDisplay.draw();
+  checkKeys(p);
+  pShip.advance();
+  asteroidController.advance();
+  playerController.advance();
+  playerDisplay.draw(pShip);
+  footerDisplay.draw();
+  const bullet = asteroidController.checkBulletCollisions(pShip.getBullets())
+  if (bullet !== null) {
+    pShip.removeBullet(bullet.bullet, bullet.index);
+  }
+};
+
+
 // medium size
 const drawAsteroidTwo = (p:p5) => {
   p.push();
@@ -91,33 +157,6 @@ const drawAsteroidTwo = (p:p5) => {
   p.vertex(-40,-18);
   p.vertex(-15,-35);
   p.endShape(p.CLOSE);
-  p.pop();
-}
-
-// larger size space ship
-const drawSpaceShip = (p:p5) => {
-  p.push();
-  p.stroke(255,0,255);
-  p.strokeWeight(2);
-  p.translate(354,40);
-  p.noFill();
-  p.quad(-55,7,55,7,25,22,-25,22);
-  p.quad(-55,7,55,7,20,-10,-20,-10);
-  p.quad(20,-10,-20,-10,-10,-30,10,-30);
-  p.pop();
-}
-
-// larger size space ship
-const drawSmallSpaceShip = (p:p5) => {
-  p.push();
-  p.stroke(255,0,255);
-  p.strokeWeight(3);
-  p.translate(354,112);
-  p.scale(0.6);
-  p.noFill();
-  p.quad(-55,7,55,7,25,22,-25,22);
-  p.quad(-55,7,55,7,20,-10,-20,-10);
-  p.quad(20,-10,-20,-10,-10,-30,10,-30);
   p.pop();
 }
 
@@ -218,28 +257,6 @@ const drawAsteroidSix = (p:p5) => {
   p.pop();
 }
 
-// small size "death star"
-const drawAsteroidSeven = (p:p5) => {
-  p.push();
-  p.stroke(255,0,255);
-  p.strokeWeight(2);
-  p.translate(355,485);
-  p.noFill();
-  p.beginShape();
-  p.vertex(26,-24); 
-  p.vertex(40,-36);
-  p.vertex(48,-32);
-  p.vertex(40,-16);
-  p.vertex(48,-8); 
-  p.vertex(36,5); 
-  p.vertex(14,5);
-  p.vertex(8,0);
-  p.vertex(8,-24);
-  p.vertex(16,-36);
-  p.endShape(p.CLOSE);
-  p.pop();
-}
-
 // const drawPlayer = (p:p5, position:p5.Vector, scale:number, color:string) => {
 //   p.push();
 //   p.stroke(color);
@@ -257,26 +274,13 @@ const drawAsteroidSeven = (p:p5) => {
 //   p.pop();
 // }
 
-const drawAfterBurner = (p:p5) => {
-  p.push();
-  p.stroke(255,0,255);
-  p.strokeWeight(2);
-  p.translate(38,475);
-  p.noFill();
-  p.beginShape();
-  p.vertex(0,12);
-  p.vertex(-9,0);
-  p.vertex(9,0);
-  p.endShape(p.CLOSE);
-  p.pop();
-}
+// const addFooter = (p:p5, font:p5.Font):void => {
+//   p.fill('#2f2');
+//   p.textFont(font);
+//   p.textSize(16);
+//   p.text('© 2022 Rick Segrest', 300, 500);
+// }
 
-const addFooter = (p:p5, font:p5.Font):void => {
-  p.fill('#2f2');
-  p.textFont(font);
-  p.textSize(16);
-  p.text('© 2022 Rick Segrest', 300, 500);
-}
 // const addScoreDisplay = (p:p5, font:p5.Font, score:number):void => {
 //   p.push();
 //   if (p.frameCount % 3 === 0) {
@@ -288,38 +292,41 @@ const addFooter = (p:p5, font:p5.Font):void => {
 //   }
 //   p.pop();
 // }
-const addLivesDisplay = (p:p5, numLives:number):void => {
-  p.push();
-  for (let i = 0; i < numLives; i++) {
-    if (p.frameCount % 3 === 0) {
-      p.strokeWeight(p.frameCount % 2)
-      p.stroke('#0a0');
-      p.strokeWeight((p.frameCount % 3));
-      // drawPlayer(p,p.createVector(130+(i*8),115),0.2,'#0a0');  
-      p.fill('#fff'); // 2f2
-      p.noStroke();
-      // drawPlayer(p,p.createVector(130+(i*8),115),0.2,'#2f2');
-    }
-  }
-  p.pop();
-}
 
+// const addLivesDisplay = (p:p5, numLives:number):void => {
+//   p.push();
+//   for (let i = 0; i < numLives; i++) {
+//     if (p.frameCount % 3 === 0) {
+//       p.strokeWeight(p.frameCount % 2)
+//       p.stroke('#0a0');
+//       p.strokeWeight((p.frameCount % 3));
+//       // drawPlayer(p,p.createVector(130+(i*8),115),0.2,'#0a0');  
+//       p.fill('#fff'); // 2f2
+//       p.noStroke();
+//       // drawPlayer(p,p.createVector(130+(i*8),115),0.2,'#2f2');
+//     }
+//   }
+//   p.pop();
+// }
 
-export const draw = (p: p5): void => {
-  p.createCanvas(800,600);
-  p.background(10);
-  // addFooter(p,font);
-
-  scoreDisplay.draw(123456);
-  livesDisplay.draw();
-  checkKeys(p);
-  pShip.advance();
-  asteroidController.advance();
-  playerController.advance();
-  playerDisplay.draw(pShip);
-  footerDisplay.draw();
-  const bullet = asteroidController.checkBulletCollisions(pShip.getBullets())
-  if (bullet !== null) {
-    pShip.removeBullet(bullet.bullet, bullet.index);
-  }
-};
+// const drawPlayer = (
+//   p:p5,
+//   rot=p.HALF_PI/2,
+// ) => {
+//   const thrusting = true;
+//   p.push();
+//   p.stroke(255);
+//   p.noFill();
+//   p.strokeWeight(2);
+//   p.translate(400, 400);
+//   p.rotate(rot);
+//   p.quad(0, -40,
+//     -15, 15,
+//     15,15,
+//     0,-40);
+//   p.fill(255);
+//   if (thrusting) {
+//     p.triangle(-10,18,10,18,0,25);
+//   }
+//   p.pop();
+// }
