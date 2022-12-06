@@ -3,27 +3,27 @@ import PlayerDisplay from './PlayerDisplay';
 class LivesDisplay {
   private p:p5;
   private playerSymbolArray:PlayerDisplay[]
-  private numLives:number;
+  // private numLives:number;
   constructor(
     p:p5,
-    numLives:number,
+    // numLives:number,
   ) {
     this.p = p;
     this.playerSymbolArray = [];
-    this.numLives = numLives;
-    if (this.numLives > 0) {
-      for (let i = 0; i < this.numLives; i++) {
-        this.playerSymbolArray.push(
-          new PlayerDisplay(p),
-          // reposition
-        );
-      }
-    }
+    // this.numLives = numLives;
+    // if (this.numLives > 0) {
+    //   for (let i = 0; i < this.numLives; i++) {
+    //     this.playerSymbolArray.push(
+    //       new PlayerDisplay(p),
+    //       // reposition
+    //     );
+    //   }
+    // }
   }
-  draw():void {
+  draw(numLives:number):void {
     const p = this.p;
     p.push();
-    for (let i = 0; i < this.numLives; i++) {
+    for (let i = 0; i < numLives; i++) {
       if (p.frameCount % 3 === 0) {
         p.strokeWeight(p.frameCount % 2)
         p.stroke('#0a0');

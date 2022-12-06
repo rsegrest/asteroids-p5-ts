@@ -119,15 +119,15 @@ class AsteroidController {
     this.asteroids.splice(index, 1);
     if (asteroid instanceof LargeAsteroid) {
       const velocityList = [
-        this.p.createVector(Math.random()-1,Math.random()-1),
-        this.p.createVector(Math.random()-1,Math.random()-1),
+        this.p.createVector(Math.random()*2-1,Math.random()*2-1),
+        this.p.createVector(Math.random()*2-1,Math.random()*2-1),
       ]
       this.spawnMediumAsteroid(position, velocityList[0]!);
       this.spawnMediumAsteroid(position, velocityList[1]!);
     } else if (asteroid instanceof MediumAsteroid) {
       const velocityList = [
-        this.p.createVector(Math.random()-1,Math.random()-1),
-        this.p.createVector(Math.random()-1,Math.random()-1),
+        this.p.createVector(Math.random()*2-1,Math.random()*2-1),
+        this.p.createVector(Math.random()*2-1,Math.random()*2-1),
       ]
       this.spawnSmallAsteroid(position, velocityList[0]!);
       this.spawnSmallAsteroid(position, velocityList[1]!);
