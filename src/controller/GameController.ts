@@ -161,7 +161,6 @@ class GameController {
     if (collision !== null) {
       const explosionPos = collision.bullet.getPos();
       this.pShip.removeBullet(collision.bullet, collision.index);
-      console.log(`collision with asteroid type ${collision.asteroidType}`)
       this.addAsteroidScore(collision.asteroidType);
     }
     const playerCollision = this.asteroidController.checkPlayerCollisions(this.pShip);

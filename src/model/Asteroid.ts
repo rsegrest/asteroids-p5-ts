@@ -66,8 +66,6 @@ class Asteroid {
   checkCollision(collider:Bullet|PlayerShip):boolean {
     const distance = this.getDistanceTo(collider.getPos());
     const collisionRadius = this.getCollisionRadius();
-    console.log(`distance: ${distance}, collisionRadius: ${collisionRadius}`);
-    console.log(`returning: ${distance < collisionRadius}`);
     return distance < collisionRadius;
   }
   draw = ():void => {
