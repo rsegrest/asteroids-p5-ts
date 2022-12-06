@@ -2,18 +2,15 @@ import p5 from 'p5';
 class FooterDisplay {
   private p:p5;
   private font:p5.Font;
-  // private pos:p5.Vector;
   private scale:number;
 
   constructor(
     p:p5,
     font:p5.Font,
-    // pos:p5.Vector,
     scale:number = 1,
   ) {
     this.p = p;
     this.font = font;
-    // this.pos = pos;
     this.scale = scale;
   }
   draw() {
