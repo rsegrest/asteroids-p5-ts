@@ -58,6 +58,9 @@ class Asteroid {
   getCollisionRadius():number {
     return this.size/2;
   }
+  getType():AsteroidType {
+    return this.type;
+  }
   checkCollision(bullet:Bullet):boolean {
     const distance = this.getDistanceTo(bullet);
     const collisionRadius = this.getCollisionRadius();

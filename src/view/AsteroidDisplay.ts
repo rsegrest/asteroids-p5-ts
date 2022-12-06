@@ -3,6 +3,8 @@ import Asteroid from "../model/Asteroid";
 import { AsteroidType } from "../type/AsteroidType";
 import * as AsteroidTypes from "../type/AsteroidType";
 class AsteroidDisplay {
+  public static asteroidColor = 'rgb(0,200,0)';
+  public static vectorStrokeWeight = 1;
   private static p:p5;
 
   constructor(p:p5) {
@@ -12,8 +14,8 @@ class AsteroidDisplay {
     asteroid:Asteroid):void {
       const p = AsteroidDisplay.p;
       p.push();
-      p.stroke(255,0,255);
-      p.strokeWeight(2);
+      p.stroke(AsteroidDisplay.asteroidColor);
+      p.strokeWeight(AsteroidDisplay.vectorStrokeWeight);
       p.translate(asteroid.getPos());
       p.translate(-5,-5);
       p.scale(0.7);
@@ -38,8 +40,8 @@ class AsteroidDisplay {
     const p = AsteroidDisplay.p;
     const pos = asteroid.getPos();
     p.push();
-    p.stroke(255,0,255);
-    p.strokeWeight(2);
+    p.stroke(AsteroidDisplay.asteroidColor);
+    p.strokeWeight(AsteroidDisplay.vectorStrokeWeight);
     p.translate(pos);
     p.translate(-10,-10);
     p.scale(0.7);
@@ -69,8 +71,8 @@ class AsteroidDisplay {
     const p = AsteroidDisplay.p;
     const pos = asteroid.getPos();
     p.push();
-    p.stroke(255,0,255);
-    p.strokeWeight(2);
+    p.stroke(AsteroidDisplay.asteroidColor);
+    p.strokeWeight(AsteroidDisplay.vectorStrokeWeight);
     p.translate(pos);
     p.translate(2,-6);
     p.scale(0.7);
@@ -90,20 +92,6 @@ class AsteroidDisplay {
     p.vertex(-22,-60);
     p.endShape(p.CLOSE);
     p.pop();
-    // p.noFill();
-    // p.beginShape();
-    // p.vertex(7,-38);
-    // p.vertex(42,-60); // top right
-    // p.vertex(78,-32); // right top
-    // p.vertex(54,0); // right middle
-    // p.vertex(80,34); // right bottom
-    // p.vertex(28,76); // bottom right edge
-    // p.vertex(-32,76); // bottom left edge
-    // p.vertex(-60,45);
-    // p.vertex(-60,-22);
-    // p.vertex(-22,-60); // top left
-    // p.endShape(p.CLOSE);
-    // p.pop();
   }
   static drawMediumAsteroidType1(
     asteroid:Asteroid
@@ -111,8 +99,8 @@ class AsteroidDisplay {
     const p = AsteroidDisplay.p;
     const pos = asteroid.getPos();
     p.push();
-    p.stroke(255,0,255);
-    p.strokeWeight(2);
+    p.stroke(AsteroidDisplay.asteroidColor);
+    p.strokeWeight(AsteroidDisplay.vectorStrokeWeight);
     p.translate(pos);
     p.scale(0.7);
     p.noFill();
@@ -139,8 +127,8 @@ class AsteroidDisplay {
     const p = AsteroidDisplay.p;
     const pos = asteroid.getPos();
     p.push();
-    p.stroke(255,0,255);
-    p.strokeWeight(2);
+    p.stroke(AsteroidDisplay.asteroidColor);
+    p.strokeWeight(AsteroidDisplay.vectorStrokeWeight);
     p.translate(pos);
     p.translate(0,-15);
     p.scale(0.7);
@@ -166,8 +154,8 @@ class AsteroidDisplay {
     const p = AsteroidDisplay.p;
     const pos = asteroid.getPos();
     p.push();
-    p.stroke(255,0,255);
-    p.strokeWeight(2);
+    p.stroke(AsteroidDisplay.asteroidColor);
+    p.strokeWeight(AsteroidDisplay.vectorStrokeWeight);
     p.translate(pos);
     p.scale(0.7);
     p.noFill();
@@ -194,8 +182,8 @@ class AsteroidDisplay {
     const p = AsteroidDisplay.p;
     const pos = asteroid.getPos();
     p.push();
-    p.stroke(255,0,255);
-    p.strokeWeight(2);
+    p.stroke(AsteroidDisplay.asteroidColor);
+    p.strokeWeight(AsteroidDisplay.vectorStrokeWeight);
     p.translate(pos);
     p.translate(-16,8)
     p.scale(0.6);
@@ -220,8 +208,8 @@ class AsteroidDisplay {
     const p = AsteroidDisplay.p;
     const pos = asteroid.getPos();
     p.push();
-    p.stroke(255,0,255);
-    p.strokeWeight(2);
+    p.stroke(AsteroidDisplay.asteroidColor);
+    p.strokeWeight(AsteroidDisplay.vectorStrokeWeight);
     p.translate(pos);
     p.scale(0.6);
     p.noFill();
@@ -242,30 +230,21 @@ class AsteroidDisplay {
     p.pop();
   }
   static draw(asteroid:Asteroid):void {
-    // console.log("Drawing Asteroid: " + asteroid.type)
     if (asteroid.type === AsteroidTypes.LARGE_ASTEROID_1) {
-      // console.log("Large Asteroid 1");
       this.drawLargeAsteroidType1(asteroid);
     } else if (asteroid.type === AsteroidTypes.LARGE_ASTEROID_2) {
-      // console.log("Large Asteroid 2");
       this.drawLargeAsteroidType2(asteroid);
     } else if (asteroid.type === AsteroidTypes.LARGE_ASTEROID_3) {
-      // console.log("Large Asteroid 3");
       this.drawLargeAsteroidType3(asteroid);
     } else if (asteroid.type === AsteroidTypes.MEDIUM_ASTEROID_1) {
-      // console.log("Medium Asteroid 1");
       this.drawMediumAsteroidType1(asteroid);
     } else if (asteroid.type === AsteroidTypes.MEDIUM_ASTEROID_2) {
-      // console.log("Medium Asteroid 2");
       this.drawMediumAsteroidType2(asteroid);
     } else if (asteroid.type === AsteroidTypes.MEDIUM_ASTEROID_3) {
-      // console.log("Medium Asteroid 3");
       this.drawMediumAsteroidType3(asteroid);
     } else if (asteroid.type === AsteroidTypes.SMALL_ASTEROID_1) {
-      // console.log("Small Asteroid 1");
       this.drawSmallAsteroidType1(asteroid);
     } else if (asteroid.type === AsteroidTypes.SMALL_ASTEROID_2) {
-      // console.log("Small Asteroid 2");
       this.drawSmallAsteroidType2(asteroid);
     }
   }

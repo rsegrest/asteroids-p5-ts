@@ -34,12 +34,7 @@ class AsteroidController {
       ));
     this.asteroidDisplay = new AsteroidDisplay(p);
     this.explosionDisplay = new ExplosionDisplay(p);
-    this.explosions.push(
-      new Explosion(
-        p,
-        p.createVector(200, 200),
-      )
-    );
+    // this.explosions.push(new Explosion(p,p.createVector(200, 200)));
   }
   reposition = (position:p5.Vector):p5.Vector => {
     let newPos = position;
@@ -103,13 +98,16 @@ class AsteroidController {
     const newPos = this.reposition(position);
     const smallAsteroidTypes = [
       SMALL_ASTEROID_1,
-      SMALL_ASTEROID_2,
+      SMALL_ASTEROID_2
     ];
+    const randomIndex = Math.floor(Math.random()*smallAsteroidTypes.length)
+    const asteroidType = smallAsteroidTypes[randomIndex] as AsteroidType;
+    console.log(`creating a new small asteroid of type ${asteroidType}`)
     this.asteroids.push(
       new SmallAsteroid(
         this.p,
         newPos,
-        smallAsteroidTypes[Math.floor(Math.random()*smallAsteroidTypes.length)] as AsteroidType,
+        asteroidType as AsteroidType,
         velocity,
       ),
     );
@@ -156,7 +154,7 @@ class AsteroidController {
     });
   }
   checkBulletCollisions = (bullets:Bullet[]):null|{
-    bullet:Bullet, index:number
+    bullet:Bullet, index:number, asteroidType:AsteroidType
   } => {
     // bullets.forEach((bullet, index) => {
     for (let i = 0; i < bullets.length; i++) {
@@ -169,9 +167,12 @@ class AsteroidController {
               explosionPosition
             )
           );
+          const asteroidType = this.asteroids[j]?.getType() as AsteroidType;
           this.breakUpAsteroid(this.asteroids[j]!, j);
           return {
-            bullet: (bullets[i]!), index: i
+            bullet: (bullets[i]!),
+            index: i,
+            asteroidType,
           };
         }
       };

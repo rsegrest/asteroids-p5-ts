@@ -1,0 +1,9 @@
+export const ScoreValues = {
+  LARGE_ASTEROID: 20,
+  MEDIUM_ASTEROID: 50,
+  SMALL_ASTEROID: 100,
+  LARGE_SAUCER: 200,
+  SMALL_SAUCER: 1000,
+  OTHER_PLAYER_SHIP: 500,
+}
+export default ScoreValues;

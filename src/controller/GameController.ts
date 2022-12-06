@@ -7,12 +7,17 @@ import PlayerDisplay from "../view/PlayerDisplay";
 import ScoreDisplay from "../view/PlayerScoreDisplay";
 import FooterDisplay from "../view/FooterDisplay";
 import BulletDisplay from "../view/BulletDisplay";
+import ScoreValues from "../type/ScoreValues";
+import * as AsteroidTypes from "../type/AsteroidType";
+import AsteroidType from "../type/AsteroidType";
+
 
 class GameController {
   private static instance:GameController|null = null;
   // game controller member variables
   private numLives:number = 3;
   private score:number = 0;
+  private lastBonus:number = 0;
   // p5js Processing reference
   private p:p5;
   // model references
@@ -62,9 +67,52 @@ class GameController {
   addBullet():void {
     this.getPShip().addBullet();
   }
-
+  addAsteroidScore(asteroidType:AsteroidType):void {
+    if (
+      (asteroidType === AsteroidTypes.LARGE_ASTEROID_1)
+      || (asteroidType === AsteroidTypes.LARGE_ASTEROID_2)
+      || (asteroidType === AsteroidTypes.LARGE_ASTEROID_3)) {
+      this.scoreLargeAsteroid();
+    } else if (
+      (asteroidType === AsteroidTypes.MEDIUM_ASTEROID_1)
+      || (asteroidType === AsteroidTypes.MEDIUM_ASTEROID_2)
+      || (asteroidType === AsteroidTypes.MEDIUM_ASTEROID_3)
+      ) {
+      this.scoreMediumAsteroid();
+    } else if (
+      (asteroidType === AsteroidTypes.SMALL_ASTEROID_1)
+      || (asteroidType === AsteroidTypes.SMALL_ASTEROID_2)
+    ) {
+      this.scoreSmallAsteroid();
+    } else {
+      throw(new Error("Error: unknown asteroid type"));
+    }
+    return;
+  }
+  scoreLargeAsteroid():void {
+    this.rackupScore(ScoreValues.LARGE_ASTEROID);
+  }
+  scoreMediumAsteroid():void {
+    this.rackupScore(ScoreValues.MEDIUM_ASTEROID);
+  }
+  scoreSmallAsteroid():void {
+    this.rackupScore(ScoreValues.SMALL_ASTEROID);
+  }
+  scoreLargeSaucer():void {
+    this.rackupScore(ScoreValues.LARGE_SAUCER);
+  }
+  scoreSmallSaucer():void {
+    this.rackupScore(ScoreValues.SMALL_SAUCER);
+  }
+  scoreDefeatPlayer():void {
+    this.rackupScore(ScoreValues.OTHER_PLAYER_SHIP);
+  }
   rackupScore = (score:number):void => {
     this.score += score;
+    if (this.score - this.lastBonus >= 10000) {
+      this.lastBonus = this.score;
+      this.numLives += 1;
+    }
   }
 
   resetScore = ():void => { this.score = 0; }
@@ -92,10 +140,12 @@ class GameController {
     this.playerController.advance();
     this.playerDisplay.draw(this.pShip);
     this.footerDisplay.draw();
-    const bullet = this.asteroidController.checkBulletCollisions(this.pShip.getBullets())
-    if (bullet !== null) {
-      const explosionPos = bullet.bullet.getPos();
-      this.pShip.removeBullet(bullet.bullet, bullet.index);
+    const collision = this.asteroidController.checkBulletCollisions(this.pShip.getBullets())
+    if (collision !== null) {
+      const explosionPos = collision.bullet.getPos();
+      this.pShip.removeBullet(collision.bullet, collision.index);
+      console.log(`collision with asteroid type ${collision.asteroidType}`)
+      this.addAsteroidScore(collision.asteroidType);
     }
   }
   static createInstance(p:p5, font:p5.Font):GameController {
