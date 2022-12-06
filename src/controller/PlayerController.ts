@@ -14,7 +14,7 @@ class PlayerController {
     this.playerModel.advance();
     this.playerDisplay.draw(this.playerModel);
     const bullets = this.playerModel.getBullets();
-    console.log(`bullets.length: ${bullets.length}`);
+    // console.log(`bullets.length: ${bullets.length}`);
     for (let i = 0; i < bullets.length; i++) {
       // bullets[i].advance();
       // bullets[i].draw();

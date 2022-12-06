@@ -90,20 +90,20 @@ class AsteroidDisplay {
     p.vertex(-22,-60);
     p.endShape(p.CLOSE);
     p.pop();
-    p.noFill();
-    p.beginShape();
-    p.vertex(7,-38);
-    p.vertex(42,-60); // top right
-    p.vertex(78,-32); // right top
-    p.vertex(54,0); // right middle
-    p.vertex(80,34); // right bottom
-    p.vertex(28,76); // bottom right edge
-    p.vertex(-32,76); // bottom left edge
-    p.vertex(-60,45);
-    p.vertex(-60,-22);
-    p.vertex(-22,-60); // top left
-    p.endShape(p.CLOSE);
-    p.pop();
+    // p.noFill();
+    // p.beginShape();
+    // p.vertex(7,-38);
+    // p.vertex(42,-60); // top right
+    // p.vertex(78,-32); // right top
+    // p.vertex(54,0); // right middle
+    // p.vertex(80,34); // right bottom
+    // p.vertex(28,76); // bottom right edge
+    // p.vertex(-32,76); // bottom left edge
+    // p.vertex(-60,45);
+    // p.vertex(-60,-22);
+    // p.vertex(-22,-60); // top left
+    // p.endShape(p.CLOSE);
+    // p.pop();
   }
   static drawMediumAsteroidType1(
     asteroid:Asteroid
@@ -242,14 +242,32 @@ class AsteroidDisplay {
     p.pop();
   }
   static draw(asteroid:Asteroid):void {
-    // this.drawLargeAsteroidType1(asteroid);
-    // this.drawLargeAsteroidType2(asteroid);
-    // this.drawLargeAsteroidType3(asteroid);
-    // this.drawMediumAsteroidType1(asteroid);
-    // this.drawMediumAsteroidType2(asteroid);
-    // this.drawMediumAsteroidType3(asteroid);
-    // this.drawSmallAsteroidType1(asteroid);
-    this.drawSmallAsteroidType2(asteroid);
+    // console.log("Drawing Asteroid: " + asteroid.type)
+    if (asteroid.type === AsteroidTypes.LARGE_ASTEROID_1) {
+      // console.log("Large Asteroid 1");
+      this.drawLargeAsteroidType1(asteroid);
+    } else if (asteroid.type === AsteroidTypes.LARGE_ASTEROID_2) {
+      // console.log("Large Asteroid 2");
+      this.drawLargeAsteroidType2(asteroid);
+    } else if (asteroid.type === AsteroidTypes.LARGE_ASTEROID_3) {
+      // console.log("Large Asteroid 3");
+      this.drawLargeAsteroidType3(asteroid);
+    } else if (asteroid.type === AsteroidTypes.MEDIUM_ASTEROID_1) {
+      // console.log("Medium Asteroid 1");
+      this.drawMediumAsteroidType1(asteroid);
+    } else if (asteroid.type === AsteroidTypes.MEDIUM_ASTEROID_2) {
+      // console.log("Medium Asteroid 2");
+      this.drawMediumAsteroidType2(asteroid);
+    } else if (asteroid.type === AsteroidTypes.MEDIUM_ASTEROID_3) {
+      // console.log("Medium Asteroid 3");
+      this.drawMediumAsteroidType3(asteroid);
+    } else if (asteroid.type === AsteroidTypes.SMALL_ASTEROID_1) {
+      // console.log("Small Asteroid 1");
+      this.drawSmallAsteroidType1(asteroid);
+    } else if (asteroid.type === AsteroidTypes.SMALL_ASTEROID_2) {
+      // console.log("Small Asteroid 2");
+      this.drawSmallAsteroidType2(asteroid);
+    }
   }
 }
 export default AsteroidDisplay;

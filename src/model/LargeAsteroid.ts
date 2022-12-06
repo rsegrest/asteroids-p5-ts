@@ -11,24 +11,24 @@ class LargeAsteroid extends Asteroid {
   ) {
     super(p, initialPos, 100, type, velocity);
   }
-  draw = ():void => {
-    const p = this.getP();
-    const pos = this.getPos();
-    if (p) {
-      p.push();
-      if (this.active) {
-        p.stroke(255);
-      } else {
-        p.stroke(255, 0, 0);
-      }
-      p.noFill();
-      p.strokeWeight(2);
-      p.translate(
-        pos.x,pos.y);
-      p.circle(0,0,100);
-      p.pop();
-    }
-  }
+  // draw = ():void => {
+  //   const p = this.getP();
+  //   const pos = this.getPos();
+  //   if (p) {
+  //     p.push();
+  //     if (this.active) {
+  //       p.stroke(255);
+  //     } else {
+  //       p.stroke(255, 0, 0);
+  //     }
+  //     p.noFill();
+  //     p.strokeWeight(2);
+  //     p.translate(
+  //       pos.x,pos.y);
+  //     p.circle(0,0,100);
+  //     p.pop();
+  //   }
+  // }
   toString():string {
     return `LargeAsteroid: pos: ${this.pos}, velocity: ${this.velocity}`;
   }
