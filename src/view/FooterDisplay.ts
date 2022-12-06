@@ -24,7 +24,7 @@ class FooterDisplay {
       p.noStroke();
       p.textFont(font);
       p.textSize(12);
-      p.text('© 2023 Rick Segrest', 300, 500);
+      p.text('© 2023 Rick Segrest', (p.width/2)-72, p.height*.95);
     }
   }
 }

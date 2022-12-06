@@ -1,15 +1,15 @@
 6 December 2022
 
+TODO: Collision detection (player and asteroid)
 TODO: Advance level
 TODO: Flying saucer
-TODO: Scoring
-TODO: Collision detection (player and asteroid)
 
 DONE:
 : Explosion animation
 : Score display
 : Draw asteroid shapes
 : Spawn random type of asteroid, render accordingly
+: Scoring
 
 
 
