@@ -1,6 +1,24 @@
-4 December 2022
+5 December 2022
 
-TODO: Score display
 TODO: Advance level
 TODO: Flying saucer
-TODO: Draw asteroid shapes
+TODO: Scoring
+TODO: Collision detection (player and asteroid)
+
+DONE:
+: Explosion animation
+: Score display
+: Draw asteroid shapes
+: Spawn random type of asteroid, render accordingly
+
+
+
+Scoring:
+Shooting A Large Asteroid: 20 Points
+Shooting A Medium Asteroid: 50 Points
+Shooting A Small Asteroid: 100 Points
+Shooting A Large Saucer: 200 Points
+Shooting A Small Saucer: 1000 Points
+Shooting Opponent In Competition Mode: 500 Points
+
+For every 10,000 points earned, a bonus ship will be awarded.

@@ -11,32 +11,15 @@ export class Particle {
   ) {
     let velx = Math.random()*2-1;
     let vely = Math.random()*2-1;
-    console.log(`velocity is ${velx}, ${vely} in particle constructor`)
     this.p = p;
     this.position = position;
     this.velocity = p.createVector(velx, vely);
     this.lifespan = 100;
   }
-  // move to view static class
-  // drawParticleAt(pos:p5.Vector):void {
-  //   // console.log('drawing particle at', pos);
-  //   const p = this.p;
-  //   p.push();
-  //   p.fill('rgb(255,255,0)');
-  //   p.noStroke();
-  //   p.translate(pos.x as number, pos.y as number);
-  //   p.circle(0,0,2);
-  //   p.pop();
-  // }
   advance():void {
     this.lifespan -= 1;
-    console.log(`adding ${this.velocity} to ${this.position}`)
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
-    console.log(`in particle.advance(): this.position : ${this.position} `)
-    // if (this.lifespan > 0) {
-    //   this.drawParticleAt(this.position);
-    // }
   }
   getPos():p5.Vector {
     return this.position;
@@ -65,7 +48,6 @@ class Explosion {
   ) {
     this.p = p;
     this.pos = this.normalizePosition(pos);
-    console.log('creating explosion at', this.pos);
     for (let i = 0; i < 30; i += 1) {
       const newParticle = new Particle(
         this.p,

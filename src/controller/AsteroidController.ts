@@ -150,12 +150,8 @@ class AsteroidController {
       }
       AsteroidDisplay.draw(asteroid);
     });
-    console.log(`explosions: ${this.explosions.length}`)
-    
-    // LEFT-OFF
     this.explosions.forEach((explosion, index) => {
       explosion.advance();
-      console.log(`explosion: ${explosion.getPos()}`)
       ExplosionDisplay.draw(explosion);
     });
   }
