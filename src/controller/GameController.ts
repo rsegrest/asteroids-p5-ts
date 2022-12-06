@@ -4,7 +4,7 @@ import PlayerController from "./PlayerController";
 import PlayerShip from "../model/PlayerShip";
 import LivesDisplay from "../view/LivesDisplay";
 import PlayerDisplay from "../view/PlayerDisplay";
-import ScoreDisplay from "../view/PlayerScoreDisplay";
+import ScoreDisplay from "../view/ScoreDisplay";
 import FooterDisplay from "../view/FooterDisplay";
 import BulletDisplay from "../view/BulletDisplay";
 import ScoreValues from "../type/ScoreValues";

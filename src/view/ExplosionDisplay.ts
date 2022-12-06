@@ -28,7 +28,9 @@ class ExplosionDisplay {
     const p = ExplosionDisplay.p;
     const particles = explosion.getParticles();
     particles.forEach((particle) => {
-      ExplosionDisplay.drawParticle(particle);
+      if (p.frameCount % 3 !== 0) {
+        ExplosionDisplay.drawParticle(particle);
+      }
     });
   }
 }

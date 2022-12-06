@@ -16,7 +16,7 @@ class PlayerDisplay {
   ) => {
     p.push();
     p.stroke(color);
-    p.strokeWeight(2);
+    p.strokeWeight(1);
     p.translate(position);
     p.scale(scale);
     p.rotate((p.HALF_PI)+rotation);
@@ -37,7 +37,9 @@ class PlayerDisplay {
     // const scale = player.getScale();
     const scale = 0.3;
     const color = player.getColor();
-    PlayerDisplay.drawPlayer(p, pos, rotation, scale, color);
+    if (p.frameCount % 3 !== 0) {
+      PlayerDisplay.drawPlayer(p, pos, rotation, scale, color);
+    }
   }
 }
 export default PlayerDisplay;

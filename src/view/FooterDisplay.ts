@@ -18,11 +18,14 @@ class FooterDisplay {
   }
   draw() {
     const p = this.p;
-    const font = this.font;
-    p.fill('#2f2');
-    p.textFont(font);
-    p.textSize(12);
-    p.text('© 2023 Rick Segrest', 300, 500);
+    if (this.p.frameCount % 3 !== 0) {
+      const font = this.font;
+      p.fill('rgb(0,128,0)');
+      p.noStroke();
+      p.textFont(font);
+      p.textSize(12);
+      p.text('© 2023 Rick Segrest', 300, 500);
+    }
   }
 }
 export default FooterDisplay;

@@ -230,22 +230,24 @@ class AsteroidDisplay {
     p.pop();
   }
   static draw(asteroid:Asteroid):void {
-    if (asteroid.type === AsteroidTypes.LARGE_ASTEROID_1) {
-      this.drawLargeAsteroidType1(asteroid);
-    } else if (asteroid.type === AsteroidTypes.LARGE_ASTEROID_2) {
-      this.drawLargeAsteroidType2(asteroid);
-    } else if (asteroid.type === AsteroidTypes.LARGE_ASTEROID_3) {
-      this.drawLargeAsteroidType3(asteroid);
-    } else if (asteroid.type === AsteroidTypes.MEDIUM_ASTEROID_1) {
-      this.drawMediumAsteroidType1(asteroid);
-    } else if (asteroid.type === AsteroidTypes.MEDIUM_ASTEROID_2) {
-      this.drawMediumAsteroidType2(asteroid);
-    } else if (asteroid.type === AsteroidTypes.MEDIUM_ASTEROID_3) {
-      this.drawMediumAsteroidType3(asteroid);
-    } else if (asteroid.type === AsteroidTypes.SMALL_ASTEROID_1) {
-      this.drawSmallAsteroidType1(asteroid);
-    } else if (asteroid.type === AsteroidTypes.SMALL_ASTEROID_2) {
-      this.drawSmallAsteroidType2(asteroid);
+    if (AsteroidDisplay.p.frameCount % 3 !== 0) {
+      if (asteroid.type === AsteroidTypes.LARGE_ASTEROID_1) {
+        this.drawLargeAsteroidType1(asteroid);
+      } else if (asteroid.type === AsteroidTypes.LARGE_ASTEROID_2) {
+        this.drawLargeAsteroidType2(asteroid);
+      } else if (asteroid.type === AsteroidTypes.LARGE_ASTEROID_3) {
+        this.drawLargeAsteroidType3(asteroid);
+      } else if (asteroid.type === AsteroidTypes.MEDIUM_ASTEROID_1) {
+        this.drawMediumAsteroidType1(asteroid);
+      } else if (asteroid.type === AsteroidTypes.MEDIUM_ASTEROID_2) {
+        this.drawMediumAsteroidType2(asteroid);
+      } else if (asteroid.type === AsteroidTypes.MEDIUM_ASTEROID_3) {
+        this.drawMediumAsteroidType3(asteroid);
+      } else if (asteroid.type === AsteroidTypes.SMALL_ASTEROID_1) {
+        this.drawSmallAsteroidType1(asteroid);
+      } else if (asteroid.type === AsteroidTypes.SMALL_ASTEROID_2) {
+        this.drawSmallAsteroidType2(asteroid);
+      }
     }
   }
 }

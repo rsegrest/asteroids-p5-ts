@@ -17,13 +17,15 @@ class BulletDisplay {
     p.scale(scale);
     if (bullet.checkIfDead()) {
       p.fill('rgb(0,128,255)');
+      p.stroke('rgb(0,128,255)')
     } else {
-      p.fill('rgb(255,0,0)');
+      p.stroke('rgb(0,64,0)');
+      p.fill('rgb(128,255,128)');
     }
-    p.noStroke();
     p.translate(pos.x as number, pos.y as number);
     p.rotate(rot);
-    p.circle(0,0,5);
+    p.circle(0,0,3);
+    p.point(0,0);
     p.pop();
   }
 }
