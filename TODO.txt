@@ -1,6 +1,6 @@
 6 December 2022
 
-TODO: Shots should wrap around
+TODO: Shots should wrap around -- static wrap around function 
 TODO: Reduce thrust (and turning?)
 TODO: Break up asteroid on collision
 TODO: Explosion on player collision (and asteroid if not already added)
