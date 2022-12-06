@@ -1,8 +1,23 @@
 6 December 2022
 
-TODO: Collision detection (player and asteroid)
+TODO: Shots should wrap around
+TODO: Reduce thrust (and turning?)
+TODO: Break up asteroid on collision
+TODO: Explosion on player collision (and asteroid if not already added)
+TODO: Hyperspace button
 TODO: Advance level
 TODO: Flying saucer
+TODO: Small saucer available after 10_000 points
+TODO: Large saucer moves and shoots randomly
+TODO: Small saucer aims at and flies toward player
+TODO: Flying saucer shoots
+TODO: Flying saucer collision
+TODO: Flying saucer bullet collisions
+
+Authenticity additions:
+TODO: Limit 4 shots on screen at once
+
+
 
 DONE:
 : Explosion animation
@@ -10,6 +25,7 @@ DONE:
 : Draw asteroid shapes
 : Spawn random type of asteroid, render accordingly
 : Scoring
+: Collision detection (player and asteroid)
 
 
 
