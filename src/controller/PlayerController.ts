@@ -16,9 +16,15 @@ class PlayerController {
     this.playerModel = playerModel;
     this.playerNumber = playerNumber;
   }
+  reset():void {
+    this.playerModel.reset();
+    this.playerDisplay.draw(this.playerModel);
+  }
   advance():void {
     this.playerModel.advance();
-    this.playerDisplay.draw(this.playerModel);
+    if(!this.playerModel.getIsResetting()) {
+      this.playerDisplay.draw(this.playerModel);
+    }
     const bullets = this.playerModel.getBullets();
     for (let i = 0; i < bullets.length; i++) {
       BulletDisplay.draw(bullets[i] as Bullet);

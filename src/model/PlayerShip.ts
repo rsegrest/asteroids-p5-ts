@@ -9,6 +9,7 @@ export class PlayerShip {
   private velocity;
   private scale = 1;
   private coolDown = 0; // wait before firing again
+  private isResetting = false;
 
   constructor(p:p5) {
     this.p = p;
@@ -62,6 +63,12 @@ export class PlayerShip {
   getColor():string {
     return '#00FF00';
   }
+  reset():void {
+    this.pos = this.p.createVector(this.p.width/2, this.p.height/2);
+    this.rot = 0;
+    this.velocity = this.p.createVector(0,0);
+    this.isResetting = false;
+  }
   advance():void {
     this.pos.x += this.velocity.x;
     this.pos.y += this.velocity.y;
@@ -85,7 +92,12 @@ export class PlayerShip {
       this.coolDown -= 1;
     }
   }
-
+  setIsResetting(isResetting:boolean):void {
+    this.isResetting = isResetting;
+  }
+  getIsResetting():boolean {
+    return this.isResetting;
+  }
   drawAfterBurner():void {
     const p = this.p;
     const rot = this.rot;

@@ -18,6 +18,7 @@ import AsteroidType, {
   SMALL_ASTEROID_1,
   SMALL_ASTEROID_2,
 } from '../type/AsteroidType';
+import PlayerShip from '../model/PlayerShip';
 class AsteroidController {
   private p:p5;
   private asteroids:Asteroid[] = [];
@@ -152,6 +153,16 @@ class AsteroidController {
       explosion.advance();
       ExplosionDisplay.draw(explosion);
     });
+  }
+  checkPlayerCollisions = (player:PlayerShip):boolean => {
+    let collided = false;
+    this.asteroids.forEach((asteroid, index) => {
+      if (asteroid.checkCollision(player)) {
+        collided = true;
+        player.setIsResetting(true);
+      }
+    });
+    return collided;
   }
   checkBulletCollisions = (bullets:Bullet[]):null|{
     bullet:Bullet, index:number, asteroidType:AsteroidType

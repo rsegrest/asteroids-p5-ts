@@ -1,7 +1,9 @@
 
 import p5 from 'p5';
 import Bullet from './Bullet';
+import PlayerShip from './PlayerShip';
 import { AsteroidType } from '../type/AsteroidType';
+
 
 class Asteroid {
   p:p5;
@@ -52,8 +54,8 @@ class Asteroid {
   setVelocity(newVelocity:p5.Vector):void {
     this.velocity = newVelocity;
   }
-  getDistanceTo(bullet:Bullet):number {
-    return this.pos.dist(bullet.getPos());
+  getDistanceTo(point:p5.Vector):number {
+    return this.pos.dist(point);
   }
   getCollisionRadius():number {
     return this.size/2;
@@ -61,9 +63,11 @@ class Asteroid {
   getType():AsteroidType {
     return this.type;
   }
-  checkCollision(bullet:Bullet):boolean {
-    const distance = this.getDistanceTo(bullet);
+  checkCollision(collider:Bullet|PlayerShip):boolean {
+    const distance = this.getDistanceTo(collider.getPos());
     const collisionRadius = this.getCollisionRadius();
+    console.log(`distance: ${distance}, collisionRadius: ${collisionRadius}`);
+    console.log(`returning: ${distance < collisionRadius}`);
     return distance < collisionRadius;
   }
   draw = ():void => {

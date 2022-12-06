@@ -129,7 +129,17 @@ class GameController {
       this.addBullet();
     }
   }
-
+  canReset():boolean {
+    const theAsteroids = this.asteroidController.getAsteroids();
+    const spawnPoint = this.p.createVector(this.p.width/2, this.p.height/2);
+    for (let i = 0; i < theAsteroids.length; i += 1) {
+      if ((theAsteroids[i]?.getDistanceTo(spawnPoint) !== null)
+      && (theAsteroids[i]!.getDistanceTo(spawnPoint) < 100)) {
+        return false;
+      }
+    }
+    return true;
+  }
   advance():void {
     this.checkKeys();
 
@@ -138,7 +148,14 @@ class GameController {
     this.pShip.advance();
     this.asteroidController.advance();
     this.playerController.advance();
-    this.playerDisplay.draw(this.pShip);
+    if (!this.pShip.getIsResetting()) {
+      this.playerDisplay.draw(this.pShip);
+    } else {
+      if (this.canReset()) {
+        this.pShip.reset();
+      }
+    }
+    
     this.footerDisplay.draw();
     const collision = this.asteroidController.checkBulletCollisions(this.pShip.getBullets())
     if (collision !== null) {
@@ -146,6 +163,14 @@ class GameController {
       this.pShip.removeBullet(collision.bullet, collision.index);
       console.log(`collision with asteroid type ${collision.asteroidType}`)
       this.addAsteroidScore(collision.asteroidType);
+    }
+    const playerCollision = this.asteroidController.checkPlayerCollisions(this.pShip);
+    if (playerCollision) {
+      this.numLives -= 1;
+      this.pShip.setIsResetting(true);
+      if (this.canReset()) {
+        this.pShip.reset();
+      }
     }
   }
   static createInstance(p:p5, font:p5.Font):GameController {
