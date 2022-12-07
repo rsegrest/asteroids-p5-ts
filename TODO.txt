@@ -2,10 +2,6 @@
 
 TODO: Shots should wrap around -- static wrap around function 
 TODO: Reduce thrust (and turning?)
-TODO: Break up asteroid on collision
-TODO: Explosion on player collision (and asteroid if not already added)
-TODO: Hyperspace button
-TODO: Advance level
 TODO: Flying saucer
 TODO: Small saucer available after 10_000 points
 TODO: Large saucer moves and shoots randomly
@@ -26,6 +22,10 @@ DONE:
 : Spawn random type of asteroid, render accordingly
 : Scoring
 : Collision detection (player and asteroid)
+: Hyperspace button
+: Break up asteroid on collision
+: Explosion on player collision (and asteroid if not already added)
+: Advance level
 
 
 

@@ -10,7 +10,7 @@ import {
   // playerController,
   // playerDisplay,
   // footerDisplay,
-  gameControlller,
+  gameController,
 } from "./setup";
 
 
@@ -19,5 +19,5 @@ export const draw = (p: p5): void => {
   p.createCanvas(800,600);
   p.background(10);
   // addFooter(p,font);
-  gameControlller.advance();
+  gameController.advance();
 };

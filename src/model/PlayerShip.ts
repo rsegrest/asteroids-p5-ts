@@ -37,6 +37,12 @@ export class PlayerShip {
     this.velocity.x += thrustVector.x;
     this.velocity.y += thrustVector.y;
   }
+  hyperspace():void {
+    this.velocity.x = 0;
+    this.velocity.y = 0;
+    this.pos.x = Math.random()*this.p.width;
+    this.pos.y = Math.random()*this.p.height;
+  }
   addBullet():void {
     if (this.coolDown === 0) {
       this.bullets.push(new Bullet(
@@ -82,7 +88,6 @@ export class PlayerShip {
     } else if (this.pos.y as number < 0) {
       this.pos.y = this.p.height;
     }
-    // this.draw();
     this.velocity.mag() > 0.1 ? this.velocity.mult(0.99) : this.velocity.mult(0);
     for (let i = 0; i < this.bullets.length; i++) {
       const thisBullet = (this.bullets[i] as Bullet);
@@ -114,31 +119,5 @@ export class PlayerShip {
     p.triangle(-10,-5,-10,5,-15,0);
     p.pop();
   }
-  // draw():void {
-  //   const isThrusting = (this.thrust > 0);
-  //   const p = this.p;
-  //   const rot = this.rot;
-
-  //   p.push();
-  //   p.scale(this.scale);
-  //   p.stroke(255);
-  //   p.noFill();
-  //   p.strokeWeight(2);
-  //   p.translate(this.pos.x as number, this.pos.y as number);
-  //   p.rotate(rot);
-  //   p.point(0,0);
-  //   p.quad(20, 0,
-  //     -8,-8,
-  //     -8, 8,
-  //     20,0);
-  //   p.fill(255);
-  //   p.pop();
-  //   if (isThrusting) {
-  //     this.drawAfterBurner();
-  //   }
-  //   for (let i = 0; i < this.bullets.length; i++) {
-  //     (this.bullets[i] as Bullet).draw();
-  //   }
-  // }
 }
 export default PlayerShip;

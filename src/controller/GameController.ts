@@ -10,6 +10,7 @@ import BulletDisplay from "../view/BulletDisplay";
 import ScoreValues from "../type/ScoreValues";
 import * as AsteroidTypes from "../type/AsteroidType";
 import AsteroidType from "../type/AsteroidType";
+import Explosion from "../model/Explosion";
 
 
 class GameController {
@@ -18,6 +19,7 @@ class GameController {
   private numLives:number = 3;
   private score:number = 0;
   private lastBonus:number = 0;
+  private level:number = 1;
   // p5js Processing reference
   private p:p5;
   // model references
@@ -52,12 +54,16 @@ class GameController {
     
     this.scoreDisplay = new ScoreDisplay(p, font);
     this.livesDisplay = new LivesDisplay(p);
+    this.level = 1;
+    this.spawnWave();
   }
 
+  spawnWave():void {
+    this.asteroidController.spawnAsteroidWave(this.level);
+  }
   moveCCW():void {
     this.getPShip().moveCCW();
   }
-
   moveCW():void {
     this.getPShip().moveCW();
   }
@@ -66,6 +72,9 @@ class GameController {
   }
   addBullet():void {
     this.getPShip().addBullet();
+  }
+  hyperspace():void {
+    this.getPShip().hyperspace();
   }
   addAsteroidScore(asteroidType:AsteroidType):void {
     if (
@@ -127,7 +136,7 @@ class GameController {
       this.addThrust();
     } else if (p.keyIsDown(32)) {
       this.addBullet();
-    }
+    } 
   }
   canReset():boolean {
     const theAsteroids = this.asteroidController.getAsteroids();
@@ -159,17 +168,36 @@ class GameController {
     this.footerDisplay.draw();
     const collision = this.asteroidController.checkBulletCollisions(this.pShip.getBullets())
     if (collision !== null) {
-      const explosionPos = collision.bullet.getPos();
       this.pShip.removeBullet(collision.bullet, collision.index);
       this.addAsteroidScore(collision.asteroidType);
+      this.checkIfLevelComplete();
     }
     const playerCollision = this.asteroidController.checkPlayerCollisions(this.pShip);
     if (playerCollision) {
+      const explosionPos = this.pShip.getPos();
+      
+      this.asteroidController.addExplosion(
+        new Explosion(
+          this.p,
+          explosionPos
+        )
+      );
+        // this.addAsteroidScore(collision.asteroidType);
+      
+
       this.numLives -= 1;
       this.pShip.setIsResetting(true);
       if (this.canReset()) {
         this.pShip.reset();
       }
+    }
+  }
+  checkIfLevelComplete():void {
+    const asteroidLength = this.asteroidController.getNumActiveAsteroids();
+    console.log(`asteroidLength: ${asteroidLength}`)
+    if (asteroidLength === 0) {
+      this.level += 1;
+      this.asteroidController.spawnAsteroidWave(this.level);
     }
   }
   static createInstance(p:p5, font:p5.Font):GameController {
