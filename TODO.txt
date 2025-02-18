@@ -1,4 +1,8 @@
-6 December 2022
+17 Feb 2025 -- Vector graphics
+TODO: Bring in sample vector graphics
+DONE: 
+
+6 December 2022 -- Asteroids
 
 TODO: Shots should wrap around -- static wrap around function 
 TODO: Reduce thrust (and turning?)
@@ -12,6 +16,7 @@ TODO: Flying saucer bullet collisions
 
 Authenticity additions:
 TODO: Limit 4 shots on screen at once
+TODO: Sound
 
 
 

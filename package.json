@@ -23,7 +23,7 @@
   "scripts": {
     "build": "npm run bundle && npm run format:dist && npm run minify",
     "build:dev": "nodemon npm run bundle && npm run format:dist",
-    "bundle": "tsc && rollup --config",
+    "bundle": "tsc && rollup -c",
     "preformat:dist": "eslint --fix --no-ignore dist/script.js",
     "format:dist": "prettier --write dist/script.js",
     "minify": "terser dist/script.js --output dist/script.min.js --compress --mangle",
