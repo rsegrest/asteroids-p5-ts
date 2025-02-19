@@ -69,8 +69,8 @@ function pointsTo2DArray(points: string[]) {
 }
 
 function processPolygon(p: p5, poly: Element) {
-  console.log("processPolygon -- poly = ");
-  console.log(poly);
+  // console.log("processPolygon -- poly = ");
+  // console.log(poly);
   const points = poly?.getAttribute("points")?.split(" ");
   const ptArray = pointsTo2DArray(points as string[]);
   drawPolygon(p, ptArray as number[][]);
@@ -87,6 +87,8 @@ function drawPolygon(p: p5, ptArray: Array<Array<number>>) {
 }
 
 export async function processSVG(p: p5, lines: string[]) {
+  // console.log("processSVG");
+  // console.log(lines);
   const svgString = lines?.join("\n");
   const parser = new DOMParser();
   const doc = await parser.parseFromString(svgString, "image/svg+xml");

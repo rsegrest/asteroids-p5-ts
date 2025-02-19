@@ -1,7 +1,13 @@
 import type p5 from "p5";
 
 import GameController from "./controller/GameController";
-import { loadSVG, processSVG, lines, polygons } from "./svg/svg";
+import {
+  loadSVG,
+  processSVG,
+  lines,
+  polygons,
+  displayPolygons,
+} from "./svg/svg";
 
 export let font: p5.Font;
 export let svg_example: string[];
@@ -13,7 +19,21 @@ export const preload = (p: p5): void => {
 
   loadSVG(p).then((result: any) => {
     console.log("then->");
-    console.log(lines);
+    // console.log(lines);
+    console.log(result);
+    const polygonPromise = processSVG(p, lines);
+    // .then((r2: any) => {
+    //   console.log("then(2)->");
+    //   console.log("polygons:");
+    //   console.log(polygons);
+    //   console.log("r2");
+    //   console.log(r2);
+    // });
+    polygonPromise.then((PGs: any) => {
+      console.log("completed pg promise");
+      // console.log("polygons:");
+      // console.log(polygons);
+    });
   });
   // console.log("svg_example:");
   // console.log(svg_example);
@@ -49,6 +69,7 @@ export const setup = (p: p5): void => {
   console.log("LINES???");
   console.log(lines);
   processSVG(p, lines);
+  // displayPolygons(p);
   console.log("setup: width/height");
   console.log(window.innerWidth, window.innerHeight);
   p.createCanvas(window.innerWidth, window.innerHeight);
