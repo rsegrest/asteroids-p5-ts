@@ -25,28 +25,33 @@ import p5 from "p5";
 // let lines = [];
 // let i = 0;
 // let svgString = "";
+export let lines: string[] = [];
+export let polygons: any | any[] = [];
 
-let polygons;
-
-function loadSVG(p: p5, filename?: string) {
+export async function loadSVG(p: p5, filename = "quick-svg-from-ai.svg") {
   console.log("preload");
+  lines = p.loadStrings(filename);
+  // LINES IS NOT YET AVAILABLE
+  // console.log("lines:");
+  // console.log(lines);
   // const textFile = loadStrings('quick-svg-from-ai.svg', doText);
   // console.log(textFile);
-  const lines = p.loadStrings("quick-svg-from-ai.svg");
   // console.log(lines.length);
   // svgString = lines.join("")
   // console.log(lines)
   // console.log(svgString);
-  return lines;
+  // return lines;
+  // await processSVG(p, lines);
+  // console.log(polygons);
 }
 
 function pointsTo2DArray(points: string[]) {
   console.log(points);
   const ptArray: Array<Array<number>> = [];
-  for (let pt of points) {
+  for (const pt of points) {
     const xyArray = pt.split(",");
     if (xyArray.length > 1) {
-      let [x, y] = pt.split(",");
+      const [x, y] = pt.split(",");
       if (x && y) {
         if (typeof x === "string" && typeof y === "string") {
           const xNum = parseFloat(x);
@@ -64,35 +69,49 @@ function pointsTo2DArray(points: string[]) {
 }
 
 function processPolygon(p: p5, poly: Element) {
-  let points = poly?.getAttribute("points")?.split(" ");
+  console.log("processPolygon -- poly = ");
+  console.log(poly);
+  const points = poly?.getAttribute("points")?.split(" ");
   const ptArray = pointsTo2DArray(points as string[]);
   drawPolygon(p, ptArray as number[][]);
-  // console.log(ptArray);
-  // return ptArray;
 }
 
 function drawPolygon(p: p5, ptArray: Array<Array<number>>) {
   p.push();
   p.beginShape();
-  for (let pt of ptArray) {
+  for (const pt of ptArray) {
     p.vertex(pt[0] as number, pt[1] as number);
   }
   p.endShape(p.CLOSE);
   p.pop();
 }
 
-function processSVG(p: p5, lines: string[]) {
+export async function processSVG(p: p5, lines: string[]) {
   const svgString = lines?.join("\n");
   const parser = new DOMParser();
-  const doc = parser.parseFromString(svgString, "image/svg+xml");
-  let polygons = doc.querySelectorAll("polygon");
-
+  const doc = await parser.parseFromString(svgString, "image/svg+xml");
+  polygons = await doc.querySelectorAll("polygon");
+  return polygons;
   // console.log(polygons)
   // console.log(polygons.length)
   // const poly = polygons[0];
-  for (let poly of polygons) {
-    // console.log("poly:");
-    // console.log(poly);
+  // if (!Array.isArray(polygons)) {
+  //   console.log("polygons is not an array");
+  //   console.log(polygons);
+  //   polygons = [polygons];
+  // }
+
+  // for (const poly of polygons) {
+  //   // console.log("poly:");
+  //   // console.log(poly);
+  //   processPolygon(p, poly);
+  // }
+}
+
+export function displayPolygons(p: p5) {
+  console.log(polygons);
+  console.log(polygons.length);
+  for (const poly of polygons) {
     processPolygon(p, poly);
   }
 }
