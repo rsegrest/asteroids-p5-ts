@@ -29,7 +29,7 @@ export let lines: string[] = [];
 export let polygons: any | any[] = [];
 
 export async function loadSVG(p: p5, filename = "quick-svg-from-ai.svg") {
-  console.log("preload");
+  // console.log("preload");
   lines = p.loadStrings(filename);
   // LINES IS NOT YET AVAILABLE
   // console.log("lines:");
@@ -86,13 +86,13 @@ function drawPolygon(p: p5, ptArray: Array<Array<number>>) {
   p.pop();
 }
 
-export async function processSVG(p: p5, lines: string[]) {
+export async function processSVG(p: p5, lines: string[]): any {
   // console.log("processSVG");
   // console.log(lines);
   const svgString = lines?.join("\n");
   const parser = new DOMParser();
-  const doc = await parser.parseFromString(svgString, "image/svg+xml");
-  polygons = await doc.querySelectorAll("polygon");
+  const doc = parser.parseFromString(svgString, "image/svg+xml");
+  polygons = doc.querySelectorAll("polygon");
   return polygons;
   // console.log(polygons)
   // console.log(polygons.length)
@@ -110,7 +110,7 @@ export async function processSVG(p: p5, lines: string[]) {
   // }
 }
 
-export function displayPolygons(p: p5) {
+export function displayPolygons(p: p5): void {
   console.log(polygons);
   console.log(polygons.length);
   for (const poly of polygons) {

@@ -21,6 +21,7 @@
   ],
   "private": true,
   "scripts": {
+    "start": "npm run bundle && npm run format:dist && node server.js",
     "server": "node server.js",
     "build": "npm run bundle && npm run format:dist && npm run minify",
     "build:dev": "nodemon npm run bundle && npm run format:dist",
