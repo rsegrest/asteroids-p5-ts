@@ -7,6 +7,7 @@ import SVGCircle from "./primitives/SVGCircle";
 import SVGEllipse from "./primitives/SVGEllipse";
 import SVGLine from "./primitives/SVGLine";
 import SVGArc from "./primitives/SVGArc";
+import { SVGFactory } from "./SVGFactory";
 
 // Root directory for loading files is dist/
 
@@ -203,7 +204,7 @@ export class SVGLoader {
     if (pointsAsStringList) {
       ptArray = this.pointStringListToPointObjArray(pointsAsStringList);
       if (ptArray) {
-        const polygon = SVGObject.createPolygon({
+        const polygon = SVGFactory.createPolygon({
           points: ptArray,
         }) as SVGPolygon;
         return polygon;
@@ -224,7 +225,7 @@ export class SVGLoader {
       cx = parseFloat(cxString);
       cy = parseFloat(cyString);
       if (radius && cx && cy) {
-        const circle = SVGObject.createCircle({
+        const circle = SVGFactory.createCircle({
           center: new Point(cx, cy),
           radius,
         });

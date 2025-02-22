@@ -1,4 +1,5 @@
-import { Point } from "./Point";
+import { SVGFactory } from "../SVGFactory";
+import Point from "./Point";
 import SVGObject from "./SVGObject";
 import SVGObjectType from "./SVGObjectTypes";
 import SVGStyle from "./SVGStyle";
@@ -32,7 +33,7 @@ export class SVGBezierCurve extends SVGObject {
     if (!points[0] || !points[1] || !points[2] || !points[3]) {
       throw new Error("Invalid points for bezier curve");
     }
-    return SVGObject.createBezierCurve(
+    return SVGFactory.createBezierCurve(
       points[0],
       points[1],
       points[2],

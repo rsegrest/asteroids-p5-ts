@@ -1,3 +1,4 @@
+import { SVGFactory } from "../SVGFactory";
 import { Point } from "./Point";
 import SVGObject from "./SVGObject";
 import SVGObjectType from "./SVGObjectTypes";
@@ -15,7 +16,7 @@ export class SVGPolygon extends SVGObject {
   }
 
   static create = (points: Point[]): SVGObject => {
-    return SVGObject.createPolygon({ points });
+    return SVGFactory.createPolygon({ points });
   };
 }
 export default SVGPolygon;
