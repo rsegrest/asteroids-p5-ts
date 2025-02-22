@@ -1,7 +1,7 @@
 import type p5 from "p5";
 
 import GameController from "./controller/GameController";
-import SVGLoader from "./svg/svg";
+import SVGLoader from "./svg/SVGLoader";
 // import {
 //   loadSVG,
 //   processSVG,

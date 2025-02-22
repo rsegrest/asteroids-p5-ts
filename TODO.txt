@@ -1,7 +1,17 @@
-17 Feb 2025 -- Vector graphics
-TODO: Bring in sample vector graphics
-  - https://www.w3schools.com/graphics/svg_examples.asp
+23 Feb 2025 -- Vector graphics
+
+// TODO: Add toString methods to each primitive class
+// TODO: Finish params interfaces for each primitive
+// TODO: Parse other primitives
+// TODO: Create functions for each primitive in SVGObject
+// TODO: A create function that calls ^ in each subclass
+// TODO: Test each against sample SVGs and render on playfield
+
+
 DONE: 
+: Bring in sample vector graphics
+  - https://www.w3schools.com/graphics/svg_examples.asp
+
 
 6 December 2022 -- Asteroids
 
