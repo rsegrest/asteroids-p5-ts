@@ -72,11 +72,10 @@ export class SVGObject {
   constructor(
     public readonly type: SVGObjectType,
     // TODO: Create an abstract class for points
-    public readonly points: Point[],
-    style: SVGStyle
+    // public readonly points: Point[],
+    style: SVGStyle | null = null
   ) {
-    this.points = points;
-    this.style = style;
+    this.style = style || {};
   }
 
   getStyle = (): SVGStyle => {
@@ -98,7 +97,113 @@ export class SVGObject {
   };
 
   static createPolygon = (points: Point[]): SVGObject => {
-    return new SVGObject(SVGObjectType.POLYGON, points, {});
+    return new SVGPolygon(points, {});
+  };
+  static createCircle = (cx: number, cy: number, radius: number): SVGCircle => {
+    return new SVGCircle(new Point(cx, cy), radius, {});
+  };
+  // static createLine = (x1: number, y1: number, x2: number, y2: number): SVGLine => {
+  // static createEllipse = (cx: number, cy: number, rx: number, ry: number): SVGEllipse => {
+  // static createArc = (cx: number, cy: number, radius: number, startAngle: number, endAngle: number): SVGArc => {
+  // static createRect = (x: number, y: number, width: number, height: number): SVGRect => {
+  // static createBezierCurve = (x1: number, y1: number, cx1: number, cy1: number, cx2: number, cy2: number, x2: number, y2: number): SVGBezierCurve => {
+}
+
+export class SVGCircle extends SVGObject {
+  private center: Point;
+  private radius: number;
+
+  constructor(center: Point, radius: number, style: SVGStyle | null = null) {
+    super(SVGObjectType.CIRCLE, style);
+    this.center = center;
+    this.radius = radius;
+  }
+}
+
+export class SVGLine extends SVGObject {
+  private p1: Point;
+  private p2: Point;
+
+  constructor(p1: Point, p2: Point, style: SVGStyle | null = null) {
+    super(SVGObjectType.LINE, style);
+    this.p1 = p1;
+    this.p2 = p2;
+  }
+}
+
+export class SVGEllipse extends SVGObject {
+  private center: Point;
+  private rx: number;
+  private ry: number;
+
+  constructor(
+    center: Point,
+    rx: number,
+    ry: number,
+    style: SVGStyle | null = null
+  ) {
+    super(SVGObjectType.ELLIPSE, style);
+    this.center = center;
+    this.rx = rx;
+    this.ry = ry;
+  }
+}
+
+export class SVGArc extends SVGObject {
+  private center: Point;
+  private radius: number;
+  private startAngle: number;
+  private endAngle: number;
+
+  constructor(
+    center: Point,
+    radius: number,
+    startAngle: number,
+    endAngle: number,
+    style: SVGStyle | null = null
+  ) {
+    super(SVGObjectType.ARC, style);
+    this.center = center;
+    this.radius = radius;
+    this.startAngle = startAngle;
+    this.endAngle = endAngle;
+  }
+}
+
+export class SVGRect extends SVGObject {
+  private x: number;
+  private y: number;
+  private width: number;
+  private height: number;
+
+  constructor(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    style: SVGStyle | null = null
+  ) {
+    super(SVGObjectType.RECT, style);
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+  }
+}
+
+export class SVGPolygon extends SVGObject {
+  constructor(
+    // public readonly type: SVGObjectType,
+    // TODO: Create an abstract class for points
+    public readonly points: Point[],
+    style: SVGStyle
+  ) {
+    super(SVGObjectType.POLYGON, style);
+    this.points = points;
+  }
+
+  static create = (points: Point[]): SVGObject => {
+    return SVGObject.createPolygon(points);
   };
 }
 
@@ -107,7 +212,7 @@ export class SVGLoader {
   public static p: p5;
 
   private static styles: SVGStyle[] = [];
-  private static polygons: SVGObject[] = [];
+  private static polygons: SVGPolygon[] = [];
 
   private static svgPolygonElementList: any | any[] = [];
 
@@ -228,8 +333,6 @@ export class SVGLoader {
   ): // points: string[]
   Point[] => {
     const ptArray: Point[] = [];
-    // console.log("pintsTo2DArray");
-    // console.log(input);
     if (pointsAsStringList) {
       for (const pt of pointsAsStringList) {
         const xyArray = pt.split(",");
@@ -240,7 +343,7 @@ export class SVGLoader {
               const xNum = parseFloat(x);
               const yNum = parseFloat(y);
               if (isNaN(xNum) || isNaN(yNum)) {
-                console.log("Error: x or y is not a number");
+                console.warn("Error: x or y is not a number");
                 return [];
               }
               const ptObj = Point.from2DArray([xNum, yNum]);
@@ -255,14 +358,33 @@ export class SVGLoader {
 
   // gets points string data from polygon SVG element
   // calls pointsTo2DArray and assigns to this.ptArray (numbers)
-  static processPolygon = (poly: Element): SVGObject | null => {
+  static processPolygon = (poly: Element): SVGPolygon | null => {
     const pointsAsStringList = poly?.getAttribute("points")?.split(" ") || null;
     let ptArray;
     if (pointsAsStringList) {
       ptArray = this.pointStringListToPointObjArray(pointsAsStringList);
       if (ptArray) {
-        const polygon = SVGObject.createPolygon(ptArray);
+        const polygon = SVGObject.createPolygon(ptArray) as SVGPolygon;
         return polygon;
+      }
+    }
+    return null;
+  };
+
+  static processCircle = (circle: Element): SVGObject | null => {
+    const rString = circle?.getAttribute("r");
+    const cxString = circle?.getAttribute("cx");
+    const cyString = circle?.getAttribute("cy");
+    let radius;
+    let cx;
+    let cy;
+    if (rString && cxString && cyString) {
+      radius = parseFloat(rString);
+      cx = parseFloat(cxString);
+      cy = parseFloat(cyString);
+      if (radius && cx && cy) {
+        const circle = SVGObject.createCircle(cx, cy, radius);
+        return circle;
       }
     }
     return null;
@@ -291,15 +413,6 @@ export class SVGLoader {
   static registerRenderer = (p: p5): void => {
     this.p = p;
   };
-
-  // TODO: update to use SVGObject
-  // displayPolygons = (): void => {
-  //   // console.log(polygons);
-  //   // console.log(polygons.length);
-  //   for (const poly of this.svgPolygonElementList) {
-  //     this.processPolygon(poly);
-  //   }
-  // };
 }
 
 export default SVGLoader;
