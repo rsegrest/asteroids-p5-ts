@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>SVG line Element</h2>
+
+<svg height="200" width="300" xmlns="http://www.w3.org/2000/svg">
+  <line x1="0" y1="0" x2="300" y2="200" style="stroke:red;stroke-width:2" />
+  Sorry, your browser does not support inline SVG.
+</svg>
+
+</body>
+</html>

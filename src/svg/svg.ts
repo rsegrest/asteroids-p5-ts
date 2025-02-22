@@ -1,15 +1,17 @@
 import p5 from "p5";
 
-// TODO: Generate Shape
-// TODO: Get Fill, Stroke, Stroke Weight
+// Root directory for loading files is dist/
 
-// TODO: Generate Polygon on screen
 // TODO: Process Circle
 // TODO: Process Ellipse
 // TODO: Process Line
 // TODO: Process Arc
 // TODO: Process Rect
 // TODO: Process Bezier Curve
+
+// : Generate Shape
+// : Get Fill, Stroke, Stroke Weight
+// : Generate Polygon on screen
 
 // const svgDataString =
 //   '<?xml version="1.0" encoding="utf-8"?>\
@@ -38,45 +40,111 @@ export enum SVGObjectType {
   BEZIER_CURVE = "bezierCurve",
 }
 
+export interface SVGStyle {
+  name?: string;
+  fillColor?: string;
+  strokeColor?: string;
+  strokeWeight?: number;
+}
+
+export class Point {
+  constructor(public readonly x: number, public readonly y: number) {}
+
+  // static fromString
+  static from2DArray = (arr: number[]): Point | null => {
+    if (arr.length !== 2) {
+      console.log("Error: Array length is not 2");
+      return null;
+    }
+    if (!arr[0] || !arr[1]) {
+      console.log("Error: x or y is null");
+      return null;
+    }
+    return new Point(arr[0], arr[1]);
+  };
+  // to2DArray
+  // toString
+}
+
 export class SVGObject {
+  private style: SVGStyle;
+
   constructor(
     public readonly type: SVGObjectType,
-    public readonly points: string[],
-    public readonly fillColor: string,
-    public readonly strokeColor: string,
-    public readonly strokeWeight: number
-  ) {}
+    // TODO: Create an abstract class for points
+    public readonly points: Point[],
+    style: SVGStyle
+  ) {
+    this.points = points;
+    this.style = style;
+  }
+
+  getStyle = (): SVGStyle => {
+    return this.style;
+  };
+
+  setStyle = (style: SVGStyle): void => {
+    this.style = style;
+  };
+
+  setFillColor = (fillColor: string): void => {
+    this.style.fillColor = fillColor;
+  };
+  setStrokeColor = (strokeColor: string): void => {
+    this.style.strokeColor = strokeColor;
+  };
+  setStrokeWeight = (strokeWeight: number): void => {
+    this.style.strokeWeight = strokeWeight;
+  };
+
+  static createPolygon = (points: Point[]): SVGObject => {
+    return new SVGObject(SVGObjectType.POLYGON, points, {});
+  };
 }
 
 export class SVGLoader {
   // TODO: Add SVGObject[] to store all SVGObjects
+  public static p: p5;
+
+  private static styles: SVGStyle[] = [];
+  private static polygons: SVGObject[] = [];
+
   private static svgPolygonElementList: any | any[] = [];
-  private static lines: string[] = [];
-  private static points: string[] | null = null;
-  private static ptArray: Array<Array<number>> | null = [];
+
   private static fillColor = "pink";
   private static strokeColor = "white";
   private static strokeWeight = 1;
-  public static p: p5;
 
   constructor(p: p5) {
     SVGLoader.p = p;
   }
 
+  // callback after loadStrings -- process all XML from SVG
   static handleSvgData = (data: string[]): void => {
-    this.lines = data;
-    this.processSVG(); // populates this.polygons (Raw SVG Elements)
+    this.processSVG(data); // populates this.polygons (Raw SVG Elements)
   };
   // called from PRELOAD
   static loadSVG = (filename: string | null = null): void => {
     console.log("loadSVG");
     console.log(this.p);
     if (filename) {
-      this.lines = this.p.loadStrings(filename, (data: any) =>
-        this.handleSvgData(data)
+      this.p.loadStrings(
+        filename,
+        (data: any) => this.handleSvgData(data) // callback
       );
     }
   };
+
+  // <svg>
+  // id="Layer_1"
+  // x="0px"
+  // y="0px"
+  // width="792px"
+  // height="612px"
+  // viewBox="0 0 792 612"
+  // style="enable-background:new 0 0 792 612;"
+  // xml:space="preserve"
+  // </svg>
 
   // <?xml version="1.0" encoding="utf-8"?>
   // <!-- Generator: Adobe Adobe Illustrator 24.2.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
@@ -89,56 +157,81 @@ export class SVGLoader {
   // 	360.92,142.64 "/>
   // </svg>
 
-  // Pulls Polygon XML data from SVG
-  static processSVG(): any {
-    const svgString = this.lines?.join("\n");
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(svgString, "image/svg+xml");
-    this.svgPolygonElementList = doc.querySelectorAll("polygon");
-    const svgStyle = doc.querySelectorAll("style");
-    const svgClass = this.svgPolygonElementList[0]?.getAttribute("class");
-    if (svgStyle.length > 0) {
-      console.log("this style:");
-      console.log(svgStyle[0]?.innerHTML);
+  static processSVGStyle = (
+    svgStyleData: any
+    // svgStyleName: string,
+    // svgStyleData: string
+  ): SVGStyle => {
+    const style: SVGStyle = {};
+    if (svgStyleData.length > 0) {
       // TODO: match style name to polygon class
-      const styleName = svgStyle[0]?.innerHTML?.split("{")[0];
-      const styleValue = svgStyle[0]?.innerHTML?.split("{")[1];
-      const styleAttributes = styleValue?.split(";");
+      let styleName = svgStyleData[0]?.innerHTML?.split("{")[0] || ""; // .st0
+      styleName = styleName.replace(/[\t\n\r]/gm, "");
+      const styleAttributesString =
+        svgStyleData[0]?.innerHTML?.split("{")[1] || ""; // fill: #FFFFFF; stroke: #000000; stroke-miterlimit: 10;
+
+      style.name = styleName;
+      const styleAttributes = styleAttributesString.split(";");
       if (styleAttributes && styleAttributes.length > 0) {
         for (const attr of styleAttributes) {
           const [key, value] = attr.split(":");
           if (key === "fill") {
             if (value) {
-              console.log("for fill, found value:", value);
-              this.fillColor = value;
+              style.fillColor = value;
             }
           } else if (key === "stroke") {
             if (value) {
-              console.log("for stroke color, found value:", value);
-              this.strokeColor = value;
+              style.strokeColor = value;
             }
           } else if (key === "stroke-width") {
             if (value) {
-              console.log("for stroke width, found value:", value);
-              this.strokeWeight = parseFloat(value);
+              style.strokeWeight = parseFloat(value);
             }
           }
         }
       }
     }
+    return style;
+  };
+
+  // Pulls Polygon XML data from SVG
+  static processSVG(data: string[]): any {
+    const svgString = data?.join("\n");
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgString, "image/svg+xml");
+    const svgElementClass =
+      this.svgPolygonElementList[0]?.getAttribute("class");
+
+    // for polygon
+    // if:
+    this.svgPolygonElementList = doc.querySelectorAll("polygon");
+    // then type = polygon, process polygon
+
+    const svgStyleData: any = doc.querySelectorAll("style");
+
+    const svgStyle = this.processSVGStyle(svgStyleData);
 
     for (const poly of this.svgPolygonElementList) {
-      this.processPolygon(poly); // calls points to 2D array
+      const polyObj = this.processPolygon(poly); // calls points to 2D array
       // this.ptArray now available
+      if (polyObj) {
+        polyObj.setStyle(svgStyle);
+        this.polygons.push(polyObj);
+      }
     }
   }
 
   // converts this.points string to 2D this.ptArray of numbers
-  static pointsTo2DArray = (): void => {
-    console.log(this.points);
-    const ptArray: Array<Array<number>> = [];
-    if (this.points) {
-      for (const pt of this.points) {
+  // example input: [ "290.48,136.58", "260.63,221.47", "174.8,255.06", "230.31,331.09", "309.61,247.59", "352.99,284.91", "401.03,211.68", "", "", "360.92,142.64", ""]
+  static pointStringListToPointObjArray = (
+    pointsAsStringList: string[]
+  ): // points: string[]
+  Point[] => {
+    const ptArray: Point[] = [];
+    // console.log("pintsTo2DArray");
+    // console.log(input);
+    if (pointsAsStringList) {
+      for (const pt of pointsAsStringList) {
         const xyArray = pt.split(",");
         if (xyArray.length > 1) {
           const [x, y] = pt.split(",");
@@ -148,25 +241,31 @@ export class SVGLoader {
               const yNum = parseFloat(y);
               if (isNaN(xNum) || isNaN(yNum)) {
                 console.log("Error: x or y is not a number");
-                return;
+                return [];
               }
-              ptArray.push([xNum, yNum]);
+              const ptObj = Point.from2DArray([xNum, yNum]);
+              if (ptObj) ptArray.push(ptObj);
             }
           }
         }
       }
     }
-    this.ptArray = ptArray;
+    return ptArray;
   };
 
   // gets points string data from polygon SVG element
   // calls pointsTo2DArray and assigns to this.ptArray (numbers)
-  static processPolygon = (poly: Element): void => {
-    this.points = poly?.getAttribute("points")?.split(" ") || null;
-    if (this.points) {
-      this.pointsTo2DArray();
+  static processPolygon = (poly: Element): SVGObject | null => {
+    const pointsAsStringList = poly?.getAttribute("points")?.split(" ") || null;
+    let ptArray;
+    if (pointsAsStringList) {
+      ptArray = this.pointStringListToPointObjArray(pointsAsStringList);
+      if (ptArray) {
+        const polygon = SVGObject.createPolygon(ptArray);
+        return polygon;
+      }
     }
-    // this.drawPolygon();
+    return null;
   };
 
   static drawPolygon = (): void => {
@@ -177,9 +276,12 @@ export class SVGLoader {
     this.p.stroke(this.strokeColor);
     this.p.strokeWeight(this.strokeWeight);
     this.p.beginShape();
-    if (this.ptArray) {
-      for (const pt of this.ptArray) {
-        this.p.vertex(pt[0] as number, pt[1] as number);
+    if (this.polygons.length > 0) {
+      for (const pg of this.polygons) {
+        const ptArray = pg.points;
+        for (const pt of ptArray) {
+          this.p.vertex(pt.x as number, pt.y as number);
+        }
       }
     }
     this.p.endShape(this.p.CLOSE);

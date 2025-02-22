@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>SVG image Element</h2>
+
+<svg height="200" width="300" xmlns="http://www.w3.org/2000/svg">
+  <image width="300" height="200" href="pulpitrock.jpg" />
+  Sorry, your browser does not support inline SVG.  
+</svg>
+
+</body>
+</html>

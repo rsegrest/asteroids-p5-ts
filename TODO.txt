@@ -1,5 +1,6 @@
 17 Feb 2025 -- Vector graphics
 TODO: Bring in sample vector graphics
+  - https://www.w3schools.com/graphics/svg_examples.asp
 DONE: 
 
 6 December 2022 -- Asteroids

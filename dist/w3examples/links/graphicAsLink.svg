@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>SVG a Element around a circle</h2>
+
+<svg height="100" width="200" xmlns="http://www.w3.org/2000/svg">
+  <a href="https://www.w3schools.com/graphics/" target="_blank">
+    <circle r="45" cx="50" cy="50" fill="red" />
+  </a>
+  Sorry, your browser does not support inline SVG.  
+</svg>
+ 
+</body>
+</html>

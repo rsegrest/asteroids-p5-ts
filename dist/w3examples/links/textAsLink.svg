@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>SVG a Element around a text</h2>
+
+<svg height="30" width="200" xmlns="http://www.w3.org/2000/svg">
+  <a href="https://www.w3schools.com/graphics/" target="_blank">
+    <text x="5" y="15" fill="red">I love SVG!</text>
+  </a>
+  Sorry, your browser does not support inline SVG.
+</svg>
+ 
+</body>
+</html>
