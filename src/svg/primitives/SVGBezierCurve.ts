@@ -25,5 +25,8 @@ export class SVGBezierCurve extends SVGObject {
   toSVGString = (): string => {
     return `M ${this.p1.x} ${this.p1.y} C ${this.cp1.x} ${this.cp1.y} ${this.cp2.x} ${this.cp2.y} ${this.p2.x} ${this.p2.y}`;
   };
+  toString = (): string => {
+    return `Bezier Curve from (${this.p1.x}, ${this.p1.y}) to (${this.p2.x}, ${this.p2.y}) with control points (${this.cp1.x}, ${this.cp1.y}) and (${this.cp2.x}, ${this.cp2.y})`;
+  };
 }
 export default SVGBezierCurve;

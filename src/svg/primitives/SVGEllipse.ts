@@ -24,5 +24,16 @@ export class SVGEllipse extends SVGObject {
   static create = (params: SVGEllipseParams): SVGEllipse => {
     return new SVGEllipse(params);
   };
+
+  toSVGString = (): string => {
+    return `M ${this.center.x} ${this.center.y} m -${this.radiusX}, 0 a ${
+      this.radiusX
+    },${this.radiusY} 0 1,0 ${this.radiusX * 2},0 a ${this.radiusX},${
+      this.radiusY
+    } 0 1,0 -${this.radiusX * 2},0`;
+  };
+  toString = (): string => {
+    return `Ellipse at (${this.center.x}, ${this.center.y}) with radii ${this.radiusX} and ${this.radiusY}`;
+  };
 }
 export default SVGEllipse;

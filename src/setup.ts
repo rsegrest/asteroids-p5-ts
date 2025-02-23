@@ -21,6 +21,8 @@ export const preload = (p: p5): void => {
   SVGLoader.registerRenderer(p);
   SVGLoader.loadSVG("quick-svg-from-ai.svg");
   SVGLoader.loadSVG("w3examples/line/svgLine.svg");
+  SVGLoader.loadSVG("w3examples/circle/circleWithOpacity.svg");
+  SVGLoader.loadSVG("w3examples/rect/svgRectExample.svg");
 };
 
 export const keyPressed = (p: p5): void => {

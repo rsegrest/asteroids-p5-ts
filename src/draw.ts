@@ -8,6 +8,5 @@ import SVGLoader from "./svg/SVGLoader";
 export const draw = (p: p5): void => {
   p.background(10);
   gameController.advance();
-  SVGLoader.drawPolygon();
-  SVGLoader.drawLines();
+  SVGLoader.drawAll();
 };

@@ -1,13 +1,25 @@
 23 Feb 2025 -- Vector graphics
+// TODO: Process Ellipse
+// TODO: Process Arc
+// TODO: Process Bezier Curve
+// TODO: Process Image
+// TODO: Process Text 
 
-// TODO: Add toString methods to each primitive class
-// TODO: Parse other primitives
-// TODO: Create functions for each primitive in SVGObject
-// TODO: A create function that calls ^ in each subclass
+// TODO: Move process, draw functions
+// TODO: Process items in order (?)
+
 // TODO: Test each against sample SVGs and render on playfield
 
 
 DONE: 
+// : Process Rect
+// : Process Line
+// : Process Circle
+// : Generate Shape
+// : Generate Polygon on screen
+// : Get Fill, Stroke, Stroke Weight
+// : Create functions for each primitive in SVGObject
+// : Add toString methods to each primitive class
 : Finish params interfaces for each primitive
 : Bring in sample vector graphics
   - https://www.w3schools.com/graphics/svg_examples.asp

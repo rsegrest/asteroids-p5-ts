@@ -2,12 +2,16 @@ import p5 from "p5";
 import SVGPolygon from "./primitives/SVGPolygon";
 import SVGStyle from "./primitives/SVGStyle";
 import Point from "./primitives/Point";
-import SVGObject from "./primitives/SVGObject";
 import SVGCircle from "./primitives/SVGCircle";
 import SVGEllipse from "./primitives/SVGEllipse";
 import SVGLine from "./primitives/SVGLine";
 import SVGArc from "./primitives/SVGArc";
-import { SVGFactory } from "./SVGFactory";
+import SVGFactory from "./SVGFactory";
+import SVGBezierCurve from "./primitives/SVGBezierCurve";
+import SVGPath from "./primitives/SVGPath";
+import SVGText from "./primitives/SVGText";
+import SVGImage from "./primitives/SVGImage";
+import SVGRect from "./primitives/SVGRect";
 
 // Root directory for loading files is dist/
 
@@ -43,11 +47,14 @@ export class SVGLoader {
   private static rects: SVGRect[] = [];
   private static ellipses: SVGEllipse[] = [];
   private static arcs: SVGArc[] = [];
-  // private static bezierCurves: SVGBezierCurve[] = [];
+  private static bezierCurves: SVGBezierCurve[] = [];
+  private static textObjects: SVGText[] = [];
+  private static paths: SVGPath[] = [];
+  private static images: SVGImage[] = [];
 
-  // move to functions?
+  // move to functions? ref pulling class
   private static svgPolygonElementList: any | any[] = [];
-  private static svgLinesElementList: any | any[] = [];
+  // private static svgLinesElementList: any | any[] = [];
 
   private static fillColor = "pink";
   private static strokeColor = "white";
@@ -68,6 +75,7 @@ export class SVGLoader {
 
   // callback after loadStrings -- process all XML from SVG
   static handleSvgData = (data: string[]): void => {
+    console.log("handleSvgData");
     this.processSVG(data); // populates this.polygons (Raw SVG Elements)
   };
   // called from PRELOAD
@@ -141,6 +149,7 @@ export class SVGLoader {
 
   // Pulls Polygon XML data from SVG
   static processSVG(data: string[]): any {
+    console.log("processSVG");
     const svgString = data?.join("\n");
     const parser = new DOMParser();
     const doc = parser.parseFromString(svgString, "image/svg+xml");
@@ -152,56 +161,77 @@ export class SVGLoader {
     // for polygon
     // if:
 
-    const svgPolygonElementList = doc.querySelectorAll("polygon");
-    const svgLinesElementList = doc.querySelectorAll("line");
     const svgCircleElementList = doc.querySelectorAll("circle");
     const svgEllipseElementList = doc.querySelectorAll("ellipse");
     const svgArcElementList = doc.querySelectorAll("arc");
     const svgRectElementList = doc.querySelectorAll("rect");
+    const svgPathElementList = doc.querySelectorAll("path");
+    const svgTextElementList = doc.querySelectorAll("text");
+    const svgImageElementList = doc.querySelectorAll("image");
+
     // const svgBezierCurveElementList = doc.querySelectorAll("bezierCurve");
 
     const svgStyleData: any = doc.querySelectorAll("style");
     // TODO: Save in style list with class name
-    for (const poly of svgPolygonElementList) {
-      // const svgStyleData = poly.getAttribute("class");
-      const svgClassData = poly.getAttribute("class");
-      // console.log("svgClassData");
-      // console.log(svgClassData);
-      // console.log("svgStyleData");
-      // console.log(svgStyleData);
-      const svgStyle = this.processSVGStyle(svgStyleData);
-      // console.log("svgStyle");
-      // console.log(svgStyle);
-      const polyObj = this.processPolygon(poly); // calls points to 2D array
-      // this.ptArray now available
-      if (polyObj) {
-        polyObj.setStyle(svgStyle);
-        this.polygons.push(polyObj);
-      }
-    }
+    this.polygons.push(...SVGPolygon.processList(doc));
+    console.log(this.polygons);
+    this.lines.push(...SVGLine.processList(doc));
+    console.log(this.lines);
+    // const svgPolygonElementList = doc.querySelectorAll("polygon");
+    // const svgClassData = poly.getAttribute("class");
+    // const svgStyle = this.processSVGStyle(svgStyleData);
 
-    for (const line of svgLinesElementList) {
-      const lineObj = this.processLine(line);
-      if (lineObj) {
-        // lineObj.setStyle(svgStyle);
-        lineObj.setStyle({ strokeColor: "white", strokeWeight: 1 });
-        this.lines.push(lineObj);
-      }
-    }
+    // for (const poly of svgPolygonElementList) {
+    // const svgStyleData = poly.getAttribute("class");
+    // console.log("svgClassData");
+    // console.log(svgClassData);
+    // console.log("svgStyleData");
+    // console.log(svgStyleData);
+    // console.log("svgStyle");
+    // console.log(svgStyle);
+    // const polyObj = SVGPolygon.process(poly); // calls points to 2D array
+    // this.ptArray now available
+    // if (polyObj) {
+    // polyObj.setStyle(svgStyle);
+    // this.polygons.push(polyObj);
+    // }
+    // }
+
+    // const svgLinesElementList = doc.querySelectorAll("line");
+    // for (const line of svgLinesElementList) {
+    //   const lineObj = SVGLine.process(line);
+    //   if (lineObj) {
+    //     // lineObj.setStyle(svgStyle);
+    //     lineObj.setStyle({ strokeColor: "white", strokeWeight: 1 });
+    //     this.lines.push(lineObj);
+    //   }
+    // }
 
     // circle
 
     for (const circle of svgCircleElementList) {
-      const circleObj = this.processCircle(circle);
+      const circleObj = SVGCircle.process(circle);
       if (circleObj) {
         // LEFT-OFF 22 Feb 2025 -> 23 Feb 2025 @ 0126
         // lineObj.setStyle(svgStyle);
-        // lineObj.setStyle({ strokeColor: "white", strokeWeight: 1 });
-        // this.lines.push(lineObj);
+        circleObj.setStyle({
+          fillColor: "green",
+          strokeColor: "white",
+          strokeWeight: 1,
+        });
+        this.circles.push(circleObj);
       }
     }
 
     // rect
+    for (const rect of svgRectElementList) {
+      const rectObj = SVGRect.process(rect);
+      if (rectObj) {
+        // lineObj.setStyle(svgStyle);
+        rectObj.setStyle({ strokeColor: "white", strokeWeight: 1 });
+        this.rects.push(rectObj);
+      }
+    }
 
     // for (const line of svgLinesElementList) {
     //   const lineObj = this.processLine(line);
@@ -235,121 +265,72 @@ export class SVGLoader {
     // }
   }
 
-  // converts this.points string to 2D this.ptArray of numbers
-  // example input: [ "290.48,136.58", "260.63,221.47", "174.8,255.06", "230.31,331.09", "309.61,247.59", "352.99,284.91", "401.03,211.68", "", "", "360.92,142.64", ""]
-  static pointStringListToPointObjArray = (
-    pointsAsStringList: string[]
-  ): // points: string[]
-  Point[] => {
-    const ptArray: Point[] = [];
-    if (pointsAsStringList) {
-      for (const pt of pointsAsStringList) {
-        const xyArray = pt.split(",");
-        if (xyArray.length > 1) {
-          const [x, y] = pt.split(",");
-          if (x && y) {
-            if (typeof x === "string" && typeof y === "string") {
-              const xNum = parseFloat(x);
-              const yNum = parseFloat(y);
-              if (isNaN(xNum) || isNaN(yNum)) {
-                console.warn("Error: x or y is not a number");
-                return [];
-              }
-              const ptObj = Point.from2DArray([xNum, yNum]);
-              if (ptObj) ptArray.push(ptObj);
-            }
-          }
-        }
-      }
-    }
-    return ptArray;
-  };
-
-  static processLine = (line: Element): SVGLine | null => {
-    console.log("process line:");
-    const x1String = line?.getAttribute("x1");
-    const y1String = line?.getAttribute("y1");
-    const x2String = line?.getAttribute("x2");
-    const y2String = line?.getAttribute("y2");
-    // console.log("x1,y1,x2,y2string:");
-    // console.log(x1String);
-    // console.log(y1String);
-    // console.log(x2String);
-    // console.log(y2String);
-    let x1;
-    let y1;
-    let x2;
-    let y2;
-    if (x1String && y1String && x2String && y2String) {
-      x1 = parseFloat(x1String);
-      y1 = parseFloat(y1String);
-      x2 = parseFloat(x2String);
-      y2 = parseFloat(y2String);
-
-      // console.log("x1,y1,x2,y2:");
-      // console.log(x1);
-      // console.log(y1);
-      // console.log(x2);
-      // console.log(y2);
-      if (
-        typeof x1 === "number" &&
-        typeof y1 === "number" &&
-        typeof x2 === "number" &&
-        typeof y2 === "number"
-      ) {
-        // console.log("points are valid numbers");
-        const line = SVGFactory.createLine({
-          p1: new Point(x1, y1),
-          p2: new Point(x2, y2),
-        });
-        // console.log("line:");
-        // console.log(JSON.stringify(line));
-        return line;
-      }
-    }
-    return null;
-  };
-
+  // Moved to SVGPolygon--
   // gets points string data from polygon SVG element
   // calls pointsTo2DArray and assigns to this.ptArray (numbers)
-  static processPolygon = (poly: Element): SVGPolygon | null => {
-    const pointsAsStringList = poly?.getAttribute("points")?.split(" ") || null;
-    let ptArray;
-    if (pointsAsStringList) {
-      ptArray = this.pointStringListToPointObjArray(pointsAsStringList);
-      if (ptArray) {
-        const polygon = SVGFactory.createPolygon({
-          points: ptArray,
-        }) as SVGPolygon;
-        return polygon;
-      }
-    }
-    return null;
-  };
+  // static processPolygon = (poly: Element): SVGPolygon | null => {
+  //   const pointsAsStringList = poly?.getAttribute("points")?.split(" ") || null;
+  //   let ptArray;
+  //   if (pointsAsStringList) {
+  //     ptArray = this.pointStringListToPointObjArray(pointsAsStringList);
+  //     if (ptArray) {
+  //       const polygon = SVGFactory.createPolygon({
+  //         points: ptArray,
+  //       }) as SVGPolygon;
+  //       return polygon;
+  //     }
+  //   }
+  //   return null;
+  // };
 
-  static processCircle = (circle: Element): SVGObject | null => {
-    const rString = circle?.getAttribute("r");
-    const cxString = circle?.getAttribute("cx");
-    const cyString = circle?.getAttribute("cy");
-    let radius;
-    let cx;
-    let cy;
-    if (rString && cxString && cyString) {
-      radius = parseFloat(rString);
-      cx = parseFloat(cxString);
-      cy = parseFloat(cyString);
-      if (radius && cx && cy) {
-        const circle = SVGFactory.createCircle({
-          center: new Point(cx, cy),
-          radius,
-        });
-        return circle;
+  // static processRect = (rect: Element): SVGRect | null => {
+  //   const xString = rect?.getAttribute("x") || "0";
+  //   const yString = rect?.getAttribute("y") || "0";
+  //   const widthString = rect?.getAttribute("width");
+  //   const heightString = rect?.getAttribute("height");
+  //   let x;
+  //   let y;
+  //   let width;
+  //   let height;
+  //   if (xString && yString && widthString && heightString) {
+  //     x = parseFloat(xString);
+  //     y = parseFloat(yString);
+  //     width = parseFloat(widthString);
+  //     height = parseFloat(heightString);
+  //     if (x && y && width && height) {
+  //       const params = {
+  //         x,
+  //         y,
+  //         width,
+  //         height,
+  //       };
+  //       const rect: SVGRect = SVGFactory.createRect(params) as SVGRect;
+  //       return rect;
+  //     }
+  //   }
+  //   return null;
+  // };
+
+  static drawCircles = (): void => {
+    this.p.push();
+    this.p.fill("green");
+    this.p.stroke("white");
+    this.p.strokeWeight(1);
+    if (this.circles.length > 0) {
+      for (const circ of this.circles) {
+        this.p.circle(
+          circ.center.x as number,
+          circ.center.y as number,
+          circ.radius
+        );
       }
     }
-    return null;
+    this.p.pop();
   };
 
   static drawLines = (): void => {
+    // console.log("drawPolygon");
+    // console.log(this.polygons);
     this.p.push();
     this.p.stroke("white");
     this.p.strokeWeight(3);
@@ -370,6 +351,8 @@ export class SVGLoader {
   };
 
   static drawPolygon = (): void => {
+    // console.log("drawPolygon");
+    // console.log(this.polygons);
     this.p.push();
     if (this.fillColor) {
       this.p.fill(this.fillColor);
@@ -387,6 +370,95 @@ export class SVGLoader {
     }
     this.p.endShape(this.p.CLOSE);
     this.p.pop();
+  };
+
+  static drawRectangles = (): void => {
+    this.p.push();
+    this.p.fill("blue");
+    this.p.stroke("white");
+    this.p.strokeWeight(1);
+    if (this.rects.length > 0) {
+      for (const rect of this.rects) {
+        this.p.rect(
+          rect.x as number,
+          rect.y as number,
+          rect.width as number,
+          rect.height as number
+        );
+      }
+    }
+    this.p.pop();
+  };
+
+  static drawArcs = (): void => {
+    this.p.push();
+    this.p.fill("yellow");
+    this.p.stroke("white");
+    this.p.strokeWeight(1);
+    if (this.arcs.length > 0) {
+      for (const arc of this.arcs) {
+        this.p.arc(
+          arc.center.x as number,
+          arc.center.y as number,
+          arc.radius * 2,
+          arc.radius * 2,
+          arc.startAngle,
+          arc.endAngle
+        );
+      }
+    }
+    this.p.pop();
+  };
+
+  static drawPaths = (): void => {
+    this.p.push();
+    this.p.fill("purple");
+    this.p.stroke("white");
+    this.p.strokeWeight(1);
+    if (this.paths.length > 0) {
+      for (const path of this.paths) {
+        for (const line of path.lines) {
+          if (line !== null) {
+            this.p.line(
+              line.p1.x as number,
+              line.p1.y as number,
+              line.p2.x as number,
+              line.p2.y as number
+            );
+          }
+        }
+      }
+    }
+    this.p.pop();
+  };
+
+  static drawTextObjects = (): void => {
+    this.p.push();
+    this.p.pop();
+    throw "drawTextObjects not yet implemented";
+  };
+  static drawImages = (): void => {
+    this.p.push();
+    this.p.pop();
+    throw "drawImages not yet implemented";
+  };
+
+  static drawEllipses = (): void => {
+    this.p.push();
+    this.p.pop();
+    throw "drawEllipses not yet implemented";
+  };
+
+  static drawAll = (): void => {
+    SVGLoader.drawPolygon();
+    SVGLoader.drawLines();
+    SVGLoader.drawCircles();
+    SVGLoader.drawRectangles();
+    SVGLoader.drawArcs();
+    SVGLoader.drawPaths();
+    // SVGLoader.drawTextObjects();
+    // SVGLoader.drawImages();
+    // SVGLoader.drawEllipses();
   };
 
   static registerRenderer = (p: p5): void => {

@@ -1,20 +1,7 @@
-import type SVGRectParams from "./paramsdef/SVGRectParams.interface";
-import Point from "./Point";
-import type SVGArc from "./SVGArc";
-import type SVGBezierCurve from "./SVGBezierCurve";
-import type SVGCircle from "./SVGCircle";
-import type SVGEllipse from "./SVGEllipse";
-import type SVGLine from "./SVGLine";
 import type SVGObjectType from "./SVGObjectTypes";
-import type SVGPolygon from "./SVGPolygon";
 import type SVGStyle from "./SVGStyle";
-import type SVGRect from "./SVGRect";
-import type SVGCircleParams from "./paramsdef/SVGCircleParams.interface";
-import type SVGEllipseParams from "./paramsdef/SVGEllipseParams.interface";
-import type SVGLineParams from "./paramsdef/SVGLineParams.interface";
-import type SVGPolygonParams from "./paramsdef/SVGPolygonParams.interface";
 
-export class SVGObject {
+export abstract class SVGObject {
   private style: SVGStyle;
 
   constructor(
@@ -40,6 +27,24 @@ export class SVGObject {
   };
   setStrokeWeight = (strokeWeight: number): void => {
     this.style.strokeWeight = strokeWeight;
+  };
+  abstract toSVGString(): string;
+  abstract toString(): string;
+  //  => {
+  //   return "abstract toSVGString";
+  // };
+  //  {
+  //   return "abstract toString";
+  // };
+  // abstract makeSound(input : string) : string;
+  static process = (element: Element): SVGObject | null => {
+    throw "abstract process element : " + element;
+  };
+  static processList = (doc: Document): SVGObject[] => {
+    throw "abstract process doc : " + doc;
+  };
+  draw = (): void => {
+    console.warn("abstract draw");
   };
 }
 export default SVGObject;
