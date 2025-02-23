@@ -1,4 +1,6 @@
 import Point from "../Point";
+import SVGArc from "../SVGArc";
+import SVGLine from "../SVGLine";
 import SVGStyle from "../SVGStyle";
 // import SVGLine from "../SVGLine";
 
@@ -7,7 +9,9 @@ import SVGStyle from "../SVGStyle";
 // Z = Close Path
 
 export interface SVGPathParams {
-  points: Point[];
+  points?: Point[];
+  lines?: SVGLine[];
+  arcs?: SVGArc[];
   style?: SVGStyle | null;
 }
 export default SVGPathParams;

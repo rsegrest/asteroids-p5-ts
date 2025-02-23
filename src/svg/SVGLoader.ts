@@ -155,6 +155,9 @@ export class SVGLoader {
     this.ellipses.push(...SVGEllipse.processList(doc));
     this.images.push(...SVGImage.processList(doc, this.p));
 
+    console.log("this.paths:");
+    console.log(this.paths);
+
     // for (const poly of svgPolygonElementList) {
     // const svgStyleData = poly.getAttribute("class");
     // console.log("svgClassData");
@@ -174,25 +177,25 @@ export class SVGLoader {
     // ellipse
   }
 
-  static drawArcs = (): void => {
-    this.p.push();
-    this.p.fill("yellow");
-    this.p.stroke("white");
-    this.p.strokeWeight(1);
-    if (this.arcs.length > 0) {
-      for (const arc of this.arcs) {
-        this.p.arc(
-          arc.center.x as number,
-          arc.center.y as number,
-          arc.radius * 2,
-          arc.radius * 2,
-          arc.startAngle,
-          arc.endAngle
-        );
-      }
-    }
-    this.p.pop();
-  };
+  // static drawArcs = (): void => {
+  // this.p.push();
+  // this.p.fill("yellow");
+  // this.p.stroke("white");
+  // this.p.strokeWeight(1);
+  // if (this.arcs.length > 0) {
+  //   for (const arc of this.arcs) {
+  //     this.p.arc(
+  //       arc.center.x as number,
+  //       arc.center.y as number,
+  //       arc.radius * 2,
+  //       arc.radius * 2,
+  //       arc.startAngle,
+  //       arc.endAngle
+  //     );
+  //   }
+  // }
+  // this.p.pop();
+  // };
 
   static drawAll = (): void => {
     SVGPolygon.drawList(SVGLoader.p, SVGLoader.polygons);
@@ -202,6 +205,7 @@ export class SVGLoader {
     SVGPath.drawList(SVGLoader.p, SVGLoader.paths);
     SVGEllipse.drawList(SVGLoader.p, SVGLoader.ellipses);
     SVGImage.drawList(SVGLoader.p, SVGLoader.images);
+    SVGArc.drawList(SVGLoader.p, SVGLoader.arcs);
     // SVGLoader.drawEllipses();
     // SVGLoader.drawArcs();
     // SVGLoader.drawTextObjects();

@@ -1,12 +1,12 @@
 23 Feb 2025 -- Vector graphics
-// TODO: Process Image
 
 // TODO: Process Arc
 // TODO: Process Bezier Curve
 // TODO: Improve Path: Represent Path as Lines (only?), check for "M" (move to)
 // TODO: Process Text 
 
-// TODO: Assign style
+// TODO: Collect styles
+// TODO: Assign style by name to Primitive
 
 // TODO: Move process, draw functions
 // TODO: Process items in order (?)
@@ -18,6 +18,7 @@
 
 
 DONE: 
+// : Process Image
 // : Process Ellipse
 // : Process Path (straight-line)
 // : Process Rect
