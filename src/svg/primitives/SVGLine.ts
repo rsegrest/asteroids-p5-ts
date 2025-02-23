@@ -25,37 +25,6 @@ export class SVGLine extends SVGObject {
     return `Line from (${this.p1.x}, ${this.p1.y}) to (${this.p2.x}, ${this.p2.y})`;
   };
 
-  // static override processList = (doc: Document | null): SVGPolygon[] => {
-  //   const polygons: SVGPolygon[] = [];
-  //   if (doc) {
-  //     console.log("found doc");
-  //     const svgElementList = doc.querySelectorAll("polygon");
-  //     for (const poly of svgElementList) {
-  //       const polygon = SVGPolygon.process(poly);
-  //       if (polygon) {
-  //         polygons.push(polygon);
-  //       }
-  //     }
-  //   }
-  //   return polygons;
-  // };
-
-  // static override process = (element: Element): SVGLine | null => {
-  //   const pointsAsStringList =
-  //     element?.getAttribute("points")?.split(" ") || null;
-  //   let ptArray;
-  //   if (pointsAsStringList) {
-  //     ptArray = SVGFactory.pointStringListToPointObjArray(pointsAsStringList);
-  //     if (ptArray) {
-  //       const line = SVGFactory.createLine({
-  //         points: ptArray,
-  //       }) as SVGLine;
-  //       return line;
-  //     }
-  //   }
-  //   return null;
-  // };
-
   static override processList = (doc: Document | null): SVGLine[] => {
     const lines: SVGLine[] = [];
     if (doc) {

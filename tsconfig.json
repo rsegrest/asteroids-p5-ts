@@ -18,8 +18,9 @@
     "noUncheckedIndexedAccess": true,
 
     /* Module Resolution Options */
-    "types": ["jest"],
+    "types": ["jest", "node"],
     "esModuleInterop": true,
+    // "moduleResolution": "nodenext",
 
     /* Advanced Options */
     "skipLibCheck": true,

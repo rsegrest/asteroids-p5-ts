@@ -1,7 +1,9 @@
+import p5 from "p5";
 import SVGEllipseParams from "./paramsdef/SVGEllipseParams.interface";
 import Point from "./Point";
 import SVGObject from "./SVGObject";
 import SVGObjectType from "./SVGObjectTypes";
+import SVGFactory from "../SVGFactory";
 
 export class SVGEllipse extends SVGObject {
   public center: Point;
@@ -34,6 +36,98 @@ export class SVGEllipse extends SVGObject {
   };
   toString = (): string => {
     return `Ellipse at (${this.center.x}, ${this.center.y}) with radii ${this.radiusX} and ${this.radiusY}`;
+  };
+
+  static override processList = (doc: Document | null): SVGEllipse[] => {
+    const ellipses: SVGEllipse[] = [];
+    if (doc) {
+      const svgElementList = doc.querySelectorAll("ellipse");
+      for (const ellipseData of svgElementList) {
+        const ellipse = SVGEllipse.process(ellipseData);
+        if (ellipse) {
+          ellipses.push(ellipse);
+        }
+      }
+    }
+    return ellipses;
+  };
+  static process = (element: Element): SVGEllipse | null => {
+    // static processLine = (line: Element): SVGLine | null => {
+    const cx = element?.getAttribute("cx");
+    const cy = element?.getAttribute("cy");
+    const rx = element?.getAttribute("rx");
+    const ry = element?.getAttribute("ry");
+    // const x1String = element?.getAttribute("x1");
+    // const y1String = element?.getAttribute("y1");
+    // const x2String = element?.getAttribute("x2");
+    // const y2String = element?.getAttribute("y2");
+    // console.log("x1,y1,x2,y2string:");
+    // console.log(x1String);
+    // console.log(y1String);
+    // console.log(x2String);
+    // console.log(y2String);
+    let centerPt;
+    let radiusX;
+    let radiusY;
+    if (
+      typeof cx === "string" &&
+      typeof cy === "string" &&
+      typeof rx === "string" &&
+      typeof ry === "string"
+    ) {
+      centerPt = new Point(parseFloat(cx), parseFloat(cy));
+      radiusX = parseFloat(rx);
+      radiusY = parseFloat(ry);
+      if (
+        centerPt &&
+        typeof radiusX === "number" &&
+        typeof radiusY === "number"
+      ) {
+        const params: SVGEllipseParams = {
+          center: centerPt,
+          radiusX,
+          radiusY,
+        };
+        const ellipse = SVGFactory.createEllipse(params);
+        // console.log("line:");
+        // console.log(JSON.stringify(line));
+        return ellipse;
+      }
+    }
+    return null;
+    // };
+  };
+  static override draw = (renderer: p5, element: SVGObject): void => {
+    renderer.push();
+    const ellipse = element as SVGEllipse;
+
+    renderer.stroke("white");
+    renderer.strokeWeight(3);
+    renderer.ellipse(
+      ellipse.center.x,
+      ellipse.center.y,
+      ellipse.radiusX,
+      ellipse.radiusY
+      // line.p1.x as number,
+      // line.p1.y as number,
+      // line.p2.x as number,
+      // line.p2.y as number
+    );
+    renderer.pop();
+  };
+  static override drawList = (renderer: p5, elements: SVGObject[]): void => {
+    // console.log("draw ellipse list length : " + elements.length);
+    for (const element of elements) {
+      SVGObject.setStyle(renderer, element.getStyle());
+      if (elements.length > 0) {
+        for (const el of elements) {
+          const ellipse = el as SVGEllipse;
+          // console.log("ellipse to draw:");
+          // console.log(ellipse);
+          this.draw(renderer, ellipse);
+        }
+      }
+    }
   };
 }
 export default SVGEllipse;

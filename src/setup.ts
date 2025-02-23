@@ -19,11 +19,14 @@ export let gameController: GameController;
 export const preload = (p: p5): void => {
   font = p.loadFont("./font/hyperspace-font/HyperspaceBold-GM0g.ttf");
   SVGLoader.registerRenderer(p);
-  SVGLoader.loadSVG("quick-svg-from-ai.svg");
-  SVGLoader.loadSVG("w3examples/line/svgLine.svg");
-  SVGLoader.loadSVG("w3examples/circle/circleWithOpacity.svg");
-  SVGLoader.loadSVG("w3examples/rect/svgRectExample.svg");
-  SVGLoader.loadSVG("w3examples/path/svgPathTriangle.svg");
+  // SVGLoader.loadSVG("quick-svg-from-ai.svg");
+  // SVGLoader.loadSVG("w3examples/line/svgLine.svg");
+  // SVGLoader.loadSVG("w3examples/circle/circleWithOpacity.svg");
+  // SVGLoader.loadSVG("w3examples/rect/svgRectExample.svg");
+  // SVGLoader.loadSVG("w3examples/path/svgPathTriangle.svg");
+  // SVGLoader.loadSVG("w3examples/ellipse/svgEllipse.svg");
+  // SVGLoader.loadSVG("w3examples/ellipse/threeEllipsesOverlapping.svg");
+  SVGLoader.loadSVG("w3examples/image/imageElement.svg");
 };
 
 export const keyPressed = (p: p5): void => {

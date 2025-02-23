@@ -78,14 +78,8 @@ export class SVGPath extends SVGObject {
     const pathList: SVGPath[] = [];
     if (doc) {
       const svgElementList = doc.querySelectorAll("path");
-      console.log("processList for paths");
-      console.log(JSON.stringify(svgElementList));
       for (const pathData of svgElementList) {
-        console.log("inside for loop");
-        console.log(pathData);
         const path = SVGPath.process(pathData);
-        console.log("the path:");
-        console.log(path);
         if (path) {
           pathList.push(path);
         }

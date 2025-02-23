@@ -38,11 +38,14 @@ export abstract class SVGObject {
   //   return "abstract toString";
   // };
   // abstract makeSound(input : string) : string;
-  static process = (element: Element): SVGObject | null => {
-    throw "abstract process element : " + element;
+  static process = (
+    element: Element,
+    renderer?: p5 | null
+  ): SVGObject | null => {
+    throw "abstract process element : " + element + ", " + renderer;
   };
-  static processList = (doc: Document): SVGObject[] => {
-    throw "abstract process doc : " + doc;
+  static processList = (doc: Document, renderer?: p5 | null): SVGObject[] => {
+    throw "abstract process doc : " + doc + ", " + renderer;
   };
   static draw = (renderer: p5, elements: SVGObject): void => {
     throw "abstract draw : " + renderer + ", " + elements;
