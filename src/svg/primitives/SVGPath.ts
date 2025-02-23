@@ -27,9 +27,6 @@ export class SVGPath extends SVGObject {
     if (params.arcs) {
       this.arcs = params.arcs;
     }
-    // this.lines = params.lines;
-    // this.startPoint = params.startPoint;
-    // this.endPoint = params.endPoint;
   }
 
   static create = (params: SVGPathParams): SVGPath => {
@@ -50,25 +47,20 @@ export class SVGPath extends SVGObject {
     const pointsAsStringList: string[] = [];
     const points: Point[] = []; // don't use
     const lines: SVGLine[] = [];
-    let closeFlag = false;
+    const closeFlag = false;
     if (instructionsAsStringList) {
       let currentPenPoint: Point | null = null;
       for (let p = 0; p < instructionsAsStringList.length; p += 1) {
         let param = instructionsAsStringList[p] as string;
         if (param && param !== "") {
-          if (param.includes("Z")) {
-            closeFlag = true;
-          } else if (param.includes("M")) {
+          if (param.includes("M")) {
             param = param.replace("M", "");
             const nextParamStr = instructionsAsStringList[p + 1];
             if (nextParamStr && typeof nextParamStr === "string") {
               const x = parseFloat(param);
               const y = parseFloat(nextParamStr);
-              // this.startPoint = new Point(x, y);
               if (typeof x === "number" && typeof y === "number") {
                 currentPenPoint = new Point(x, y);
-                // console.log("moveToPoint:");
-                // console.log(currentPenPoint);
               }
             }
           } else if (param.includes("L")) {
@@ -86,26 +78,17 @@ export class SVGPath extends SVGObject {
               const p2x = parseFloat(lineEndXStr);
               const p2y = parseFloat(lineEndYStr);
               if (typeof p2x === "number" && typeof p2y === "number") {
-                // points.push(moveToPoint);
-                // points.push(new Point(nextPointX, nextPointY));
                 const lineParams = {
                   style: {},
                   p1: lineStart,
                   p2: new Point(p2x, p2y),
                 };
                 currentPenPoint = new Point(p2x, p2y);
-                console.log("creating a line:");
-                console.log(lineParams);
                 lines.push(SVGLine.create(lineParams));
                 p += 1;
               }
             }
           }
-          // if (param.includes("L")) {
-          //   param = param.replace("L", "");
-          //   // CREATE LINE
-          //   console.log();
-          // }
           if (param.includes("A")) {
             // create an arc with next 7 numbers
             // const arc = instructionsAsStringList.slice(p, p + 7).join(" ");
@@ -113,7 +96,6 @@ export class SVGPath extends SVGObject {
             // p += 6;
           }
           if (param === "Z") {
-            closeFlag = true;
             const lastPt = lines[lines.length - 1]?.p2;
             const firstPt = lines[0]?.p1;
             if (lastPt && firstPt) {
@@ -124,47 +106,10 @@ export class SVGPath extends SVGObject {
               };
               lines.push(SVGLine.create(lineParams));
             }
-            // const lineParams = {
-            // style: {},
-            // p1: moveToPoint,
-            // p2: lines.?[0].p1
-            // };
-            lines.push();
-          }
-          // param = param.replace("Z", "");
-          // // TODO: move to flag?
-          // // TODO: lines?
-          // if (param !== "") {
-          //   pointsAsStringList.push(param);
-          // }
-        }
-      }
-      for (let i = 0; i < pointsAsStringList.length; i += 2) {
-        const xStr = pointsAsStringList[i];
-        const yStr = pointsAsStringList[i + 1];
-        if (typeof xStr === "string" && typeof yStr === "string") {
-          const x = parseFloat(xStr);
-          const y = parseFloat(yStr);
-          if (typeof x === "number" && typeof y === "number") {
-            points.push(new Point(x, y));
           }
         }
       }
       return SVGPath.create({ style: {}, points, lines });
-      // return { lines, points }
-      // if (closeFlag) {
-      //   if (points[0]) {
-      //     points.push(points[0]);
-      //   }
-      // }
-      // if (points) {
-      //   const params: SVGPathParams = {
-      //     style: {},
-      //     points,
-      //   };
-      //   const path = SVGFactory.createPath(params) as SVGPath;
-      //   return path;
-      // }
     }
     return null;
   };
