@@ -5,6 +5,7 @@ import SVGObject from "./SVGObject";
 import SVGObjectType from "./SVGObjectTypes";
 import Point from "./Point";
 import SVGLine from "./SVGLine";
+import SVGArc from "./SVGArc";
 // import SVGLine from "./SVGLine";
 
 export class SVGPath extends SVGObject {
@@ -47,6 +48,7 @@ export class SVGPath extends SVGObject {
     const pointsAsStringList: string[] = [];
     const points: Point[] = []; // don't use
     const lines: SVGLine[] = [];
+    const arcs: SVGArc[] = [];
     const closeFlag = false;
     if (instructionsAsStringList) {
       let currentPenPoint: Point | null = null;
@@ -89,11 +91,19 @@ export class SVGPath extends SVGObject {
               }
             }
           }
-          if (param.includes("A")) {
+          if (param.includes("A") || param.includes("a")) {
             // create an arc with next 7 numbers
-            // const arc = instructionsAsStringList.slice(p, p + 7).join(" ");
-            // TODO: process arc
-            // p += 6;
+            const arcInstructions = instructionsAsStringList
+              .slice(p, p + 7)
+              .join(" ");
+            // console.log(arc);
+            const arc = SVGArc.processFromString(arcInstructions);
+            console.log(arc);
+            if (arc) {
+              arcs.push(arc);
+              // p += 7;
+            }
+            p += 7;
           }
           if (param === "Z") {
             const lastPt = lines[lines.length - 1]?.p2;
@@ -109,7 +119,7 @@ export class SVGPath extends SVGObject {
           }
         }
       }
-      return SVGPath.create({ style: {}, points, lines });
+      return SVGPath.create({ style: {}, points, lines, arcs });
     }
     return null;
   };
@@ -139,8 +149,8 @@ export class SVGPath extends SVGObject {
     renderer.stroke("white");
     renderer.strokeWeight(1);
     const path = element as SVGPath;
-    console.log("in draw, path.lines.length = ");
-    console.log(path.lines.length);
+    // console.log("in draw, path.lines.length = ");
+    // console.log(path.lines.length);
     if (path.lines.length > 0) {
       for (let i = 0; i < path.lines.length; i += 1) {
         const line = path.lines[i];
@@ -149,15 +159,16 @@ export class SVGPath extends SVGObject {
           console.log(line);
           SVGLine.draw(renderer, line);
         }
-        // const p2 = path.points[i + 1];
-        // if (p1 && p2) {
-        // renderer.line(
-        // p1.x as number,
-        // p1.y as number,
-        // p2.x as number,
-        // p2.y as number
-        // );
-        // }
+      }
+    }
+    if (path.arcs.length > 0) {
+      for (let i = 0; i < path.arcs.length; i += 1) {
+        const arc = path.arcs[i];
+        if (arc) {
+          console.log("drawing arc:");
+          console.log(arc);
+          SVGArc.draw(renderer, arc);
+        }
       }
     }
     renderer.pop();

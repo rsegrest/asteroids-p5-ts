@@ -75,3 +75,88 @@ Shooting A Small Saucer: 1000 Points
 Shooting Opponent In Competition Mode: 500 Points
 
 For every 10,000 points earned, a bonus ship will be awarded.
+
+
+Translating SVG arc parameters to p5.js arc() parameters requires understanding the differences between the two systems. SVG uses a more complex arc definition with endpoints and flags, while p5.js uses a center-based approach with start and end angles. Let’s break it down step-by-step.
+SVG Arc Parameters (from the A command in a path)
+
+In SVG, an arc is defined with:
+
+ * rx, ry: Radii of the ellipse along the x and y axes.
+ * x-axis-rotation: Rotation of the ellipse (in degrees).
+ * large-arc-flag: 0 (small arc) or 1 (large arc).
+ * sweep-flag: 0 (counterclockwise) or 1 (clockwise).
+ * x, y: Endpoint coordinates of the arc (the starting point is the current position from the previous command).
+
+This describes an elliptical arc between two points, which can take one of four possible paths (small/large arc, clockwise/counterclockwise).
+
+p5.js arc() Parameters
+In p5.js, the arc() function uses:
+
+ * x, y: Center of the arc (not endpoints).
+ * width, height: Width and height of the ellipse (diameters, not radii).
+ * start: Starting angle (in radians).
+ * stop: Ending angle (in radians).
+ * [mode]: Optional, can be CHORD, PIE, or default (open arc).
+
+p5.js draws the arc as a section of an ellipse centered at (x, y), moving from start to stop angles counterclockwise (positive angles go counterclockwise from the positive x-axis).
+
+Translation Process
+
+To convert SVG arc parameters to p5.js, you need to:
+
+ * Determine the center and radii: SVG defines arcs via endpoints, so you must calculate the ellipse’s center based on the start point, end point, radii, rotation, and flags.
+ * Calculate start and end angles: Use the center and endpoints to find the angles relative to the ellipse’s orientation.
+ * Adjust for p5.js conventions: SVG’s sweep direction and p5.js’s counterclockwise angle system need alignment.
+ * This is mathematically intensive, so here’s a simplified approach with assumptions, followed by a practical example.
+
+Step-by-Step
+SVG Radii to p5.js Width/Height:
+p5.js uses diameters, so width = 2 * rx and height = 2 * ry.
+Find the Center:
+The center isn’t directly given in SVG. You’d need to use the start point (x1, y1), end point (x2, y2), rx, ry, x-axis-rotation, and flags to compute it. This involves solving a system of equations (beyond simple arithmetic, often requiring trigonometry and matrix transformations). Libraries like svg-arc-to-center-param (in JavaScript) can help, or you can approximate for simple cases.
+Start and End Angles:
+Once you have the center (cx, cy), calculate the angle of the start point (x1, y1) and end point (x2, y2) relative to the center using atan2(y - cy, x - cx).
+Adjust for x-axis-rotation by rotating the angles if nonzero.
+Sweep Direction:
+SVG sweep-flag = 1 means clockwise; p5.js goes counterclockwise by default. If sweep-flag = 0, swap the start and stop angles to reverse direction.
+Large Arc Flag:
+In p5.js, the arc length is determined purely by start and stop. Use the large-arc-flag to decide if the angle difference should exceed 180 degrees.
+Example
+SVG Command
+svg
+<path d="M 100 100 A 50 50 0 0 1 200 100" />
+Start: (100, 100)
+End: (200, 100)
+rx = 50, ry = 50
+x-axis-rotation = 0
+large-arc-flag = 0 (small arc)
+sweep-flag = 1 (clockwise)
+Step 1: Radii to Width/Height
+rx = 50, ry = 50
+width = 2 * 50 = 100, height = 2 * 50 = 100
+Step 2: Calculate Center
+For a simple horizontal arc with no rotation:
+Start (100, 100) to end (200, 100) with rx = 50, ry = 50.
+Center is midway horizontally and vertically aligned: (cx, cy) = (150, 100) (simplified case; exact center requires full computation).
+Step 3: Start and End Angles
+Start point (100, 100) relative to center (150, 100):
+atan2(100 - 100, 100 - 150) = atan2(0, -50) = PI (180 degrees, left side).
+End point (200, 100) relative to center (150, 100):
+atan2(100 - 100, 200 - 150) = atan2(0, 50) = 0 (0 degrees, right side).
+Angles in radians: start = PI, stop = 0.
+Step 4: Adjust for Sweep
+sweep-flag = 1 (clockwise). From PI (180°) to 0 (0°) clockwise is a small arc (180°), matching large-arc-flag = 0.
+p5.js is counterclockwise, so reverse: start = 0, stop = PI.
+p5.js Code
+javascript
+function setup() {
+  createCanvas(300, 200);
+  arc(150, 100, 100, 100, 0, PI); // Center (150, 100), width 100, height 100, 0 to PI
+}
+This draws a semicircle from (200, 100) to (100, 100) counterclockwise, matching the SVG arc.
+Notes
+Rotation: If x-axis-rotation isn’t 0, you’d need to rotate the coordinate system or adjust angles, complicating the math.
+Complex Cases: For arbitrary SVG arcs, use a library or write a full conversion function to handle center calculation (search “SVG arc to center” for algorithms).
+Approximation: For quick sketches, assume a circular arc and tweak manually in p5.js.
+If you have a specific SVG arc you’re working with, share it, and I can refine the translation!
