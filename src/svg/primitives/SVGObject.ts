@@ -10,8 +10,8 @@ import type SVGPolygon from "./SVGPolygon";
 import type SVGStyle from "./SVGStyle";
 import type SVGRect from "./SVGRect";
 import type SVGCircleParams from "./paramsdef/SVGCircleParams.interface";
-import type SVGEllipseParams from "./paramsdef/SVGEllipseParams";
-import type SVGLineParams from "./paramsdef/SVGLineParams";
+import type SVGEllipseParams from "./paramsdef/SVGEllipseParams.interface";
+import type SVGLineParams from "./paramsdef/SVGLineParams.interface";
 import type SVGPolygonParams from "./paramsdef/SVGPolygonParams.interface";
 
 export class SVGObject {
@@ -19,8 +19,6 @@ export class SVGObject {
 
   constructor(
     public readonly type: SVGObjectType,
-    // TODO: Create an abstract class for points
-    // public readonly points: Point[],
     style: SVGStyle | null = null
   ) {
     this.style = style || {};

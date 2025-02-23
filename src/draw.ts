@@ -6,9 +6,8 @@ import SVGLoader from "./svg/SVGLoader";
 // import { displayPolygons } from "./svg/svg";
 
 export const draw = (p: p5): void => {
-  // p.createCanvas(window.innerWidth, window.innerHeight);
   p.background(10);
   gameController.advance();
-  // displayPolygons(p);
   SVGLoader.drawPolygon();
+  SVGLoader.drawLines();
 };

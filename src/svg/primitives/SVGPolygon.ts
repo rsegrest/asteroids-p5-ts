@@ -1,21 +1,17 @@
 import { SVGFactory } from "../SVGFactory";
+import SVGPolygonParams from "./paramsdef/SVGPolygonParams.interface";
 import { Point } from "./Point";
 import SVGObject from "./SVGObject";
 import SVGObjectType from "./SVGObjectTypes";
-import SVGStyle from "./SVGStyle";
 
 export class SVGPolygon extends SVGObject {
-  constructor(
-    // public readonly type: SVGObjectType,
-    // TODO: Create an abstract class for points
-    public readonly points: Point[],
-    style: SVGStyle
-  ) {
-    super(SVGObjectType.POLYGON, style);
-    this.points = points;
+  public points: Point[];
+  constructor(params: SVGPolygonParams) {
+    super(SVGObjectType.POLYGON, params.style);
+    this.points = params.points;
   }
 
-  static create = (points: Point[]): SVGObject => {
+  static create = (points: Point[]): SVGPolygon => {
     return SVGFactory.createPolygon({ points });
   };
 }

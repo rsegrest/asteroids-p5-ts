@@ -38,14 +38,16 @@ export class SVGLoader {
 
   private static styles: SVGStyle[] = [];
   private static polygons: SVGPolygon[] = [];
+  private static lines: SVGLine[] = [];
   private static circles: SVGCircle[] = [];
   private static rects: SVGRect[] = [];
   private static ellipses: SVGEllipse[] = [];
-  private static lines: SVGLine[] = [];
   private static arcs: SVGArc[] = [];
   // private static bezierCurves: SVGBezierCurve[] = [];
 
+  // move to functions?
   private static svgPolygonElementList: any | any[] = [];
+  private static svgLinesElementList: any | any[] = [];
 
   private static fillColor = "pink";
   private static strokeColor = "white";
@@ -70,8 +72,6 @@ export class SVGLoader {
   };
   // called from PRELOAD
   static loadSVG = (filename: string | null = null): void => {
-    console.log("loadSVG");
-    console.log(this.p);
     if (filename) {
       this.p.loadStrings(
         filename,
@@ -144,19 +144,34 @@ export class SVGLoader {
     const svgString = data?.join("\n");
     const parser = new DOMParser();
     const doc = parser.parseFromString(svgString, "image/svg+xml");
-    const svgElementClass =
-      this.svgPolygonElementList[0]?.getAttribute("class");
+
+    // Get class from polygon, lines, circles
+    // const svgElementClass =
+    this.svgPolygonElementList[0]?.getAttribute("class");
 
     // for polygon
     // if:
-    this.svgPolygonElementList = doc.querySelectorAll("polygon");
-    // then type = polygon, process polygon
+
+    const svgPolygonElementList = doc.querySelectorAll("polygon");
+    const svgLinesElementList = doc.querySelectorAll("line");
+    const svgCircleElementList = doc.querySelectorAll("circle");
+    const svgEllipseElementList = doc.querySelectorAll("ellipse");
+    const svgArcElementList = doc.querySelectorAll("arc");
+    const svgRectElementList = doc.querySelectorAll("rect");
+    // const svgBezierCurveElementList = doc.querySelectorAll("bezierCurve");
 
     const svgStyleData: any = doc.querySelectorAll("style");
-
-    const svgStyle = this.processSVGStyle(svgStyleData);
-
-    for (const poly of this.svgPolygonElementList) {
+    // TODO: Save in style list with class name
+    for (const poly of svgPolygonElementList) {
+      // const svgStyleData = poly.getAttribute("class");
+      const svgClassData = poly.getAttribute("class");
+      // console.log("svgClassData");
+      // console.log(svgClassData);
+      // console.log("svgStyleData");
+      // console.log(svgStyleData);
+      const svgStyle = this.processSVGStyle(svgStyleData);
+      // console.log("svgStyle");
+      // console.log(svgStyle);
       const polyObj = this.processPolygon(poly); // calls points to 2D array
       // this.ptArray now available
       if (polyObj) {
@@ -164,6 +179,60 @@ export class SVGLoader {
         this.polygons.push(polyObj);
       }
     }
+
+    for (const line of svgLinesElementList) {
+      const lineObj = this.processLine(line);
+      if (lineObj) {
+        // lineObj.setStyle(svgStyle);
+        lineObj.setStyle({ strokeColor: "white", strokeWeight: 1 });
+        this.lines.push(lineObj);
+      }
+    }
+
+    // circle
+
+    for (const circle of svgCircleElementList) {
+      const circleObj = this.processCircle(circle);
+      if (circleObj) {
+        // LEFT-OFF 22 Feb 2025 -> 23 Feb 2025 @ 0126
+        // lineObj.setStyle(svgStyle);
+        // lineObj.setStyle({ strokeColor: "white", strokeWeight: 1 });
+        // this.lines.push(lineObj);
+      }
+    }
+
+    // rect
+
+    // for (const line of svgLinesElementList) {
+    //   const lineObj = this.processLine(line);
+    //   if (lineObj) {
+    //     // lineObj.setStyle(svgStyle);
+    //     lineObj.setStyle({ strokeColor: "white", strokeWeight: 1 });
+    //     this.lines.push(lineObj);
+    //   }
+    // }
+
+    // ellipse
+
+    // for (const line of svgLinesElementList) {
+    //   const lineObj = this.processLine(line);
+    //   if (lineObj) {
+    //     // lineObj.setStyle(svgStyle);
+    //     lineObj.setStyle({ strokeColor: "white", strokeWeight: 1 });
+    //     this.lines.push(lineObj);
+    //   }
+    // }
+
+    // arc
+
+    // for (const line of svgLinesElementList) {
+    //   const lineObj = this.processLine(line);
+    //   if (lineObj) {
+    //     // lineObj.setStyle(svgStyle);
+    //     lineObj.setStyle({ strokeColor: "white", strokeWeight: 1 });
+    //     this.lines.push(lineObj);
+    //   }
+    // }
   }
 
   // converts this.points string to 2D this.ptArray of numbers
@@ -194,6 +263,51 @@ export class SVGLoader {
       }
     }
     return ptArray;
+  };
+
+  static processLine = (line: Element): SVGLine | null => {
+    console.log("process line:");
+    const x1String = line?.getAttribute("x1");
+    const y1String = line?.getAttribute("y1");
+    const x2String = line?.getAttribute("x2");
+    const y2String = line?.getAttribute("y2");
+    // console.log("x1,y1,x2,y2string:");
+    // console.log(x1String);
+    // console.log(y1String);
+    // console.log(x2String);
+    // console.log(y2String);
+    let x1;
+    let y1;
+    let x2;
+    let y2;
+    if (x1String && y1String && x2String && y2String) {
+      x1 = parseFloat(x1String);
+      y1 = parseFloat(y1String);
+      x2 = parseFloat(x2String);
+      y2 = parseFloat(y2String);
+
+      // console.log("x1,y1,x2,y2:");
+      // console.log(x1);
+      // console.log(y1);
+      // console.log(x2);
+      // console.log(y2);
+      if (
+        typeof x1 === "number" &&
+        typeof y1 === "number" &&
+        typeof x2 === "number" &&
+        typeof y2 === "number"
+      ) {
+        // console.log("points are valid numbers");
+        const line = SVGFactory.createLine({
+          p1: new Point(x1, y1),
+          p2: new Point(x2, y2),
+        });
+        // console.log("line:");
+        // console.log(JSON.stringify(line));
+        return line;
+      }
+    }
+    return null;
   };
 
   // gets points string data from polygon SVG element
@@ -233,6 +347,26 @@ export class SVGLoader {
       }
     }
     return null;
+  };
+
+  static drawLines = (): void => {
+    this.p.push();
+    this.p.stroke("white");
+    this.p.strokeWeight(3);
+    // console.log("drawLines--this.lines.length: ", this.lines.length);
+    if (this.lines.length > 0) {
+      for (const line of this.lines) {
+        // console.log("drawing line");
+        // console.log(JSON.stringify);
+        this.p.line(
+          line.p1.x as number,
+          line.p1.y as number,
+          line.p2.x as number,
+          line.p2.y as number
+        );
+      }
+    }
+    this.p.pop();
   };
 
   static drawPolygon = (): void => {

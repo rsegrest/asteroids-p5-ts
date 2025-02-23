@@ -1,29 +1,24 @@
+import SVGArcParams from "./paramsdef/SVGArcParams.interface";
 import Point from "./Point";
 import SVGObject from "./SVGObject";
 import SVGObjectType from "./SVGObjectTypes";
-import SVGStyle from "./SVGStyle";
 
 export class SVGArc extends SVGObject {
-  // public readonly type: SVGObjectType;
+  public center: Point;
+  public radius: number;
+  public startAngle: number;
+  public endAngle: number;
 
-  private center: Point;
-  private radius: number;
-  private startAngle: number;
-  private endAngle: number;
-
-  constructor(
-    center: Point,
-    radius: number,
-    startAngle: number,
-    endAngle: number,
-    style: SVGStyle | null = null
-  ) {
-    super(SVGObjectType.ARC, style);
-    // this.type = SVGObjectType.ARC;
-    this.center = center;
-    this.radius = radius;
-    this.startAngle = startAngle;
-    this.endAngle = endAngle;
+  constructor(params: SVGArcParams) {
+    super(SVGObjectType.ARC, params.style);
+    this.center = params.center;
+    this.radius = params.radius;
+    this.startAngle = params.startAngle;
+    this.endAngle = params.endAngle;
   }
+
+  static create = (params: SVGArcParams): SVGArc => {
+    return new SVGArc(params);
+  };
 }
 export default SVGArc;

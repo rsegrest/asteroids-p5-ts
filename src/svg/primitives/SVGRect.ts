@@ -1,6 +1,6 @@
+import SVGRectParams from "./paramsdef/SVGRectParams.interface";
 import SVGObject from "./SVGObject";
 import SVGObjectType from "./SVGObjectTypes";
-import SVGStyle from "./SVGStyle";
 
 export class SVGRect extends SVGObject {
   public x: number;
@@ -8,18 +8,15 @@ export class SVGRect extends SVGObject {
   public width: number;
   public height: number;
 
-  constructor(
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    style: SVGStyle | null = null
-  ) {
-    super(SVGObjectType.RECT, style);
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
+  constructor(params: SVGRectParams) {
+    super(SVGObjectType.RECT, params.style);
+    this.x = params.x;
+    this.y = params.y;
+    this.width = params.width;
+    this.height = params.height;
   }
+  static create = (params: SVGRectParams): SVGRect => {
+    return new SVGRect(params);
+  };
 }
 export default SVGRect;
