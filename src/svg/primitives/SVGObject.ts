@@ -1,3 +1,4 @@
+import p5 from "p5";
 import type SVGObjectType from "./SVGObjectTypes";
 import type SVGStyle from "./SVGStyle";
 
@@ -43,8 +44,22 @@ export abstract class SVGObject {
   static processList = (doc: Document): SVGObject[] => {
     throw "abstract process doc : " + doc;
   };
-  draw = (): void => {
-    console.warn("abstract draw");
+  static draw = (renderer: p5, elements: SVGObject): void => {
+    throw "abstract draw : " + renderer + ", " + elements;
+  };
+  static drawList = (renderer: p5, elements: SVGObject[]): void => {
+    throw "abstract drawList : " + renderer + ", " + elements;
+  };
+  static setStyle = (renderer: p5, style: SVGStyle): void => {
+    if (style.fillColor) {
+      renderer.fill(style.fillColor);
+    }
+    if (style.strokeColor) {
+      renderer.stroke(style.strokeColor);
+    }
+    if (style.strokeWeight) {
+      renderer.strokeWeight(style.strokeWeight);
+    }
   };
 }
 export default SVGObject;

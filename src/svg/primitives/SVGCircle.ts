@@ -1,3 +1,4 @@
+import p5 from "p5";
 import SVGFactory from "../SVGFactory";
 import SVGCircleParams from "./paramsdef/SVGCircleParams.interface";
 import Point from "./Point";
@@ -28,6 +29,19 @@ export class SVGCircle extends SVGObject {
     return `Circle at (${this.center.x}, ${this.center.y}) with radius ${this.radius}`;
   };
 
+  static override processList = (doc: Document | null): SVGCircle[] => {
+    const circles: SVGCircle[] = [];
+    if (doc) {
+      const svgElementList = doc.querySelectorAll("circle");
+      for (const lineData of svgElementList) {
+        const circle = SVGCircle.process(lineData);
+        if (circle) {
+          circles.push(circle);
+        }
+      }
+    }
+    return circles;
+  };
   static process = (element: Element): SVGCircle | null => {
     const rString = element?.getAttribute("r");
     const cxString = element?.getAttribute("cx");
@@ -39,7 +53,11 @@ export class SVGCircle extends SVGObject {
       radius = parseFloat(rString);
       cx = parseFloat(cxString);
       cy = parseFloat(cyString);
-      if (radius && cx && cy) {
+      if (
+        typeof radius === "number" &&
+        typeof cx === "number" &&
+        typeof cy === "number"
+      ) {
         const circle = SVGFactory.createCircle({
           center: new Point(cx, cy),
           radius,
@@ -50,8 +68,30 @@ export class SVGCircle extends SVGObject {
     return null;
   };
 
-  // static draw = (element: SVGCircle): SVGCircle => {
-  //   return element;
-  // }
+  static drawList = (renderer: p5, elements: SVGObject[]): void => {
+    for (const element of elements) {
+      SVGObject.setStyle(renderer, element.getStyle());
+      if (elements.length > 0) {
+        for (const c of elements) {
+          const circle = c as SVGCircle;
+          this.draw(renderer, circle);
+        }
+      }
+    }
+  };
+
+  static draw = (renderer: p5, element: SVGObject): void => {
+    renderer.push();
+    renderer.fill("green");
+    renderer.stroke("white");
+    renderer.strokeWeight(1);
+    const circleObj = element as SVGCircle;
+    renderer.circle(
+      circleObj.center.x as number,
+      circleObj.center.y as number,
+      circleObj.radius
+    );
+    renderer.pop();
+  };
 }
 export default SVGCircle;

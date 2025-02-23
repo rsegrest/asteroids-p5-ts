@@ -56,9 +56,9 @@ export class SVGLoader {
   private static svgPolygonElementList: any | any[] = [];
   // private static svgLinesElementList: any | any[] = [];
 
-  private static fillColor = "pink";
-  private static strokeColor = "white";
-  private static strokeWeight = 1;
+  // private static fillColor = "pink";
+  // private static strokeColor = "white";
+  // private static strokeWeight = 1;
 
   constructor(p: p5) {
     SVGLoader.p = p;
@@ -75,7 +75,7 @@ export class SVGLoader {
 
   // callback after loadStrings -- process all XML from SVG
   static handleSvgData = (data: string[]): void => {
-    console.log("handleSvgData");
+    // console.log("handleSvgData");
     this.processSVG(data); // populates this.polygons (Raw SVG Elements)
   };
   // called from PRELOAD
@@ -149,7 +149,7 @@ export class SVGLoader {
 
   // Pulls Polygon XML data from SVG
   static processSVG(data: string[]): any {
-    console.log("processSVG");
+    // console.log("processSVG");
     const svgString = data?.join("\n");
     const parser = new DOMParser();
     const doc = parser.parseFromString(svgString, "image/svg+xml");
@@ -161,25 +161,19 @@ export class SVGLoader {
     // for polygon
     // if:
 
-    const svgCircleElementList = doc.querySelectorAll("circle");
-    const svgEllipseElementList = doc.querySelectorAll("ellipse");
-    const svgArcElementList = doc.querySelectorAll("arc");
-    const svgRectElementList = doc.querySelectorAll("rect");
-    const svgPathElementList = doc.querySelectorAll("path");
-    const svgTextElementList = doc.querySelectorAll("text");
-    const svgImageElementList = doc.querySelectorAll("image");
-
     // const svgBezierCurveElementList = doc.querySelectorAll("bezierCurve");
 
     const svgStyleData: any = doc.querySelectorAll("style");
     // TODO: Save in style list with class name
+
     this.polygons.push(...SVGPolygon.processList(doc));
-    console.log(this.polygons);
     this.lines.push(...SVGLine.processList(doc));
-    console.log(this.lines);
+    this.circles.push(...SVGCircle.processList(doc));
+    this.rects.push(...SVGRect.processList(doc));
+    this.paths.push(...SVGPath.processList(doc));
     // const svgPolygonElementList = doc.querySelectorAll("polygon");
     // const svgClassData = poly.getAttribute("class");
-    // const svgStyle = this.processSVGStyle(svgStyleData);
+    // const svgStyle = this.proscessSVGStyle(svgStyleData);
 
     // for (const poly of svgPolygonElementList) {
     // const svgStyleData = poly.getAttribute("class");
@@ -195,51 +189,6 @@ export class SVGLoader {
     // polyObj.setStyle(svgStyle);
     // this.polygons.push(polyObj);
     // }
-    // }
-
-    // const svgLinesElementList = doc.querySelectorAll("line");
-    // for (const line of svgLinesElementList) {
-    //   const lineObj = SVGLine.process(line);
-    //   if (lineObj) {
-    //     // lineObj.setStyle(svgStyle);
-    //     lineObj.setStyle({ strokeColor: "white", strokeWeight: 1 });
-    //     this.lines.push(lineObj);
-    //   }
-    // }
-
-    // circle
-
-    for (const circle of svgCircleElementList) {
-      const circleObj = SVGCircle.process(circle);
-      if (circleObj) {
-        // LEFT-OFF 22 Feb 2025 -> 23 Feb 2025 @ 0126
-        // lineObj.setStyle(svgStyle);
-        circleObj.setStyle({
-          fillColor: "green",
-          strokeColor: "white",
-          strokeWeight: 1,
-        });
-        this.circles.push(circleObj);
-      }
-    }
-
-    // rect
-    for (const rect of svgRectElementList) {
-      const rectObj = SVGRect.process(rect);
-      if (rectObj) {
-        // lineObj.setStyle(svgStyle);
-        rectObj.setStyle({ strokeColor: "white", strokeWeight: 1 });
-        this.rects.push(rectObj);
-      }
-    }
-
-    // for (const line of svgLinesElementList) {
-    //   const lineObj = this.processLine(line);
-    //   if (lineObj) {
-    //     // lineObj.setStyle(svgStyle);
-    //     lineObj.setStyle({ strokeColor: "white", strokeWeight: 1 });
-    //     this.lines.push(lineObj);
-    //   }
     // }
 
     // ellipse
@@ -311,84 +260,85 @@ export class SVGLoader {
   //   return null;
   // };
 
-  static drawCircles = (): void => {
-    this.p.push();
-    this.p.fill("green");
-    this.p.stroke("white");
-    this.p.strokeWeight(1);
-    if (this.circles.length > 0) {
-      for (const circ of this.circles) {
-        this.p.circle(
-          circ.center.x as number,
-          circ.center.y as number,
-          circ.radius
-        );
-      }
-    }
-    this.p.pop();
-  };
+  // static drawCircles = (): void => {
+  //   this.p.push();
+  //   this.p.fill("green");
+  //   this.p.stroke("white");
+  //   this.p.strokeWeight(1);
+  //   if (this.circles.length > 0) {
+  //     for (const circ of this.circles) {
+  //       this.p.circle(
+  //         circ.center.x as number,
+  //         circ.center.y as number,
+  //         circ.radius
+  //       );
+  //     }
+  //   }
+  //   this.p.pop();
+  // };
 
-  static drawLines = (): void => {
-    // console.log("drawPolygon");
-    // console.log(this.polygons);
-    this.p.push();
-    this.p.stroke("white");
-    this.p.strokeWeight(3);
-    // console.log("drawLines--this.lines.length: ", this.lines.length);
-    if (this.lines.length > 0) {
-      for (const line of this.lines) {
-        // console.log("drawing line");
-        // console.log(JSON.stringify);
-        this.p.line(
-          line.p1.x as number,
-          line.p1.y as number,
-          line.p2.x as number,
-          line.p2.y as number
-        );
-      }
-    }
-    this.p.pop();
-  };
+  // static drawLines = (): void => {
+  //   // console.log("drawPolygon");
+  //   // console.log(this.polygons);
+  //   this.p.push();
+  //   this.p.stroke("white");
+  //   this.p.strokeWeight(3);
+  //   // console.log("drawLines--this.lines.length: ", this.lines.length);
+  //   if (this.lines.length > 0) {
+  //     for (const line of this.lines) {
+  //       // console.log("drawing line");
+  //       // console.log(JSON.stringify);
+  //       this.p.line(
+  //         line.p1.x as number,
+  //         line.p1.y as number,
+  //         line.p2.x as number,
+  //         line.p2.y as number
+  //       );
+  //     }
+  //   }
+  //   this.p.pop();
+  // };
 
-  static drawPolygon = (): void => {
-    // console.log("drawPolygon");
-    // console.log(this.polygons);
-    this.p.push();
-    if (this.fillColor) {
-      this.p.fill(this.fillColor);
-    }
-    this.p.stroke(this.strokeColor);
-    this.p.strokeWeight(this.strokeWeight);
-    this.p.beginShape();
-    if (this.polygons.length > 0) {
-      for (const pg of this.polygons) {
-        const ptArray = pg.points;
-        for (const pt of ptArray) {
-          this.p.vertex(pt.x as number, pt.y as number);
-        }
-      }
-    }
-    this.p.endShape(this.p.CLOSE);
-    this.p.pop();
-  };
+  // static drawPolygon = (): void => {
+  // SVGPolygon.draw(this.p, this.polygons);
+  // console.log("drawPolygon");
+  // console.log(this.polygons);
+  // this.p.push();
+  // if (this.fillColor) {
+  //   this.p.fill(this.fillColor);
+  // }
+  // this.p.stroke(this.strokeColor);
+  // this.p.strokeWeight(this.strokeWeight);
+  // this.p.beginShape();
+  // if (this.polygons.length > 0) {
+  //   for (const pg of this.polygons) {
+  //     const ptArray = pg.points;
+  //     for (const pt of ptArray) {
+  //       this.p.vertex(pt.x as number, pt.y as number);
+  //     }
+  //   }
+  // }
+  // this.p.endShape(this.p.CLOSE);
+  // this.p.pop();
+  // };
 
-  static drawRectangles = (): void => {
-    this.p.push();
-    this.p.fill("blue");
-    this.p.stroke("white");
-    this.p.strokeWeight(1);
-    if (this.rects.length > 0) {
-      for (const rect of this.rects) {
-        this.p.rect(
-          rect.x as number,
-          rect.y as number,
-          rect.width as number,
-          rect.height as number
-        );
-      }
-    }
-    this.p.pop();
-  };
+  // static drawRectangles = (): void => {
+  //   this.p.push();
+  //   this.p.fill("blue");
+  //   this.p.stroke("white");
+  //   this.p.strokeWeight(1);
+  //   if (this.rects.length > 0) {
+  //     for (const rect of this.rects) {
+  //       this.p.rect(
+  //         rect.x as number,
+  //         rect.y as number,
+  //         rect.width as number,
+  //         rect.height as number
+  //       );
+  //     }
+  //   }
+  //   this.p.pop();
+  // };
 
   static drawArcs = (): void => {
     this.p.push();
@@ -410,27 +360,27 @@ export class SVGLoader {
     this.p.pop();
   };
 
-  static drawPaths = (): void => {
-    this.p.push();
-    this.p.fill("purple");
-    this.p.stroke("white");
-    this.p.strokeWeight(1);
-    if (this.paths.length > 0) {
-      for (const path of this.paths) {
-        for (const line of path.lines) {
-          if (line !== null) {
-            this.p.line(
-              line.p1.x as number,
-              line.p1.y as number,
-              line.p2.x as number,
-              line.p2.y as number
-            );
-          }
-        }
-      }
-    }
-    this.p.pop();
-  };
+  // static drawPaths = (): void => {
+  // this.p.push();
+  // this.p.fill("purple");
+  // this.p.stroke("white");
+  // this.p.strokeWeight(1);
+  // if (this.paths.length > 0) {
+  //   for (const path of this.paths) {
+  //     for (const line of path.lines) {
+  //       if (line !== null) {
+  //         this.p.line(
+  //           line.p1.x as number,
+  //           line.p1.y as number,
+  //           line.p2.x as number,
+  //           line.p2.y as number
+  //         );
+  //       }
+  //     }
+  //   }
+  // }
+  // this.p.pop();
+  // };
 
   static drawTextObjects = (): void => {
     this.p.push();
@@ -450,12 +400,14 @@ export class SVGLoader {
   };
 
   static drawAll = (): void => {
-    SVGLoader.drawPolygon();
-    SVGLoader.drawLines();
-    SVGLoader.drawCircles();
-    SVGLoader.drawRectangles();
-    SVGLoader.drawArcs();
-    SVGLoader.drawPaths();
+    SVGPolygon.drawList(SVGLoader.p, SVGLoader.polygons);
+    SVGLine.drawList(SVGLoader.p, SVGLoader.lines);
+    SVGCircle.drawList(SVGLoader.p, SVGLoader.circles);
+    SVGRect.drawList(SVGLoader.p, SVGLoader.rects);
+    SVGPath.drawList(SVGLoader.p, SVGLoader.paths);
+    // SVGLoader.drawCircles();
+    // SVGLoader.drawRectangles();
+    // SVGLoader.drawArcs();
     // SVGLoader.drawTextObjects();
     // SVGLoader.drawImages();
     // SVGLoader.drawEllipses();

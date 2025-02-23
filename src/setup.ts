@@ -23,6 +23,7 @@ export const preload = (p: p5): void => {
   SVGLoader.loadSVG("w3examples/line/svgLine.svg");
   SVGLoader.loadSVG("w3examples/circle/circleWithOpacity.svg");
   SVGLoader.loadSVG("w3examples/rect/svgRectExample.svg");
+  SVGLoader.loadSVG("w3examples/path/svgPathTriangle.svg");
 };
 
 export const keyPressed = (p: p5): void => {

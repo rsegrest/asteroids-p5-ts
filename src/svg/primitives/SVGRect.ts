@@ -1,3 +1,4 @@
+import p5 from "p5";
 import SVGFactory from "../SVGFactory";
 import SVGRectParams from "./paramsdef/SVGRectParams.interface";
 import SVGObject from "./SVGObject";
@@ -26,6 +27,23 @@ export class SVGRect extends SVGObject {
     return `Rectangle at (${this.x}, ${this.y}) with width ${this.width} and height ${this.height}`;
   };
 
+  static override processList = (doc: Document | null): SVGRect[] => {
+    const rectList: SVGRect[] = [];
+    if (doc) {
+      const elements = doc.getElementsByTagName("rect");
+      for (let i = 0; i < elements.length; i++) {
+        const rectData = elements[i];
+        if (rectData) {
+          const rect = SVGRect.process(rectData) as SVGRect;
+          if (rect) {
+            rectList.push(rect);
+          }
+        }
+      }
+    }
+    return rectList;
+  };
+
   static process = (element: Element): SVGRect | null => {
     const xString = element?.getAttribute("x") || "0";
     const yString = element?.getAttribute("y") || "0";
@@ -40,7 +58,12 @@ export class SVGRect extends SVGObject {
       y = parseFloat(yString);
       width = parseFloat(widthString);
       height = parseFloat(heightString);
-      if (x && y && width && height) {
+      if (
+        typeof x === "number" &&
+        typeof y === "number" &&
+        typeof width === "number" &&
+        typeof height === "number"
+      ) {
         const params = {
           x,
           y,
@@ -52,6 +75,28 @@ export class SVGRect extends SVGObject {
       }
     }
     return null;
+  };
+
+  static override drawList = (renderer: p5, elements: SVGObject[]): void => {
+    for (const element of elements) {
+      SVGObject.setStyle(renderer, element.getStyle());
+      if (elements.length > 0) {
+        for (const rect of elements) {
+          SVGRect.draw(renderer, rect);
+          // renderer.push();
+          // renderer.beginShape();
+          // renderer.rect(rect.x, rect.y, rect.width, rect.height);
+          // renderer.endShape(renderer.CLOSE);
+          // renderer.pop();
+        }
+      }
+    }
+  };
+  static override draw = (renderer: p5, element: SVGObject): void => {
+    renderer.push();
+    const rect = element as SVGRect;
+    renderer.rect(rect.x, rect.y, rect.width, rect.height);
+    renderer.pop();
   };
 }
 export default SVGRect;

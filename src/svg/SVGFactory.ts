@@ -4,6 +4,7 @@ import SVGCircleParams from "./primitives/paramsdef/SVGCircleParams.interface";
 import SVGEllipseParams from "./primitives/paramsdef/SVGEllipseParams.interface";
 import SVGImageParams from "./primitives/paramsdef/SVGImageParams.interface";
 import SVGLineParams from "./primitives/paramsdef/SVGLineParams.interface";
+import SVGPathParams from "./primitives/paramsdef/SVGPathParams.interface";
 import SVGPolygonParams from "./primitives/paramsdef/SVGPolygonParams.interface";
 import SVGRectParams from "./primitives/paramsdef/SVGRectParams.interface";
 import SVGTextParams from "./primitives/paramsdef/SVGTextParams.interface";
@@ -14,6 +15,7 @@ import SVGCircle from "./primitives/SVGCircle";
 import SVGEllipse from "./primitives/SVGEllipse";
 import SVGImage from "./primitives/SVGImage";
 import SVGLine from "./primitives/SVGLine";
+import SVGPath from "./primitives/SVGPath";
 import SVGPolygon from "./primitives/SVGPolygon";
 import SVGRect from "./primitives/SVGRect";
 import SVGText from "./primitives/SVGText";
@@ -28,6 +30,10 @@ export class SVGFactory {
   static createLine = (params: SVGLineParams): SVGLine => {
     const newLine = new SVGLine(params);
     return newLine;
+  };
+  static createPath = (params: SVGPathParams): SVGPath => {
+    const newPath = new SVGPath(params);
+    return newPath;
   };
   static createEllipse = (params: SVGEllipseParams): SVGEllipse => {
     return new SVGEllipse(params);

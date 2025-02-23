@@ -1,3 +1,4 @@
+import p5 from "p5";
 import SVGFactory from "../SVGFactory";
 import SVGLineParams from "./paramsdef/SVGLineParams.interface";
 import Point from "./Point";
@@ -70,7 +71,6 @@ export class SVGLine extends SVGObject {
   };
   static process = (element: Element): SVGLine | null => {
     // static processLine = (line: Element): SVGLine | null => {
-    console.log("process line:");
     const x1String = element?.getAttribute("x1");
     const y1String = element?.getAttribute("y1");
     const x2String = element?.getAttribute("x2");
@@ -113,6 +113,31 @@ export class SVGLine extends SVGObject {
     }
     return null;
     // };
+  };
+  static override draw = (renderer: p5, element: SVGObject): void => {
+    renderer.push();
+    const line = element as SVGLine;
+
+    renderer.stroke("white");
+    renderer.strokeWeight(3);
+    renderer.line(
+      line.p1.x as number,
+      line.p1.y as number,
+      line.p2.x as number,
+      line.p2.y as number
+    );
+    renderer.pop();
+  };
+  static override drawList = (renderer: p5, elements: SVGObject[]): void => {
+    for (const element of elements) {
+      SVGObject.setStyle(renderer, element.getStyle());
+      if (elements.length > 0) {
+        for (const ln of elements) {
+          const line = ln as SVGLine;
+          this.draw(renderer, line);
+        }
+      }
+    }
   };
 }
 export default SVGLine;

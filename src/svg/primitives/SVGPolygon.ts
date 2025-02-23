@@ -1,3 +1,4 @@
+import p5 from "p5";
 import SVGFactory from "../SVGFactory";
 import SVGPolygonParams from "./paramsdef/SVGPolygonParams.interface";
 import Point from "./Point";
@@ -51,6 +52,28 @@ export class SVGPolygon extends SVGObject {
       }
     }
     return null;
+  };
+  static override draw = (renderer: p5, element: SVGObject): void => {
+    renderer.push();
+    const polygon = element as SVGPolygon;
+    const ptArray = polygon.points;
+    renderer.beginShape();
+    for (const pt of ptArray) {
+      renderer.vertex(pt.x as number, pt.y as number);
+    }
+    renderer.endShape(renderer.CLOSE);
+    renderer.pop();
+  };
+  static override drawList = (renderer: p5, elements: SVGObject[]): void => {
+    for (const element of elements) {
+      SVGObject.setStyle(renderer, element.getStyle());
+      if (elements.length > 0) {
+        for (const pg of elements) {
+          const polygon = pg as SVGPolygon;
+          this.draw(renderer, polygon);
+        }
+      }
+    }
   };
 }
 export default SVGPolygon;
