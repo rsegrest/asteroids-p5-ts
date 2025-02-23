@@ -46,15 +46,9 @@ export class SVGImage extends SVGObject {
       return [];
     }
     const images: SVGImage[] = [];
-    console.log("processing image list");
     if (doc) {
-      console.log("doc is here");
       const svgElementList = doc.querySelectorAll("image");
-      console.log("svgElementList:");
-      console.log(svgElementList);
       for (const imageData of svgElementList) {
-        console.log("imageData:");
-        console.log(imageData);
         const image = SVGImage.process(imageData, renderer);
         if (image) {
           images.push(image);
@@ -68,22 +62,13 @@ export class SVGImage extends SVGObject {
     renderer?: p5 | null
   ): SVGImage | null => {
     if (!renderer || renderer === null) {
-      console.log("NO RENDERER");
       return null;
     }
-    console.log("processing image");
-    // static processLine = (line: Element): SVGLine | null => {
     const href = element?.getAttribute("href");
     const xString = element?.getAttribute("x") || null;
     const yString = element?.getAttribute("y") || null;
     const widthString = element?.getAttribute("width") || null;
     const heightString = element?.getAttribute("height") || null;
-    console.log("href, xString, yString, widthString, heightString:");
-    console.log(href);
-    console.log(xString);
-    console.log(yString);
-    console.log(widthString);
-    console.log(heightString);
     let x = 0;
     let y = 0;
     let w: number | null = null;
@@ -100,12 +85,6 @@ export class SVGImage extends SVGObject {
     if (heightString) {
       h = parseFloat(heightString);
     }
-    console.log("x, y, w, h:");
-    console.log(x);
-    console.log(y);
-    console.log(w);
-    console.log(h);
-
     if (
       href &&
       typeof x === "number" &&
@@ -114,14 +93,7 @@ export class SVGImage extends SVGObject {
       typeof h === "number"
     ) {
       const imgPath = "w3examples/image/" + href;
-      // console.log("img file Exists?:");
-      // console.log(imgExists);
       const img = renderer.loadImage(imgPath);
-      console.log("img:");
-      console.log(img);
-      // console.log("img:");
-      // console.log(img);
-      // if (element.img) {
       const imgData = {
         href: imgPath,
         img,
@@ -132,54 +104,20 @@ export class SVGImage extends SVGObject {
       const image = SVGFactory.createImage(imgData);
       image.img = img;
       return image;
-      // }
     }
-    // else {
-    // console.warn("Image not loaded");
-    // }
-
-    // console.log("points are valid numbers");
-    // const line = SVGFactory.createImage({
-
-    // p1: new Point(x1, y1),
-    // p2: new Point(x2, y2),
-    // });
-    // console.log("line:");
-    // console.log(JSON.stringify(line));
-    // return line;
-    // }
-    // }
-    // return null;
-    // };
     return null;
   };
 
   static override drawList = (renderer: p5, elements: SVGObject[]): void => {
-    console.log("draw image list of " + elements.length + " elements");
     elements.forEach((element) => {
       SVGImage.draw(renderer, element);
-      // if (element.type === SVGObjectType.IMAGE) {
-      //   const imgData = element as SVGImage;
-      //   const img = renderer.loadImage((element as SVGImage).href);
-      //   renderer.image(
-      //     img,
-      //     imgData.position.x,
-      //     imgData.position.y,
-      //     imgData.width,
-      //     imgData.height
-      //   );
-      // }
     });
   };
   static override draw = (renderer: p5, element: SVGObject): void => {
     if (element.type === SVGObjectType.IMAGE) {
       const svgImage = element as SVGImage;
-      console.log("drawing image");
-      console.log(svgImage);
       if (svgImage.img) {
-        console.log("img data is loaded; drawing image");
         renderer.push();
-
         renderer.image(
           svgImage.img,
           svgImage.position.x,
