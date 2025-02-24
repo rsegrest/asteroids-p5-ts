@@ -9,7 +9,7 @@ export class SVGArc extends SVGObject {
   public radiusX: number;
   public radiusY: number;
   public xAxisRotation: number;
-  public endPosition: Point;
+  public endPosition: Point | null = null;
   // public center: Point;
   // public radius: number;
   // public startAngle: number;
@@ -22,7 +22,7 @@ export class SVGArc extends SVGObject {
     this.radiusY = params.ry;
     this.xAxisRotation = params.xAxisRotation;
     if (params.endPosition) {
-      this.endPosition = new Point(params.x, params.y);
+      this.endPosition = params.endPosition;
     }
     // this.center = params.center;
     // this.radius = params.radius;
@@ -35,15 +35,16 @@ export class SVGArc extends SVGObject {
   };
 
   toSVGString = (): string => {
-    return `A ${this.radiusX} ${this.radiusY} ${this.xAxisRotation} 0 0 ${this.endPosition.x} ${this.endPosition.y}`;
+    return `A ${this.radiusX} ${this.radiusY} ${this.xAxisRotation} 0 0 ${this.endPosition?.x} ${this.endPosition?.y}`;
     // return `M ${this.center.x} ${this.center.y} m -${this.radius}, 0 a ${
     //   this.radius
     // },${this.radius} 0 1,0 ${this.radius * 2},0 a ${this.radius},${
     //   this.radius
     // } 0 1,0 -${this.radius * 2},0`;
   };
+
   toString = (): string => {
-    return `Arc from (${this.center.x}, ${this.center.y}) with radius ${this.radius}`;
+    return `Arc from (${this.center.x}, ${this.center.y}) with x-radius ${this.radiusX} & y-radius ${this.radiusY}`;
   };
 
   static override processList = (doc: Document | null): SVGArc[] => {

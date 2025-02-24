@@ -1,6 +1,9 @@
 23 Feb 2025 -- Vector graphics
 
 // TODO: Process Arc
+  - TODO: Test translation functions by plugging numbers from arc.svg,
+      - then adding a small circle on the midpoint
+      - p5.js arc needs (center)x,y, w,h; start/endOfArc(radians)
 // TODO: Process Bezier Curve
 // TODO: Improve Path: Represent Path as Lines (only?), check for "M" (move to)
 // TODO: Process Text 
