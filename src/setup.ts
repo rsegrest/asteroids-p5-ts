@@ -12,6 +12,17 @@ export const preload = async (p: p5): Promise<void> => {
   SVGLoader.registerRenderer(p);
 };
 
+// Disable default browser behavior-- scrolling with arrow keys
+// Source - https://stackoverflow.com/a/8916697
+// Posted by Zeta, modified by community. See post 'Timeline' for change history
+// Retrieved 2026-02-12, License - CC BY-SA 4.0
+
+window.addEventListener("keydown", function(e) {
+    if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+        e.preventDefault();
+    }
+}, false);
+
 export const keyPressed = (p: p5): void => {
   if (p.keyCode === 72 || p.keyCode === 104) {
     gameController.hyperspace();
