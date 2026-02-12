@@ -8,9 +8,10 @@ class LargeAsteroid extends Asteroid {
     p:p5,
     initialPos:p5.Vector,
     type:AsteroidType,
+    scale:number,
     velocity?:p5.Vector,
   ) {
-    super(p, initialPos, 100, type, velocity);
+    super(p, initialPos, 100*scale, type, velocity);
   }
   
   toString():string {

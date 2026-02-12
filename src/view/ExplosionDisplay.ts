@@ -3,8 +3,11 @@ import Explosion, { Particle } from '../model/Explosion';
 
 class ExplosionDisplay {
   private static p:p5;
-  constructor(p:p5) {
+  private static scale:number = 1;
+
+  constructor(p:p5, scale:number = 1) {
     ExplosionDisplay.p = p;
+    ExplosionDisplay.scale = scale;
   }
   static drawParticle(particle:Particle) {
     const p = ExplosionDisplay.p;

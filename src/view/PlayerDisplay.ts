@@ -16,17 +16,17 @@ class PlayerDisplay {
   ) => {
     p.push();
     p.stroke(color);
-    p.strokeWeight(1);
+    p.strokeWeight(scale*.7);
     p.translate(position);
     p.scale(scale);
     p.rotate((p.HALF_PI)+rotation);
     p.noFill();
     p.beginShape();
-    p.vertex(0,-20);
-    p.vertex(-20,32);
-    p.vertex(-14,22);
-    p.vertex(14,22);
-    p.vertex(20,32);
+    p.vertex(0,-10);
+    p.vertex(-7.5,10);
+    p.vertex(-5,5);
+    p.vertex(5,5);
+    p.vertex(7.5,10);
     p.endShape(p.CLOSE);
     p.pop();
   }
@@ -34,11 +34,9 @@ class PlayerDisplay {
     const p = this.p;
     const pos = player.getPos();
     const rotation = player.getRot();
-    // const scale = player.getScale();
-    const scale = 0.3;
     const color = player.getColor();
     if (p.frameCount % 3 !== 0) {
-      PlayerDisplay.drawPlayer(p, pos, rotation, scale, color);
+      PlayerDisplay.drawPlayer(p, pos, rotation, this.scale, color);
     }
   }
 }

@@ -26,10 +26,13 @@ class AsteroidController {
   private explosions:Explosion[] = [];
   private asteroidDisplay:AsteroidDisplay;
   private explosionDisplay:ExplosionDisplay;
-  constructor (p:p5) {
+  private scale:number;
+
+  constructor (p:p5, scale:number = 1) {
     this.p = p;
-    this.asteroidDisplay = new AsteroidDisplay(p);
-    this.explosionDisplay = new ExplosionDisplay(p);
+    this.scale = scale;
+    this.asteroidDisplay = new AsteroidDisplay(p, scale);
+    this.explosionDisplay = new ExplosionDisplay(p, scale);
   }
 
   getRandomAsteroidSpawnPosition = () => {
@@ -100,6 +103,7 @@ class AsteroidController {
         this.p,
         newPos,
         largeAsteroidTypes[randomIndex] as AsteroidType,
+        this.scale,
         velocity,
       ),
     );
@@ -120,6 +124,7 @@ class AsteroidController {
         this.p,
         newPos,
         mediumAsteroidTypes[Math.floor(Math.random()*mediumAsteroidTypes.length)] as AsteroidType,
+        this.scale,
         velocity,
       ),
     );
@@ -141,6 +146,7 @@ class AsteroidController {
         this.p,
         newPos,
         asteroidType as AsteroidType,
+        this.scale,
         velocity,
       ),
     );

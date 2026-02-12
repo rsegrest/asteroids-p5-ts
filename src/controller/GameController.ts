@@ -37,19 +37,21 @@ class GameController {
   
   // other
   private font: p5.Font;
+  private scale:number;
 
   private constructor(p:p5, font:p5.Font) {
 
     this.p = p;
-    this.pShip = new PlayerShip(p);
+    this.scale = p.width/1200;
+    this.pShip = new PlayerShip(p, this.scale);
     this.font = font;
     this.footerDisplay = new FooterDisplay(
-      p, font, 0.5
+      p, font, this.scale
     );
-    this.playerDisplay = new PlayerDisplay(p,0.5);
-    this.bulletDisplay = new BulletDisplay(p);
+    this.playerDisplay = new PlayerDisplay(p,this.scale);
+    this.bulletDisplay = new BulletDisplay(p,this.scale);
     
-    this.asteroidController = new AsteroidController(p);
+    this.asteroidController = new AsteroidController(p,this.scale);
     this.playerController = new PlayerController(this.playerDisplay, this.pShip);
     
     this.scoreDisplay = new ScoreDisplay(p, font);

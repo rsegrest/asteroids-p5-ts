@@ -5,8 +5,9 @@ class BulletDisplay {
   private static p:p5;
   private static scale:number = 1;
 
-  constructor(p:p5) {
+  constructor(p:p5, scale:number = 1) {
     BulletDisplay.p = p;
+    BulletDisplay.scale = scale;
   }
   static draw(bullet:Bullet) {
     const p = BulletDisplay.p;
@@ -14,7 +15,6 @@ class BulletDisplay {
     const pos = bullet.getPos();
     const rot = bullet.getRot();
     p.push();
-    p.scale(scale);
     if (bullet.checkIfDead()) {
       p.fill('rgb(0,128,255)');
       p.stroke('rgb(0,128,255)')

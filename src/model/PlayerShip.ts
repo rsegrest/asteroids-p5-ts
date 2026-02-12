@@ -11,8 +11,9 @@ export class PlayerShip {
   private coolDown = 0; // wait before firing again
   private isResetting = false;
 
-  constructor(p:p5) {
+  constructor(p:p5,scale:number = 1) {
     this.p = p;
+    this.scale = scale;
     this.rot = 0; // this.p.HALF_PI/2
     this.velocity = this.p.createVector(0,0);
     this.pos = p.createVector(400,400);
@@ -90,6 +91,7 @@ export class PlayerShip {
   advance():void {
     this.pos.x += this.velocity.x;
     this.pos.y += this.velocity.y;
+    
     if (this.pos.x as number > this.p.width) {
       this.pos.x = 0;
     } else if (this.pos.x as number < 0) {
@@ -104,6 +106,10 @@ export class PlayerShip {
     for (let i = 0; i < this.bullets.length; i++) {
       const thisBullet = (this.bullets[i] as Bullet);
       thisBullet.setPos(thisBullet.getPos().add(thisBullet.getVel()));
+      // console.log('position:')
+      // console.log(this.pos);
+      // console.log('bullet position:')
+      // console.log(thisBullet.getPos());
     }
     if (this.coolDown > 0) {
       this.coolDown -= 1;

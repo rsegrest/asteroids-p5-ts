@@ -6,9 +6,11 @@ class AsteroidDisplay {
   public static asteroidColor = 'rgb(0,200,0)';
   public static vectorStrokeWeight = 1;
   private static p:p5;
+  private static scale:number = 1;
 
-  constructor(p:p5) {
+  constructor(p:p5, scale:number = 1) {
     AsteroidDisplay.p = p;
+    AsteroidDisplay.scale = scale;
   }
   static drawLargeAsteroidType1(
     asteroid:Asteroid):void {
@@ -18,7 +20,7 @@ class AsteroidDisplay {
       p.strokeWeight(AsteroidDisplay.vectorStrokeWeight);
       p.translate(asteroid.getPos());
       p.translate(-5,-5);
-      p.scale(0.7);
+      p.scale(AsteroidDisplay.scale);
       p.noFill();
       p.beginShape();
       p.vertex(7,-38);
