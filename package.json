@@ -31,7 +31,8 @@
     "preformat:dist": "eslint --fix --no-ignore dist/script.js",
     "format:dist": "prettier --write dist/script.js",
     "minify": "terser dist/script.js --output dist/script.min.js --compress --mangle",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest --config ./jest.config.cjs"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest --config ./jest.config.cjs",
+    "heroku-postbuild": "npm run build"
   },
   "dependencies": {
     "canvas": "^2.5.0",
