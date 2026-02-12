@@ -11,8 +11,8 @@ type TouchEventCallback = (event?: TouchEvent) => void | boolean;
  * Methods of `p5` that may be overwritten in `new p5()`.
  */
 export type P5WritableMethods = {
-  preload: () => void;
-  setup: () => void;
+  preload: () => void | Promise<void>;
+  setup: () => void | Promise<void>;
   draw: () => void;
 
   windowResized: (event?: Event) => void;

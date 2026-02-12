@@ -30,8 +30,8 @@ export const createSketch = (definition: SketchDef): Sketch => {
 
   return (p) => {
     methodNames.forEach((methodName) => {
-      const method = definition[methodName];
-      if (method) p[methodName] = method.bind(undefined, p);
+      const method = definition[methodName] as Function;
+      if (method) (p as any)[methodName] = method.bind(undefined, p);
     });
   };
 };

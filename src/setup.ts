@@ -7,8 +7,8 @@ export let font: p5.Font;
 export let svg_example: string[];
 export let gameController: GameController;
 
-export const preload = (p: p5): void => {
-  font = p.loadFont("./font/hyperspace-font/HyperspaceBold-GM0g.ttf");
+export const preload = async (p: p5): Promise<void> => {
+  font = await p.loadFont("./font/hyperspace-font/HyperspaceBold-GM0g.ttf");
   SVGLoader.registerRenderer(p);
 };
 

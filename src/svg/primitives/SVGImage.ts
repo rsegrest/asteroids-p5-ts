@@ -93,16 +93,16 @@ export class SVGImage extends SVGObject {
       typeof h === "number"
     ) {
       const imgPath = "w3examples/image/" + href;
-      const img = renderer.loadImage(imgPath);
       const imgData = {
         href: imgPath,
-        img,
         position: new Point(x, y),
         width: w,
         height: h,
       };
       const image = SVGFactory.createImage(imgData);
-      image.img = img;
+      renderer.loadImage(imgPath, (loadedImg) => {
+        image.img = loadedImg;
+      });
       return image;
     }
     return null;
