@@ -96,12 +96,9 @@ export class SVGPath extends SVGObject {
             const arcInstructions = instructionsAsStringList
               .slice(p, p + 7)
               .join(" ");
-            // console.log(arc);
             const arc = SVGArc.processFromString(arcInstructions);
-            console.log(arc);
             if (arc) {
               arcs.push(arc);
-              // p += 7;
             }
             p += 7;
           }
@@ -144,19 +141,11 @@ export class SVGPath extends SVGObject {
     }
   };
   static override draw = (renderer: p5, element: SVGObject): void => {
-    renderer.push();
-    renderer.fill("purple");
-    renderer.stroke("white");
-    renderer.strokeWeight(1);
     const path = element as SVGPath;
-    // console.log("in draw, path.lines.length = ");
-    // console.log(path.lines.length);
     if (path.lines.length > 0) {
       for (let i = 0; i < path.lines.length; i += 1) {
         const line = path.lines[i];
         if (line) {
-          console.log("drawing line:");
-          console.log(line);
           SVGLine.draw(renderer, line);
         }
       }
@@ -165,8 +154,6 @@ export class SVGPath extends SVGObject {
       for (let i = 0; i < path.arcs.length; i += 1) {
         const arc = path.arcs[i];
         if (arc) {
-          console.log("drawing arc:");
-          console.log(arc);
           SVGArc.draw(renderer, arc);
         }
       }

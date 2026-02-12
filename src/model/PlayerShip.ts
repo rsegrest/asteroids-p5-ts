@@ -21,15 +21,19 @@ export class PlayerShip {
   getBullets():Bullet[] {
     return this.bullets;
   }
+
   removeBullet(bullet:Bullet, index:number):void {
     this.bullets.splice(index, 1);
   }
+
   moveCW():void {
     this.rot += this.p.HALF_PI/20;
   }
+
   moveCCW():void {
     this.rot -= this.p.HALF_PI/20;
   }
+
   addThrust():void {
     const thrustVector = this.p.createVector(
       this.thrust * Math.cos(this.rot), this.thrust * Math.sin(this.rot)
@@ -37,12 +41,14 @@ export class PlayerShip {
     this.velocity.x += thrustVector.x;
     this.velocity.y += thrustVector.y;
   }
+
   hyperspace():void {
     this.velocity.x = 0;
     this.velocity.y = 0;
     this.pos.x = Math.random()*this.p.width;
     this.pos.y = Math.random()*this.p.height;
   }
+
   addBullet():void {
     if (this.coolDown === 0) {
       this.bullets.push(new Bullet(
@@ -57,24 +63,30 @@ export class PlayerShip {
       this.coolDown = 16;
     }
   }
+
   getPos():p5.Vector {
     return this.pos;
   }
+
   getRot():number {
     return this.rot;
   }
+
   getScale():number {
     return this.scale;
   }
+
   getColor():string {
     return '#00FF00';
   }
+
   reset():void {
     this.pos = this.p.createVector(this.p.width/2, this.p.height/2);
     this.rot = 0;
     this.velocity = this.p.createVector(0,0);
     this.isResetting = false;
   }
+
   advance():void {
     this.pos.x += this.velocity.x;
     this.pos.y += this.velocity.y;
@@ -97,12 +109,15 @@ export class PlayerShip {
       this.coolDown -= 1;
     }
   }
+
   setIsResetting(isResetting:boolean):void {
     this.isResetting = isResetting;
   }
+
   getIsResetting():boolean {
     return this.isResetting;
   }
+
   drawAfterBurner():void {
     const p = this.p;
     const rot = this.rot;

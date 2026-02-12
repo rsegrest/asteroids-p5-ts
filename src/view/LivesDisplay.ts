@@ -2,23 +2,10 @@ import p5 from 'p5';
 import PlayerDisplay from './PlayerDisplay';
 class LivesDisplay {
   private p:p5;
-  private playerSymbolArray:PlayerDisplay[]
-  // private numLives:number;
   constructor(
     p:p5,
-    // numLives:number,
   ) {
     this.p = p;
-    this.playerSymbolArray = [];
-    // this.numLives = numLives;
-    // if (this.numLives > 0) {
-    //   for (let i = 0; i < this.numLives; i++) {
-    //     this.playerSymbolArray.push(
-    //       new PlayerDisplay(p),
-    //       // reposition
-    //     );
-    //   }
-    // }
   }
   draw(numLives:number):void {
     const p = this.p;
@@ -35,15 +22,15 @@ class LivesDisplay {
           0.2,
           '#0a0'
         );  
-        p.fill('#fff'); // 2f2
-        p.noStroke();
-        PlayerDisplay.drawPlayer(
-          p,
-          p.createVector(150+(i*8),125),
-          -p.HALF_PI,
-          0.2,
-          '#2f2'
-        );
+        // p.fill('#fff'); // 2f2
+        // p.noStroke();
+        // PlayerDisplay.drawPlayer(
+          // p,
+          // p.createVector(150+(i*8),125),
+          // -p.HALF_PI,
+          // 0.2,
+          // '#2f2'
+        // );
       }
     }
     p.pop();

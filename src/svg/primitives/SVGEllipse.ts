@@ -57,15 +57,6 @@ export class SVGEllipse extends SVGObject {
     const cy = element?.getAttribute("cy");
     const rx = element?.getAttribute("rx");
     const ry = element?.getAttribute("ry");
-    // const x1String = element?.getAttribute("x1");
-    // const y1String = element?.getAttribute("y1");
-    // const x2String = element?.getAttribute("x2");
-    // const y2String = element?.getAttribute("y2");
-    // console.log("x1,y1,x2,y2string:");
-    // console.log(x1String);
-    // console.log(y1String);
-    // console.log(x2String);
-    // console.log(y2String);
     let centerPt;
     let radiusX;
     let radiusY;
@@ -89,8 +80,6 @@ export class SVGEllipse extends SVGObject {
           radiusY,
         };
         const ellipse = SVGFactory.createEllipse(params);
-        // console.log("line:");
-        // console.log(JSON.stringify(line));
         return ellipse;
       }
     }
@@ -108,22 +97,15 @@ export class SVGEllipse extends SVGObject {
       ellipse.center.y,
       ellipse.radiusX,
       ellipse.radiusY
-      // line.p1.x as number,
-      // line.p1.y as number,
-      // line.p2.x as number,
-      // line.p2.y as number
     );
     renderer.pop();
   };
   static override drawList = (renderer: p5, elements: SVGObject[]): void => {
-    // console.log("draw ellipse list length : " + elements.length);
     for (const element of elements) {
       SVGObject.setStyle(renderer, element.getStyle());
       if (elements.length > 0) {
         for (const el of elements) {
           const ellipse = el as SVGEllipse;
-          // console.log("ellipse to draw:");
-          // console.log(ellipse);
           this.draw(renderer, ellipse);
         }
       }

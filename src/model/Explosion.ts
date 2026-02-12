@@ -37,14 +37,12 @@ export class Particle {
 
 class Explosion {
   private p:p5;
-  // private creationTime:number;
   private pos:p5.Vector;
   private lifespan = 60;
   private particles:Particle[] = [];
   constructor(
     p:p5,
     pos:p5.Vector,
-    // creationTime:number
   ) {
     this.p = p;
     this.pos = this.normalizePosition(pos);

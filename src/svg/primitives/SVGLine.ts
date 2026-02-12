@@ -44,11 +44,6 @@ export class SVGLine extends SVGObject {
     const y1String = element?.getAttribute("y1");
     const x2String = element?.getAttribute("x2");
     const y2String = element?.getAttribute("y2");
-    // console.log("x1,y1,x2,y2string:");
-    // console.log(x1String);
-    // console.log(y1String);
-    // console.log(x2String);
-    // console.log(y2String);
     let x1;
     let y1;
     let x2;
@@ -58,30 +53,20 @@ export class SVGLine extends SVGObject {
       y1 = parseFloat(y1String);
       x2 = parseFloat(x2String);
       y2 = parseFloat(y2String);
-
-      // console.log("x1,y1,x2,y2:");
-      // console.log(x1);
-      // console.log(y1);
-      // console.log(x2);
-      // console.log(y2);
       if (
         typeof x1 === "number" &&
         typeof y1 === "number" &&
         typeof x2 === "number" &&
         typeof y2 === "number"
       ) {
-        // console.log("points are valid numbers");
         const line = SVGFactory.createLine({
           p1: new Point(x1, y1),
           p2: new Point(x2, y2),
         });
-        // console.log("line:");
-        // console.log(JSON.stringify(line));
         return line;
       }
     }
     return null;
-    // };
   };
   static override draw = (renderer: p5, element: SVGObject): void => {
     renderer.push();

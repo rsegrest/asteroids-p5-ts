@@ -19,18 +19,19 @@ import AsteroidType, {
   SMALL_ASTEROID_2,
 } from '../type/AsteroidType';
 import PlayerShip from '../model/PlayerShip';
+
 class AsteroidController {
   private p:p5;
   private asteroids:Asteroid[] = [];
-  private asteroidDisplay:AsteroidDisplay;
   private explosions:Explosion[] = [];
+  private asteroidDisplay:AsteroidDisplay;
   private explosionDisplay:ExplosionDisplay;
   constructor (p:p5) {
     this.p = p;
     this.asteroidDisplay = new AsteroidDisplay(p);
     this.explosionDisplay = new ExplosionDisplay(p);
-    // this.explosions.push(new Explosion(p,p.createVector(200, 200)));
   }
+
   getRandomAsteroidSpawnPosition = () => {
     const x = Math.random() * this.p.width;
     let y = Math.random() * this.p.height/2;
@@ -39,12 +40,14 @@ class AsteroidController {
     }
     return this.p.createVector(x, y);
   }
+
   getRandomVector = (scalar:number) => {
     return this.p.createVector(
       (Math.random()*scalar*2)-(scalar),
       (Math.random()*scalar*2)-(scalar),
     );
   }
+
   getNumActiveAsteroids = ():number => {
     let asteroidCount = 0;
     for (let i = 0; i < this.asteroids.length; i++) {
@@ -54,13 +57,7 @@ class AsteroidController {
     }
     return asteroidCount;
   }
-  // pruneInactiveAsteroids = ():Asteroid[] => {
-  //   for (let i = 0; i < this.asteroids.length; i++) {
-  //     if (this.asteroids[i]!.getIsInactive()) {
-  //       this.asteroids.splice(i, 1);
-  //     }
-  //   }
-  // }
+
   spawnAsteroidWave = (levelNum:number):void => {
     for (let i = 0; i < 4; i++) {
       this.spawnLargeAsteroid(
@@ -86,6 +83,7 @@ class AsteroidController {
     }
     return newPos;
   }
+
   spawnLargeAsteroid = (
     position:p5.Vector,
     velocity:p5.Vector,
@@ -106,6 +104,7 @@ class AsteroidController {
       ),
     );
   }
+
   spawnMediumAsteroid = (
     position:p5.Vector,
     velocity:p5.Vector
@@ -125,6 +124,7 @@ class AsteroidController {
       ),
     );
   }
+
   spawnSmallAsteroid = (
     position:p5.Vector,
     velocity:p5.Vector,
@@ -145,6 +145,7 @@ class AsteroidController {
       ),
     );
   }
+
   breakUpAsteroid = (asteroid:LargeAsteroid|MediumAsteroid|SmallAsteroid, index:number):void => {
     const position = asteroid.getPos();
     this.asteroids.splice(index, 1);
@@ -202,7 +203,7 @@ class AsteroidController {
   checkBulletCollisions = (bullets:Bullet[]):null|{
     bullet:Bullet, index:number, asteroidType:AsteroidType
   } => {
-    // bullets.forEach((bullet, index) => {
+  
     for (let i = 0; i < bullets.length; i++) {
       for (let j = 0; j < this.asteroids.length; j++) {
         if ((this.asteroids[j]!).checkCollision(bullets[i] as Bullet)) {
@@ -225,12 +226,15 @@ class AsteroidController {
     }
     return null;
   }
+
   getAsteroids = ():Asteroid[] => {
     return this.asteroids;
   }
+
   addExplosion = (explosion:Explosion):void => {
     this.explosions.push(explosion);
   }
+
   toString():string {
     let asteroidList = '[';
     this.asteroids.forEach((asteroid) => {
@@ -239,5 +243,6 @@ class AsteroidController {
     asteroidList += '\n]';
     return `AsteroidController: asteroids: ${this.asteroids}`;
   }
+
 }
 export default AsteroidController;

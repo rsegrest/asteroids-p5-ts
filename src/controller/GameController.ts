@@ -61,21 +61,27 @@ class GameController {
   spawnWave():void {
     this.asteroidController.spawnAsteroidWave(this.level);
   }
+
   moveCCW():void {
     this.getPShip().moveCCW();
   }
+
   moveCW():void {
     this.getPShip().moveCW();
   }
+
   addThrust():void {
     this.getPShip().addThrust();
   }
+
   addBullet():void {
     this.getPShip().addBullet();
   }
+
   hyperspace():void {
     this.getPShip().hyperspace();
   }
+
   addAsteroidScore(asteroidType:AsteroidType):void {
     if (
       (asteroidType === AsteroidTypes.LARGE_ASTEROID_1)
@@ -98,24 +104,31 @@ class GameController {
     }
     return;
   }
+
   scoreLargeAsteroid():void {
     this.rackupScore(ScoreValues.LARGE_ASTEROID);
   }
+
   scoreMediumAsteroid():void {
     this.rackupScore(ScoreValues.MEDIUM_ASTEROID);
   }
+
   scoreSmallAsteroid():void {
     this.rackupScore(ScoreValues.SMALL_ASTEROID);
   }
+
   scoreLargeSaucer():void {
     this.rackupScore(ScoreValues.LARGE_SAUCER);
   }
+
   scoreSmallSaucer():void {
     this.rackupScore(ScoreValues.SMALL_SAUCER);
   }
+
   scoreDefeatPlayer():void {
     this.rackupScore(ScoreValues.OTHER_PLAYER_SHIP);
   }
+
   rackupScore = (score:number):void => {
     this.score += score;
     if (this.score - this.lastBonus >= 10000) {
@@ -124,9 +137,9 @@ class GameController {
     }
   }
 
-  resetScore = ():void => { this.score = 0; }
+  resetScore():void { this.score = 0; }
 
-  checkKeys = () => {
+  checkKeys():void {
     const p = this.p;
     if (p.keyIsDown(p.LEFT_ARROW)) {
       this.moveCCW();
@@ -138,6 +151,7 @@ class GameController {
       this.addBullet();
     } 
   }
+
   canReset():boolean {
     const theAsteroids = this.asteroidController.getAsteroids();
     const spawnPoint = this.p.createVector(this.p.width/2, this.p.height/2);
@@ -149,6 +163,7 @@ class GameController {
     }
     return true;
   }
+
   advance():void {
     this.checkKeys();
 
@@ -182,8 +197,6 @@ class GameController {
           explosionPos
         )
       );
-        // this.addAsteroidScore(collision.asteroidType);
-      
 
       this.numLives -= 1;
       this.pShip.setIsResetting(true);
@@ -194,7 +207,6 @@ class GameController {
   }
   checkIfLevelComplete():void {
     const asteroidLength = this.asteroidController.getNumActiveAsteroids();
-    console.log(`asteroidLength: ${asteroidLength}`)
     if (asteroidLength === 0) {
       this.level += 1;
       this.asteroidController.spawnAsteroidWave(this.level);
