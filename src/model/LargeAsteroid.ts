@@ -13,6 +13,10 @@ class LargeAsteroid extends Asteroid {
   ) {
     super(p, initialPos, 100*scale, type, velocity);
   }
+
+  getCollisionRadius():number {
+    return this.size*.8;
+  }
   
   toString():string {
     return `LargeAsteroid: pos: ${this.pos}, velocity: ${this.velocity}`;

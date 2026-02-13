@@ -173,8 +173,9 @@ class AsteroidController {
       asteroid.setInactive();
     }
   }
+
   advance = ():void => {
-    this.asteroids.forEach((asteroid, index) => {
+    this.asteroids.forEach((asteroid) => {
       const newPositionX = asteroid.getPos().x + asteroid.getVelocity().x;
       const newPositionY = asteroid.getPos().y + asteroid.getVelocity().y;
       asteroid.setPos(this.p.createVector(newPositionX, newPositionY));
@@ -195,6 +196,7 @@ class AsteroidController {
       ExplosionDisplay.draw(explosion);
     });
   }
+
   checkPlayerCollisions = (player:PlayerShip):boolean => {
     let collided = false;
     this.asteroids.forEach((asteroid, index) => {
@@ -206,6 +208,7 @@ class AsteroidController {
     });
     return collided;
   }
+
   checkBulletCollisions = (bullets:Bullet[]):null|{
     bullet:Bullet, index:number, asteroidType:AsteroidType
   } => {

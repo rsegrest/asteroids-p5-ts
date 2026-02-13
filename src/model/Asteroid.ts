@@ -67,7 +67,7 @@ class Asteroid {
   }
   
   getCollisionRadius():number {
-    return this.size/2;
+    return this.size*.6;
   }
   
   getType():AsteroidType {
