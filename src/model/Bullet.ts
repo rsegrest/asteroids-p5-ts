@@ -6,16 +6,22 @@ export class Bullet {
   private vel: p5.Vector;
   private rot: number;
   private scale = 1;
-  private creationTime:number;
-  private lifespan = 180;
+  private distTravelled = 0;
+  private maxDist:number;
+  private owner: 'player' | 'saucer';
 
   constructor(
-    p:p5, pos:p5.Vector, vel:p5.Vector, rot:number, creationTime:number) {
+    p:p5, pos:p5.Vector, vel:p5.Vector, rot:number, owner: 'player' | 'saucer' = 'player') {
     this.p = p;
     this.pos = pos;
     this.vel = vel;
     this.rot = rot;
-    this.creationTime = creationTime;
+    this.maxDist = p.width;
+    this.owner = owner;
+  }
+
+  getOwner(): 'player' | 'saucer' {
+    return this.owner;
   }
 
   getPos():p5.Vector {
@@ -31,7 +37,24 @@ export class Bullet {
   }
 
   checkIfDead():boolean {
-    return (this.creationTime + this.lifespan) < this.p.frameCount;
+    return this.distTravelled >= this.maxDist;
+  }
+
+  update():void {
+    this.pos.add(this.vel);
+    this.distTravelled += this.vel.mag();
+
+    if (this.pos.x > this.p.width) {
+      this.pos.x = 0;
+    } else if (this.pos.x < 0) {
+      this.pos.x = this.p.width;
+    }
+
+    if (this.pos.y > this.p.height) {
+      this.pos.y = 0;
+    } else if (this.pos.y < 0) {
+      this.pos.y = this.p.height;
+    }
   }
 
   setPos(newPos:p5.Vector):void {

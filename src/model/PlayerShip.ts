@@ -1,5 +1,6 @@
 import p5 from "p5";
 import Bullet from './Bullet';
+import SoundManager from '../util/SoundManager';
 export class PlayerShip {
   private p:p5;
   private pos:p5.Vector;
@@ -41,6 +42,7 @@ export class PlayerShip {
     );
     this.velocity.x += thrustVector.x;
     this.velocity.y += thrustVector.y;
+    SoundManager.getInstance().playThrust();
   }
 
   hyperspace():void {
@@ -59,8 +61,9 @@ export class PlayerShip {
           Math.cos(this.rot)*5,
           Math.sin(this.rot)*5),
         this.rot,
-        this.p.frameCount,
+        'player'
       ));
+      SoundManager.getInstance().playFire();
       this.coolDown = 16;
     }
   }
@@ -103,13 +106,12 @@ export class PlayerShip {
       this.pos.y = this.p.height;
     }
     this.velocity.mag() > 0.1 ? this.velocity.mult(0.99) : this.velocity.mult(0);
-    for (let i = 0; i < this.bullets.length; i++) {
+    for (let i = this.bullets.length - 1; i >= 0; i--) {
       const thisBullet = (this.bullets[i] as Bullet);
-      thisBullet.setPos(thisBullet.getPos().add(thisBullet.getVel()));
-      // console.log('position:')
-      // console.log(this.pos);
-      // console.log('bullet position:')
-      // console.log(thisBullet.getPos());
+      thisBullet.update();
+      if (thisBullet.checkIfDead()) {
+        this.removeBullet(thisBullet, i);
+      }
     }
     if (this.coolDown > 0) {
       this.coolDown -= 1;
@@ -139,6 +141,10 @@ export class PlayerShip {
     p.fill(255);
     p.triangle(-10,-5,-10,5,-15,0);
     p.pop();
+  }
+  checkCollision(entity: { getPos: () => p5.Vector }): boolean {
+      const dist = p5.Vector.dist(this.pos, entity.getPos());
+      return dist < 15; // Approximate radius
   }
 }
 export default PlayerShip;

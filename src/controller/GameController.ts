@@ -1,4 +1,5 @@
 import type p5 from "p5";
+import * as AsteroidTypes from "../type/AsteroidType";
 import AsteroidController from "./AsteroidController";
 import PlayerController from "./PlayerController";
 import PlayerShip from "../model/PlayerShip";
@@ -8,9 +9,11 @@ import ScoreDisplay from "../view/ScoreDisplay";
 import FooterDisplay from "../view/FooterDisplay";
 import BulletDisplay from "../view/BulletDisplay";
 import ScoreValues from "../type/ScoreValues";
-import * as AsteroidTypes from "../type/AsteroidType";
 import AsteroidType from "../type/AsteroidType";
 import Explosion from "../model/Explosion";
+import SoundManager from "../util/SoundManager";
+import SaucerController from "./SaucerController";
+import LineDebris from "../model/LineDebris";
 
 
 class GameController {
@@ -33,11 +36,12 @@ class GameController {
 
   // controller references
   private asteroidController:AsteroidController;
+  private saucerController:SaucerController;
   private playerController:PlayerController;
   
-  // other
   private font: p5.Font;
   private scale:number;
+  private playerDebris:LineDebris[] = [];
 
   private constructor(p:p5, font:p5.Font) {
 
@@ -52,6 +56,7 @@ class GameController {
     this.bulletDisplay = new BulletDisplay(p,this.scale);
     
     this.asteroidController = new AsteroidController(p,this.scale);
+    this.saucerController = new SaucerController(p, this.scale); // , this.asteroidController);
     this.playerController = new PlayerController(this.playerDisplay, this.pShip);
     
     this.scoreDisplay = new ScoreDisplay(p, font);
@@ -151,7 +156,12 @@ class GameController {
       this.addThrust();
     } else if (p.keyIsDown(32)) {
       this.addBullet();
-    } 
+    }
+    
+    // Ensure audio context is running on any key interaction
+    if (p.keyIsPressed) {
+      SoundManager.getInstance().ensureAudioContext();
+    }
   }
 
   canReset():boolean {
@@ -173,6 +183,7 @@ class GameController {
     this.livesDisplay.draw(this.numLives);
     this.pShip.advance();
     this.asteroidController.advance();
+    this.saucerController.advance(this.pShip, this.score);
     this.playerController.advance();
     if (!this.pShip.getIsResetting()) {
       this.playerDisplay.draw(this.pShip);
@@ -193,20 +204,71 @@ class GameController {
     if (playerCollision) {
       const explosionPos = this.pShip.getPos();
       
-      this.asteroidController.addExplosion(
-        new Explosion(
-          this.p,
-          explosionPos
-        )
-      );
+        this.asteroidController.addExplosion(
+          new Explosion(
+            this.p,
+            explosionPos
+          )
+        );
 
-      this.numLives -= 1;
+        this.createPlayerDebris(explosionPos);
+
+        this.numLives -= 1;
       this.pShip.setIsResetting(true);
       if (this.canReset()) {
         this.pShip.reset();
       }
     }
+
+    if (this.saucerController.checkCollisionWithPlayer(this.pShip)) {
+        const explosionPos = this.pShip.getPos();
+        this.asteroidController.addExplosion(
+          new Explosion(
+            this.p,
+            explosionPos
+          )
+        );
+        this.numLives -= 1;
+        this.pShip.setIsResetting(true);
+        if (this.canReset()) {
+          this.pShip.reset();
+        }
+    }
+
+    // Update and draw player debris
+    for (let i = this.playerDebris.length - 1; i >= 0; i--) {
+        const d = this.playerDebris[i];
+        d!.update();
+        d!.draw();
+        if (d!.isDead()) {
+            this.playerDebris.splice(i, 1);
+        }
+    }
   }
+
+  createPlayerDebris(pos: p5.Vector) {
+      const p = this.p;
+      const color = '#00FF00';
+      const debrisScale = this.scale; // Player debris uses full scale? Or adjusted? 
+      // PlayerDisplay uses this.scale for drawing. LineDebris uses scale direct.
+      // So passing this.scale is correct. 
+      // But wait, LineDebris might not support "scale" affecting the length if I pass length in pixels.
+      // In SaucerController I passed `debrisScale` which was `this.scale * 0.3`.
+      // The lengths in `createPlayerDebris` should be relative to the ship size.
+      // Ship vertices are around -10 to 10.
+      
+      // Left wing
+      this.playerDebris.push(new LineDebris(p, pos.copy().add(-5, 0), p.createVector(Math.random()-0.5, Math.random()-0.5), 15, debrisScale, color));
+      // Right wing
+      this.playerDebris.push(new LineDebris(p, pos.copy().add(5, 0), p.createVector(Math.random()-0.5, Math.random()-0.5), 15, debrisScale, color));
+      // Nose
+      this.playerDebris.push(new LineDebris(p, pos.copy().add(0, -5), p.createVector(Math.random()-0.5, Math.random()-0.5), 10, debrisScale, color));
+      // Random bits
+      for(let i=0; i<3; i++) {
+           this.playerDebris.push(new LineDebris(p, pos.copy(), p.createVector(Math.random()*2-1, Math.random()*2-1), 10, debrisScale, color));
+      }
+  }
+
   checkIfLevelComplete():void {
     const asteroidLength = this.asteroidController.getNumActiveAsteroids();
     if (asteroidLength === 0) {

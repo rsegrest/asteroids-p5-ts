@@ -1,3 +1,20 @@
+
+6 December 2022 -- Asteroids
+
+TODO: Flying saucer
+TODO: Small saucer available after 10_000 points
+TODO: Large saucer moves and shoots randomly
+TODO: Small saucer aims at and flies toward player
+TODO: Flying saucer shoots
+TODO: Flying saucer collision
+TODO: Flying saucer bullet collisions
+
+TODO: Use my es-vector-math library
+?: Reduce thrust (and turning?)
+
+Authenticity additions:
+TODO: Limit 4 shots on screen at once
+
 23 Feb 2025 -- Vector graphics
 
 // TODO: Process Arc
@@ -37,21 +54,6 @@ DONE:
   - https://www.w3schools.com/graphics/svg_examples.asp
 
 
-6 December 2022 -- Asteroids
-
-TODO: Shots should wrap around -- static wrap around function 
-TODO: Reduce thrust (and turning?)
-TODO: Flying saucer
-TODO: Small saucer available after 10_000 points
-TODO: Large saucer moves and shoots randomly
-TODO: Small saucer aims at and flies toward player
-TODO: Flying saucer shoots
-TODO: Flying saucer collision
-TODO: Flying saucer bullet collisions
-
-Authenticity additions:
-TODO: Limit 4 shots on screen at once
-TODO: Sound
 
 
 

@@ -2,6 +2,7 @@ import p5 from 'p5';
 import Asteroid from '../model/Asteroid';
 import AsteroidDisplay from '../view/AsteroidDisplay';
 import LargeAsteroid from '../model/LargeAsteroid';
+import SoundManager from '../util/SoundManager';
 import MediumAsteroid from '../model/MediumAsteroid';
 import Bullet from '../model/Bullet';
 import Explosion from '../model/Explosion';
@@ -154,23 +155,35 @@ class AsteroidController {
 
   breakUpAsteroid = (asteroid:LargeAsteroid|MediumAsteroid|SmallAsteroid, index:number):void => {
     const position = asteroid.getPos();
+    const velocity = asteroid.getVelocity();
     this.asteroids.splice(index, 1);
+    
     if (asteroid instanceof LargeAsteroid) {
-      const velocityList = [
-        this.p.createVector(Math.random()*2-1,Math.random()*2-1),
-        this.p.createVector(Math.random()*2-1,Math.random()*2-1),
-      ]
-      this.spawnMediumAsteroid(position, velocityList[0]!);
-      this.spawnMediumAsteroid(position, velocityList[1]!);
+      // Divergent velocities for medium asteroids
+      const v1 = velocity.copy().rotate(this.p.PI / 6).mult(1.5);
+      const v2 = velocity.copy().rotate(-this.p.PI / 6).mult(1.5);
+      
+      // Offset positions slightly to prevent overlap
+      const p1 = position.copy().add(v1.copy().setMag(15));
+      const p2 = position.copy().add(v2.copy().setMag(15));
+
+      this.spawnMediumAsteroid(p1, v1);
+      this.spawnMediumAsteroid(p2, v2);
+      SoundManager.getInstance().playBangLarge();
     } else if (asteroid instanceof MediumAsteroid) {
-      const velocityList = [
-        this.p.createVector(Math.random()*2-1,Math.random()*2-1),
-        this.p.createVector(Math.random()*2-1,Math.random()*2-1),
-      ]
-      this.spawnSmallAsteroid(position, velocityList[0]!);
-      this.spawnSmallAsteroid(position, velocityList[1]!);
+      // Divergent velocities for small asteroids
+      const v1 = velocity.copy().rotate(this.p.PI / 6).mult(1.5);
+      const v2 = velocity.copy().rotate(-this.p.PI / 6).mult(1.5);
+      
+      const p1 = position.copy().add(v1.copy().setMag(10));
+      const p2 = position.copy().add(v2.copy().setMag(10));
+
+      this.spawnSmallAsteroid(p1, v1);
+      this.spawnSmallAsteroid(p2, v2);
+      SoundManager.getInstance().playBangMedium();
     } else if (asteroid instanceof SmallAsteroid) {
       asteroid.setInactive();
+      SoundManager.getInstance().playBangSmall();
     }
   }
 
@@ -203,7 +216,9 @@ class AsteroidController {
       if (asteroid.checkCollision(player)) {
         collided = true;
         this.breakUpAsteroid(asteroid, index);
+        this.breakUpAsteroid(asteroid, index);
         player.setIsResetting(true);
+        SoundManager.getInstance().playBangLarge(); // Ship explosion
       }
     });
     return collided;
